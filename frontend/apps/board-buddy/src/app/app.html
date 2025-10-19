@@ -1,4 +1,4 @@
-<div class="flex justify-center items-center h-screen bg-gray-100">
+<div class="flex justify-center items-center h-screen bg-gray-100 gap-4">
   <p-card header="Board Buddy" class="w-96 shadow-lg">
     <div class="flex flex-col gap-4">
       <p class="text-gray-700 text-center">
@@ -13,4 +13,13 @@
       </button>
     </div>
   </p-card>
+
+
+  <p-card header="Unit Attack" class="w-96 shadow-lg">
+    <div class="flex flex-col gap-4">
+      <p class="text-gray-700">Your warriors attack the enemy city!</p>
+      <button pButton label="Resolve Combat" class="bg-red-500 hover:bg-red-600 text-white w-full" (click)="resolveCombat()"></button>
+    </div>
+  </p-card>
+
 </div>
