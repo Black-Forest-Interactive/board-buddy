@@ -3,9 +3,9 @@ package de.sambalmueslie.boardbuddy.core.player
 import de.sambalmueslie.boardbuddy.core.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.core.common.TimeProvider
 import de.sambalmueslie.boardbuddy.core.event.EventService
-import de.sambalmueslie.boardbuddy.core.game.api.NameValidationFailed
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerNameValidationFailed
 import de.sambalmueslie.boardbuddy.core.player.db.PlayerData
 import de.sambalmueslie.boardbuddy.core.player.db.PlayerRepository
 import jakarta.inject.Singleton
@@ -36,6 +36,6 @@ class PlayerService(
     }
 
     override fun validate(request: PlayerChangeRequest) {
-        if (request.name.isBlank()) throw NameValidationFailed(request.name)
+        if (request.name.isBlank()) throw PlayerNameValidationFailed(request.name)
     }
 }

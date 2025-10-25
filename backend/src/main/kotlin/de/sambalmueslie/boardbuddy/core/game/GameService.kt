@@ -3,10 +3,10 @@ package de.sambalmueslie.boardbuddy.core.game
 import de.sambalmueslie.boardbuddy.core.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.core.common.TimeProvider
 import de.sambalmueslie.boardbuddy.core.event.EventService
-import de.sambalmueslie.boardbuddy.core.game.api.DescriptionValidationFailed
 import de.sambalmueslie.boardbuddy.core.game.api.Game
 import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
-import de.sambalmueslie.boardbuddy.core.game.api.NameValidationFailed
+import de.sambalmueslie.boardbuddy.core.game.api.GameDescriptionValidationFailed
+import de.sambalmueslie.boardbuddy.core.game.api.GameNameValidationFailed
 import de.sambalmueslie.boardbuddy.core.game.db.GameData
 import de.sambalmueslie.boardbuddy.core.game.db.GameRepository
 import jakarta.inject.Singleton
@@ -37,7 +37,7 @@ class GameService(
     }
 
     override fun validate(request: GameChangeRequest) {
-        if (request.name.isBlank()) throw NameValidationFailed(request.name)
-        if (request.description.isBlank()) throw DescriptionValidationFailed(request.description)
+        if (request.name.isBlank()) throw GameNameValidationFailed(request.name)
+        if (request.description.isBlank()) throw GameDescriptionValidationFailed(request.description)
     }
 }

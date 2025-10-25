@@ -2,10 +2,10 @@ package de.sambalmueslie.boardbuddy.core.game
 
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
-import de.sambalmueslie.boardbuddy.core.game.api.DescriptionValidationFailed
 import de.sambalmueslie.boardbuddy.core.game.api.Game
 import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
-import de.sambalmueslie.boardbuddy.core.game.api.NameValidationFailed
+import de.sambalmueslie.boardbuddy.core.game.api.GameDescriptionValidationFailed
+import de.sambalmueslie.boardbuddy.core.game.api.GameNameValidationFailed
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
@@ -45,8 +45,8 @@ class GameServiceTest {
         assertEquals(reference, service.create(request))
         verify { eventCollector.created(reference) }
 
-        assertThrows<NameValidationFailed> { service.create(GameChangeRequest("", request.description)) }
-        assertThrows<DescriptionValidationFailed> { service.create(GameChangeRequest(request.name, "")) }
+        assertThrows<GameNameValidationFailed> { service.create(GameChangeRequest("", request.description)) }
+        assertThrows<GameDescriptionValidationFailed> { service.create(GameChangeRequest(request.name, "")) }
 
         // GETTER
         assertEquals(reference, service.get(reference.id))
@@ -58,8 +58,8 @@ class GameServiceTest {
         assertEquals(reference, service.update(reference.id, update))
         verify { eventCollector.updated(reference) }
 
-        assertThrows<NameValidationFailed> { service.update(reference.id, (GameChangeRequest("", request.description))) }
-        assertThrows<DescriptionValidationFailed> { service.update(reference.id, (GameChangeRequest(request.name, ""))) }
+        assertThrows<GameNameValidationFailed> { service.update(reference.id, (GameChangeRequest("", request.description))) }
+        assertThrows<GameDescriptionValidationFailed> { service.update(reference.id, (GameChangeRequest(request.name, ""))) }
 
         val secondReference = Game(2, request.name, request.description)
         assertEquals(secondReference, service.update(99, request))

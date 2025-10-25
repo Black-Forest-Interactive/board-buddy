@@ -2,9 +2,9 @@ package de.sambalmueslie.boardbuddy.core.player
 
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
-import de.sambalmueslie.boardbuddy.core.player.api.NameValidationFailed
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerNameValidationFailed
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
@@ -43,7 +43,7 @@ class PlayerServiceTest {
         assertEquals(reference, service.create(request))
         verify { eventCollector.created(reference) }
 
-        assertThrows<NameValidationFailed> { service.create(PlayerChangeRequest("")) }
+        assertThrows<PlayerNameValidationFailed> { service.create(PlayerChangeRequest("")) }
 
         // GETTER
         assertEquals(reference, service.get(reference.id))
@@ -55,7 +55,7 @@ class PlayerServiceTest {
         assertEquals(reference, service.update(reference.id, update))
         verify { eventCollector.updated(reference) }
 
-        assertThrows<NameValidationFailed> { service.update(reference.id, (PlayerChangeRequest(""))) }
+        assertThrows<PlayerNameValidationFailed> { service.update(reference.id, (PlayerChangeRequest(""))) }
 
         val secondReference = Player(2, request.name)
         assertEquals(secondReference, service.update(99, request))
