@@ -1,6 +1,8 @@
 package de.sambalmueslie.boardbuddy.core.player.api
 
+import de.sambalmueslie.boardbuddy.core.common.Entity
+
 data class Player(
-    val id: Long,
+    override val id: Long,
     val name: String
-)
+) : Entity

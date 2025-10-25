@@ -118,11 +118,11 @@ dependencies {
 
 
 application {
-    mainClass = "de.sambalmueslie.boardbuddy.ApplicationKt"
+    mainClass = "de.sambalmueslie.boardbuddy.BoardBuddyApplication"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_24
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 
@@ -158,13 +158,13 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
 tasks {
     compileKotlin {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_24)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 
     compileTestKotlin {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_24)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 }
@@ -199,7 +199,7 @@ sonar {
 
 
 jib {
-    from.image = "eclipse-temurin:25-jre-ubi9-minimal"
+    from.image = "eclipse-temurin:21-jre-ubi9-minimal"
     to {
         image = "open-event-backend"
         tags = setOf(version.toString(), "latest")

@@ -1,11 +1,10 @@
-package de.sambalmueslie.boardbuddy.core.game
+package de.sambalmueslie.boardbuddy.core.player
 
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
-import de.sambalmueslie.boardbuddy.core.game.api.DescriptionValidationFailed
-import de.sambalmueslie.boardbuddy.core.game.api.Game
-import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
-import de.sambalmueslie.boardbuddy.core.game.api.NameValidationFailed
+import de.sambalmueslie.boardbuddy.core.player.api.NameValidationFailed
+import de.sambalmueslie.boardbuddy.core.player.api.Player
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
@@ -18,10 +17,9 @@ import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest
 @Testcontainers
-class GameServiceTest {
-
+class PlayerServiceTest {
     @Inject
-    lateinit var service: GameService
+    lateinit var service: PlayerService
 
     @Inject
     lateinit var eventService: EventService
@@ -29,39 +27,37 @@ class GameServiceTest {
     @Test
     fun testCrudOperations() {
         // SETUP EVENT COLLECTOR
-        val eventCollector: EventConsumer<Game> = mockk()
+        val eventCollector: EventConsumer<Player> = mockk()
         every { eventCollector.created(any()) } just Runs
         every { eventCollector.updated(any()) } just Runs
         every { eventCollector.deleted(any()) } just Runs
-        eventService.register(Game::class, eventCollector)
+        eventService.register(Player::class, eventCollector)
 
         // EMPTY GETTER
         assertNull(service.get(0))
-        assertEquals(emptyList<Game>(), service.getAll(Pageable.from(0)).content)
+        assertEquals(emptyList<Player>(), service.getAll(Pageable.from(0)).content)
 
         // CREATE
-        val request = GameChangeRequest("name", "description")
-        var reference = Game(1, request.name, request.description)
+        val request = PlayerChangeRequest("name")
+        var reference = Player(1, request.name)
         assertEquals(reference, service.create(request))
         verify { eventCollector.created(reference) }
 
-        assertThrows<NameValidationFailed> { service.create(GameChangeRequest("", request.description)) }
-        assertThrows<DescriptionValidationFailed> { service.create(GameChangeRequest(request.name, "")) }
+        assertThrows<NameValidationFailed> { service.create(PlayerChangeRequest("")) }
 
         // GETTER
         assertEquals(reference, service.get(reference.id))
         assertEquals(listOf(reference), service.getAll(Pageable.from(0)).content)
 
         // UPDATE
-        val update = GameChangeRequest("name-update", "description-update")
-        reference = Game(1, update.name, update.description)
+        val update = PlayerChangeRequest("name-update")
+        reference = Player(1, update.name)
         assertEquals(reference, service.update(reference.id, update))
         verify { eventCollector.updated(reference) }
 
-        assertThrows<NameValidationFailed> { service.update(reference.id, (GameChangeRequest("", request.description))) }
-        assertThrows<DescriptionValidationFailed> { service.update(reference.id, (GameChangeRequest(request.name, ""))) }
+        assertThrows<NameValidationFailed> { service.update(reference.id, (PlayerChangeRequest(""))) }
 
-        val secondReference = Game(2, request.name, request.description)
+        val secondReference = Player(2, request.name)
         assertEquals(secondReference, service.update(99, request))
         verify { eventCollector.created(secondReference) }
 
@@ -75,8 +71,7 @@ class GameServiceTest {
 
         // EMPTY GETTER
         assertNull(service.get(0))
-        assertEquals(emptyList<Game>(), service.getAll(Pageable.from(0)).content)
+        assertEquals(emptyList<Player>(), service.getAll(Pageable.from(0)).content)
 
     }
-
 }
