@@ -173,6 +173,10 @@ tasks {
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs = listOf(
+        "-XX:+UnlockExperimentalVMOptions",
+        "-XX:+UseParallelGC"
+    )
     finalizedBy(tasks.jacocoTestReport)
 }
 tasks.jacocoTestReport {
