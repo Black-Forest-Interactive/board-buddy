@@ -1,11 +1,8 @@
 package de.sambalmueslie.boardbuddy.core.game
 
+import de.sambalmueslie.boardbuddy.core.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.core.common.TimeProvider
-import de.sambalmueslie.boardbuddy.core.common.findByIdOrNull
 import de.sambalmueslie.boardbuddy.core.event.EventService
-import de.sambalmueslie.boardbuddy.core.event.notifyCreate
-import de.sambalmueslie.boardbuddy.core.event.notifyDelete
-import de.sambalmueslie.boardbuddy.core.event.notifyUpdate
 import de.sambalmueslie.boardbuddy.core.game.api.DescriptionValidationFailed
 import de.sambalmueslie.boardbuddy.core.game.api.Game
 import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
@@ -17,36 +14,29 @@ import org.slf4j.LoggerFactory
 
 @Singleton
 class GameService(
-    private val repository: GameRepository,
-    private val eventService: EventService,
+    repository: GameRepository,
+    eventService: EventService,
     private val timeProvider: TimeProvider
-) {
+) : BaseEntityService<Game, GameChangeRequest, GameData>(repository, eventService, Game::class) {
+
+
     companion object {
         private val logger = LoggerFactory.getLogger(GameService::class.java)
     }
 
-    private val sender = eventService.createSender(Game::class)
-
-    fun create(request: GameChangeRequest): Game {
-        validate(request)
-        val data = GameData(0, request.name, request.description, timeProvider.currentTime())
-        return sender.notifyCreate { repository.save(data).convert() }
+    override fun convert(data: GameData): Game {
+        return data.convert()
     }
 
-    fun update(id: Long, request: GameChangeRequest): Game {
-        validate(request)
-        val existing = repository.findByIdOrNull(id) ?: return create(request)
-        existing.update(request, timeProvider.currentTime())
-        return sender.notifyUpdate { repository.update(existing).convert() }
+    override fun createData(request: GameChangeRequest): GameData {
+        return GameData(0, request.name, request.description, timeProvider.currentTime())
     }
 
-    fun delete(id: Long) {
-        val existing = repository.findByIdOrNull(id) ?: return
-        repository.delete(existing)
-        sender.notifyDelete { existing.convert() }
+    override fun updateData(existing: GameData, request: GameChangeRequest): GameData {
+        return existing.update(request, timeProvider.currentTime())
     }
 
-    private fun validate(request: GameChangeRequest) {
+    override fun validate(request: GameChangeRequest) {
         if (request.name.isBlank()) throw NameValidationFailed(request.name)
         if (request.description.isBlank()) throw DescriptionValidationFailed(request.description)
     }

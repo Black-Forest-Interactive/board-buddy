@@ -105,6 +105,7 @@ dependencies {
     testImplementation("org.opensearch:opensearch-testcontainers:4.0.0")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testImplementation("io.fusionauth:fusionauth-jwt:5.3.3")
+    testImplementation("io.mockk:mockk:1.14.6")
 
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
@@ -183,6 +184,13 @@ tasks.jacocoTestReport {
 }
 jacoco {
     toolVersion = "0.8.13"
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "Black-Forest-Interactive_board-buddy")
+        property("sonar.organization", "black-forest-interactive")
+    }
 }
 
 
