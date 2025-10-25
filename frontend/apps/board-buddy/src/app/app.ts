@@ -15,4 +15,8 @@ export class App {
   sayHello() {
     alert('Hello from Board Buddy!');
   }
+
+  resolveCombat() {
+
+  }
 }
