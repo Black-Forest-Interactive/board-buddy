@@ -9,10 +9,8 @@ import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
 import jakarta.inject.Inject
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertNull
-import org.junit.jupiter.api.assertThrows
 import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest
@@ -24,26 +22,35 @@ class PlayerServiceTest {
     @Inject
     lateinit var eventService: EventService
 
-    @Test
-    fun testCrudOperations() {
-        // SETUP EVENT COLLECTOR
-        val eventCollector: EventConsumer<Player> = mockk()
+
+    private val eventCollector: EventConsumer<Player> = mockk()
+    private val request = PlayerChangeRequest("name")
+
+    init {
         every { eventCollector.created(any()) } just Runs
         every { eventCollector.updated(any()) } just Runs
         every { eventCollector.deleted(any()) } just Runs
+    }
+
+    @BeforeEach
+    fun setup() {
         eventService.register(Player::class, eventCollector)
+    }
 
-        // EMPTY GETTER
-        assertNull(service.get(0))
-        assertEquals(emptyList<Player>(), service.getAll(Pageable.from(0)).content)
+    @AfterEach
+    fun teardown() {
+        eventService.unregister(Player::class, eventCollector)
+        service.deleteAll()
+    }
 
+
+    @Test
+    fun testCrudOperations() {
         // CREATE
-        val request = PlayerChangeRequest("name")
-        var reference = Player(1, request.name)
-        assertEquals(reference, service.create(request))
+        val response = service.create(request)
+        var reference = Player(response.id, request.name)
+        assertEquals(reference, response)
         verify { eventCollector.created(reference) }
-
-        assertThrows<PlayerNameValidationFailed> { service.create(PlayerChangeRequest("")) }
 
         // GETTER
         assertEquals(reference, service.get(reference.id))
@@ -51,27 +58,39 @@ class PlayerServiceTest {
 
         // UPDATE
         val update = PlayerChangeRequest("name-update")
-        reference = Player(1, update.name)
+        reference = Player(response.id, update.name)
         assertEquals(reference, service.update(reference.id, update))
         verify { eventCollector.updated(reference) }
-
-        assertThrows<PlayerNameValidationFailed> { service.update(reference.id, (PlayerChangeRequest(""))) }
-
-        val secondReference = Player(2, request.name)
-        assertEquals(secondReference, service.update(99, request))
-        verify { eventCollector.created(secondReference) }
 
         // DELETE
         service.delete(reference.id)
         verify { eventCollector.deleted(reference) }
-        service.delete(secondReference.id)
-        verify { eventCollector.deleted(secondReference) }
         verify { eventCollector.hashCode() }
         confirmVerified(eventCollector)
 
         // EMPTY GETTER
         assertNull(service.get(0))
         assertEquals(emptyList<Player>(), service.getAll(Pageable.from(0)).content)
-
     }
+
+
+    @Test
+    fun testUpdateWithInvalidId() {
+        service.create(request)
+
+        val updateResponse = service.update(99, request)
+        val updateReference = Player(updateResponse.id, request.name)
+        assertEquals(updateReference, updateResponse)
+        verify { eventCollector.created(updateReference) }
+    }
+
+    @Test
+    fun testValidation() {
+        assertThrows<PlayerNameValidationFailed> { service.create(PlayerChangeRequest("")) }
+
+        val response = service.create(request)
+        assertThrows<PlayerNameValidationFailed> { service.update(response.id, PlayerChangeRequest("")) }
+        service.delete(response.id)
+    }
+
 }
