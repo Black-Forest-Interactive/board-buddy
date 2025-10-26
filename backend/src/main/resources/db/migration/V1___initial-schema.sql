@@ -29,7 +29,7 @@ CREATE TABLE rule_set
 
 CREATE TABLE rule_set_unit_type
 (
-    rule_set_id   BIGINT REFERENCES rule_set (id),
+    rule_set_id  BIGINT REFERENCES rule_set (id),
     unit_type_id BIGINT REFERENCES unit_type (id),
     PRIMARY KEY (rule_set_id, unit_type_id)
 );
@@ -48,7 +48,7 @@ CREATE TABLE game
 
 CREATE TABLE game_rule_set
 (
-    game_id    BIGINT REFERENCES game (id),
+    game_id     BIGINT REFERENCES game (id),
     rule_set_id BIGINT REFERENCES rule_set (id),
     PRIMARY KEY (game_id, rule_set_id)
 );
@@ -63,4 +63,26 @@ CREATE TABLE player
 
     created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated TIMESTAMP WITHOUT TIME ZONE
+);
+
+-- session
+CREATE SEQUENCE game_session_seq;
+CREATE TABLE game_session
+(
+    id          BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('game_session_seq'::regclass),
+    key         UUID                              DEFAULT gen_random_uuid(),
+    name        VARCHAR(255) NOT NULL,
+    host_id     BIGINT REFERENCES player (id),
+    game_id     BIGINT REFERENCES game (id),
+    rule_set_id BIGINT REFERENCES rule_set (id),
+
+    created     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated     TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE game_session_player
+(
+    game_session_id BIGINT REFERENCES game_session (id),
+    player_id       BIGINT REFERENCES player (id),
+    PRIMARY KEY (game_session_id, player_id)
 );
