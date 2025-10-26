@@ -1,28 +1,26 @@
-package de.sambalmueslie.boardbuddy.core.game.db
+package de.sambalmueslie.boardbuddy.core.ruleset.db
 
 import de.sambalmueslie.boardbuddy.core.common.EntityData
-import de.sambalmueslie.boardbuddy.core.game.api.Game
-import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
+import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.LocalDateTime
 
-@Entity(name = "Game")
-@Table(name = "game")
-data class GameData(
+
+@Entity(name = "RuleSet")
+@Table(name = "rule_set")
+data class RuleSetData(
     @Id @GeneratedValue var id: Long,
     var name: String,
-    var description: String,
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert(ruleSets: List<RuleSet>) = Game(id, name, description, ruleSets)
-    fun update(request: GameChangeRequest, currentTime: LocalDateTime): GameData {
+    fun convert() = RuleSet(id, name)
+    fun update(request: RuleSetChangeRequest, currentTime: LocalDateTime): RuleSetData {
         name = request.name
-        description = request.description
         updated = currentTime
         return this
     }

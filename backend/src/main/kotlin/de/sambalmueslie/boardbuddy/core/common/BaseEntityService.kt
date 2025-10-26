@@ -4,14 +4,15 @@ import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.notifyCreate
 import de.sambalmueslie.boardbuddy.core.event.notifyDelete
 import de.sambalmueslie.boardbuddy.core.event.notifyUpdate
+import de.sambalmueslie.openevent.common.PageableSequence
 import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
 import kotlin.reflect.KClass
 
 abstract class BaseEntityService<T : Entity, R : EntityChangeRequest, D : EntityData>(
     private val repository: EntityRepository<D>,
-    private val eventService: EventService,
-    private val type: KClass<T>
+    eventService: EventService,
+    type: KClass<T>
 ) : EntityService<T, R> {
 
     private val sender = eventService.createSender(type)
@@ -22,6 +23,10 @@ abstract class BaseEntityService<T : Entity, R : EntityChangeRequest, D : Entity
 
     override fun getAll(pageable: Pageable): Page<T> {
         return repository.findAll(pageable).map { convert(it) }
+    }
+
+    override fun getByIds(ids: Set<Long>): List<T> {
+        return repository.findByIdIn(ids).map { convert(it) }
     }
 
     protected abstract fun convert(data: D): T
@@ -47,7 +52,28 @@ abstract class BaseEntityService<T : Entity, R : EntityChangeRequest, D : Entity
 
     override fun delete(id: Long) {
         val existing = repository.findByIdOrNull(id) ?: return
-        repository.delete(existing)
-        sender.notifyDelete { convert(existing) }
+        return delete(existing)
     }
+
+    override fun deleteAll() {
+        val sequence = PageableSequence() { repository.findAll(it) }
+        sequence.forEach { delete(it) }
+    }
+
+    private fun delete(data: D) {
+        val result = convert(data)
+        deleteDependencies(data)
+        sender.notifyDelete { result }
+        repository.delete(data)
+    }
+
+    protected open fun deleteDependencies(data: D) {
+        // intentionally left empty
+    }
+
+    protected fun notifyUpdate(obj: T) {
+        sender.updated(obj)
+    }
+
+
 }
