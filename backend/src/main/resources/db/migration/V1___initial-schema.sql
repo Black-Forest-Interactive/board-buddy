@@ -27,7 +27,7 @@ CREATE TABLE rule_set
     updated TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE ruleset_unit_type
+CREATE TABLE rule_set_unit_type
 (
     rule_set_id   BIGINT REFERENCES rule_set (id),
     unit_type_id BIGINT REFERENCES unit_type (id),
@@ -46,7 +46,7 @@ CREATE TABLE game
     updated     TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE game_ruleset
+CREATE TABLE game_rule_set
 (
     game_id    BIGINT REFERENCES game (id),
     rule_set_id BIGINT REFERENCES rule_set (id),

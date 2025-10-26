@@ -1,39 +1,37 @@
-package de.sambalmueslie.boardbuddy.core.game
+package de.sambalmueslie.boardbuddy.core.ruleset
 
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
-import de.sambalmueslie.boardbuddy.core.game.api.Game
-import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
-import de.sambalmueslie.boardbuddy.core.game.api.GameDescriptionValidationFailed
-import de.sambalmueslie.boardbuddy.core.game.api.GameNameValidationFailed
-import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
+import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetNameValidationFailed
+import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
+import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitClass
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitType
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitTypeChangeRequest
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
 import jakarta.inject.Inject
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest()
 @Testcontainers
-class GameServiceTest {
+class RuleSetServiceTest {
+    @Inject
+    lateinit var service: RuleSetService
 
     @Inject
-    lateinit var service: GameService
-
-    @Inject
-    lateinit var ruleSetService: RuleSetService
+    lateinit var unitTypeService: UnitTypeService
 
     @Inject
     lateinit var eventService: EventService
 
-
-    private val eventCollector: EventConsumer<Game> = mockk()
-    private val request = GameChangeRequest("name", "description")
+    private val eventCollector: EventConsumer<RuleSet> = mockk()
+    private val request = RuleSetChangeRequest("name")
 
     init {
         every { eventCollector.created(any()) } just Runs
@@ -43,23 +41,22 @@ class GameServiceTest {
 
     @BeforeEach
     fun setup() {
-        eventService.register(Game::class, eventCollector)
+        eventService.register(RuleSet::class, eventCollector)
     }
 
     @AfterEach
     fun teardown() {
-        eventService.unregister(Game::class, eventCollector)
+        eventService.unregister(RuleSet::class, eventCollector)
         service.deleteAll()
-        ruleSetService.deleteAll()
+        unitTypeService.deleteAll()
     }
-
 
     @Test
     fun testCrudOperations() {
 
         // CREATE
         val response = service.create(request)
-        var reference = Game(response.id, request.name, request.description, emptyList())
+        var reference = RuleSet(response.id, request.name, emptyList())
         assertEquals(reference, response)
         verify { eventCollector.created(reference) }
 
@@ -68,8 +65,8 @@ class GameServiceTest {
         assertEquals(listOf(reference), service.getAll(Pageable.from(0)).content)
 
         // UPDATE
-        val update = GameChangeRequest("name-update", "description-update")
-        reference = Game(response.id, update.name, update.description, emptyList())
+        val update = RuleSetChangeRequest("name-update")
+        reference = RuleSet(response.id, update.name, emptyList())
         assertEquals(reference, service.update(reference.id, update))
         verify { eventCollector.updated(reference) }
 
@@ -81,7 +78,7 @@ class GameServiceTest {
 
         // EMPTY GETTER
         assertNull(service.get(0))
-        assertEquals(emptyList<Game>(), service.getAll(Pageable.from(0)).content)
+        assertEquals(emptyList<RuleSet>(), service.getAll(Pageable.from(0)).content)
     }
 
     @Test
@@ -89,51 +86,51 @@ class GameServiceTest {
         service.create(request)
 
         val updateResponse = service.update(99, request)
-        val updateReference = Game(updateResponse.id, request.name, request.description, emptyList())
+        val updateReference = RuleSet(updateResponse.id, request.name, emptyList())
         assertEquals(updateReference, updateResponse)
         verify { eventCollector.created(updateReference) }
     }
 
+
     @Test
     fun testValidation() {
-        assertThrows<GameNameValidationFailed> { service.create(GameChangeRequest("", request.description)) }
-        assertThrows<GameDescriptionValidationFailed> { service.create(GameChangeRequest(request.name, "")) }
+        assertThrows<RuleSetNameValidationFailed> { service.create(RuleSetChangeRequest("")) }
 
         val response = service.create(request)
-        assertThrows<GameNameValidationFailed> { service.update(response.id, (GameChangeRequest("", request.description))) }
-        assertThrows<GameDescriptionValidationFailed> { service.update(response.id, (GameChangeRequest(request.name, ""))) }
+        assertThrows<RuleSetNameValidationFailed> { service.update(response.id, (RuleSetChangeRequest(""))) }
         service.delete(response.id)
     }
 
     @Test
-    fun testRuleSetRelations() {
-        val game = service.create(request)
-        val ruleSet = ruleSetService.create(RuleSetChangeRequest("name"))
+    fun testUnitTypeRelations() {
+        val ruleSet = service.create(request)
+        val unitType = unitTypeService.create(UnitTypeChangeRequest("name", UnitClass.INFANTRY, UnitClass.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
 
-        val assigned = service.assignRuleSet(game, ruleSet)
-        assertNotNull(assigned)
-        assertEquals(listOf(ruleSet), assigned!!.ruleSets)
+        val assigned = service.assignUnitType(ruleSet, unitType)
+        Assertions.assertNotNull(assigned)
+        assertEquals(listOf(unitType), assigned!!.unitTypes)
         verify { eventCollector.updated(assigned) }
 
         val response = service.get(assigned.id)
-        assertNotNull(response)
+        Assertions.assertNotNull(response)
         assertEquals(assigned, response)
 
-        val revoked = service.revokeRuleSet(game, ruleSet)
-        assertNotNull(revoked)
-        assertEquals(listOf<RuleSet>(), revoked!!.ruleSets)
+        val revoked = service.revokeUnitType(ruleSet, unitType)
+        Assertions.assertNotNull(revoked)
+        assertEquals(listOf<UnitType>(), revoked!!.unitTypes)
         verify { eventCollector.updated(revoked) }
     }
 
+
     @Test
     fun testDeletionWithRelations() {
-        val game = service.create(request)
-        val ruleSet = ruleSetService.create(RuleSetChangeRequest("name"))
+        val ruleSet = service.create(request)
+        val unitType = unitTypeService.create(UnitTypeChangeRequest("name", UnitClass.INFANTRY, UnitClass.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
 
-        service.assignRuleSet(game, ruleSet)
+        service.assignUnitType(ruleSet, unitType)
 
-        val response = service.get(game.id)
-        assertNotNull(response)
+        val response = service.get(ruleSet.id)
+        Assertions.assertNotNull(response)
 
         service.delete(response!!.id)
         verify { eventCollector.deleted(response) }

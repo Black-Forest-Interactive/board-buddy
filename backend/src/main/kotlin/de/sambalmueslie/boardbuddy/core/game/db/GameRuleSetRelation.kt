@@ -5,7 +5,7 @@ import jakarta.persistence.Table
 
 @Suppress("JpaMissingIdInspection")
 @Entity(name = "GameRuleSet")
-@Table(name = "game_ruleset")
+@Table(name = "game_rule_set")
 data class GameRuleSetRelation(
     val gameId: Long,
     val ruleSetId: Long,
