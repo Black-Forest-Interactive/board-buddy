@@ -107,7 +107,7 @@ class UnitTypeServiceTest {
 
 
         val response = service.create(request)
-        assertThrows<UnitTypeNameValidationFailed> { service.create(invalidNameRequest) }
+        assertThrows<UnitTypeNameValidationFailed> { service.update(response.id, invalidNameRequest) }
         assertThrows<UnitTypeCounterClassValidationFailed> { service.update(response.id, invalidCounterClassRequest) }
         assertThrows<UnitTypeDamageValidationFailed> { service.update(response.id, invalidDamageRequest1) }
         assertThrows<UnitTypeDamageValidationFailed> { service.update(response.id, invalidDamageRequest2) }
@@ -116,4 +116,5 @@ class UnitTypeServiceTest {
         assertThrows<UnitTypeLevelValidationFailed> { service.update(response.id, invalidUnitLevelRequest) }
         service.delete(response.id)
     }
+
 }

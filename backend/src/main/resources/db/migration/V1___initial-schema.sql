@@ -16,6 +16,20 @@ CREATE TABLE unit_type
     updated           TIMESTAMP WITHOUT TIME ZONE
 );
 
+CREATE SEQUENCE unit_instance_seq;
+CREATE TABLE unit_instance
+(
+    id           BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('unit_instance_seq'::regclass),
+    damage       INT    NOT NULL,
+    health       INT    NOT NULL,
+    level        INT    NOT NULL,
+
+    unit_type_id BIGINT REFERENCES unit_type (id),
+
+    created      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated      TIMESTAMP WITHOUT TIME ZONE
+);
+
 -- rule set
 CREATE SEQUENCE rule_set_seq;
 CREATE TABLE rule_set

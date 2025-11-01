@@ -60,7 +60,7 @@ abstract class BaseEntityService<T : Entity, R : EntityChangeRequest, D : Entity
         sequence.forEach { delete(it) }
     }
 
-    private fun delete(data: D) {
+    protected fun delete(data: D) {
         val result = convert(data)
         deleteDependencies(data)
         sender.notifyDelete { result }
