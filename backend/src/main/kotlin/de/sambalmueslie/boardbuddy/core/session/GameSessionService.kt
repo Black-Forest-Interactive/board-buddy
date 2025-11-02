@@ -14,6 +14,7 @@ import de.sambalmueslie.boardbuddy.core.session.api.GameSessionNameValidationFai
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionRuleSetValidationFailed
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionData
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionRepository
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstance
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory
 class GameSessionService(
     private val repository: GameSessionRepository,
     private val sessionPlayerService: GameSessionPlayerService,
+    private val sessionUnitService: GameSessionUnitService,
 
     private val playerService: PlayerService,
     private val gameService: GameService,
@@ -40,9 +42,7 @@ class GameSessionService(
     fun assignPlayer(gameSessionId: Long, player: Player): GameSession? {
         val data = repository.findByIdOrNull(gameSessionId) ?: return null
         sessionPlayerService.assign(data, player)
-        val result = convert(data)
-        notifyUpdate(result)
-        return result
+        return sessionUpdated(data)
     }
 
     fun revokePlayer(gameSession: GameSession, player: Player): GameSession? {
@@ -52,9 +52,37 @@ class GameSessionService(
     fun revokePlayer(gameSessionId: Long, player: Player): GameSession? {
         val data = repository.findByIdOrNull(gameSessionId) ?: return null
         sessionPlayerService.revoke(data, player)
+        return sessionUpdated(data)
+    }
+
+    fun assignUnit(session: GameSession, player: Player, instance: UnitInstance): GameSession? {
+        return assignUnit(session.id, player, instance)
+    }
+
+    fun assignUnit(gameSessionId: Long, player: Player, instance: UnitInstance): GameSession? {
+        val data = repository.findByIdOrNull(gameSessionId) ?: return null
+        sessionUnitService.assign(data, player, instance)
+        return sessionUpdated(data)
+    }
+
+    fun revokeUnit(gameSession: GameSession, player: Player, instance: UnitInstance): GameSession? {
+        return revokeUnit(gameSession.id, player, instance)
+    }
+
+    fun revokeUnit(gameSessionId: Long, player: Player, instance: UnitInstance): GameSession? {
+        val data = repository.findByIdOrNull(gameSessionId) ?: return null
+        sessionUnitService.revoke(data, player, instance)
+       return sessionUpdated(data)
+    }
+
+    private fun sessionUpdated(data: GameSessionData): GameSession {
         val result = convert(data)
         notifyUpdate(result)
         return result
+    }
+
+    fun findByKey(key: String): GameSession? {
+        return repository.findByKey(key)?.let { convert(it) }
     }
 
     override fun convert(data: GameSessionData): GameSession {
@@ -81,5 +109,9 @@ class GameSessionService(
 
     override fun deleteDependencies(data: GameSessionData) {
         sessionPlayerService.revokeAll(data)
+        sessionUnitService.revokeAll(data)
     }
+
+
+
 }

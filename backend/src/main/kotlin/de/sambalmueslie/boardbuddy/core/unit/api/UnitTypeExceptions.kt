@@ -1,9 +1,9 @@
 package de.sambalmueslie.boardbuddy.core.unit.api
 
-import de.sambalmueslie.boardbuddy.core.common.RequestValidationException
+import de.sambalmueslie.boardbuddy.core.common.EntityException
 
 
-sealed class UnitTypeRequestValidationException(code: Int, msg: String) : RequestValidationException(UnitType::class, code, msg)
+sealed class UnitTypeRequestValidationException(code: Int, msg: String) : EntityException(UnitType::class, code, msg)
 
 class UnitTypeNameValidationFailed(value: String) : UnitTypeRequestValidationException(1, "Validation failed due to invalid name '$value'")
 class UnitTypeCounterClassValidationFailed(value: UnitClass?) : UnitTypeRequestValidationException(2, "Validation failed due to invalid counter class '$value'")

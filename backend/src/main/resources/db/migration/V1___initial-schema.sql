@@ -100,3 +100,12 @@ CREATE TABLE game_session_player
     player_id       BIGINT REFERENCES player (id),
     PRIMARY KEY (game_session_id, player_id)
 );
+
+
+CREATE TABLE game_session_unit
+(
+    game_session_id  BIGINT REFERENCES game_session (id),
+    player_id        BIGINT REFERENCES player (id),
+    unit_instance_id BIGINT REFERENCES unit_instance (id),
+    PRIMARY KEY (game_session_id, player_id, unit_instance_id)
+);

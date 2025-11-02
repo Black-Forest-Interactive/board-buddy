@@ -8,4 +8,5 @@ import io.micronaut.data.model.query.builder.sql.Dialect
 @Repository
 @JdbcRepository(dialect = Dialect.POSTGRES)
 interface GameSessionRepository : EntityRepository<GameSessionData> {
+    fun findByKey(key: String): GameSessionData?
 }

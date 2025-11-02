@@ -1,9 +1,9 @@
 package de.sambalmueslie.boardbuddy.core.unit.api
 
-import de.sambalmueslie.boardbuddy.core.common.RequestValidationException
+import de.sambalmueslie.boardbuddy.core.common.EntityException
 
 
-sealed class UnitInstanceException(code: Int, msg: String) : RequestValidationException(UnitInstance::class, code, msg)
+sealed class UnitInstanceException(code: Int, msg: String) : EntityException(UnitInstance::class, code, msg)
 
 
 class UnitInstanceLevelValidationFailed(value: Int) : UnitInstanceException(1, "Validation failed due to invalid level '$value'")
