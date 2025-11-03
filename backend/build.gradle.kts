@@ -9,9 +9,9 @@ plugins {
     id("org.sonarqube") version "7.0.1.6134"
     id("net.researchgate.release") version "3.1.0"
     id("com.google.cloud.tools.jib") version "3.4.5"
-    id("io.micronaut.application") version "4.6.0"
-    id("io.micronaut.test-resources") version "4.6.0"
-    id("io.micronaut.aot") version "4.6.0"
+    id("io.micronaut.application") version "4.6.1"
+    id("io.micronaut.test-resources") version "4.6.1"
+    id("io.micronaut.aot") version "4.6.1"
     id("maven-publish")
     id("jacoco")
 }
@@ -32,8 +32,8 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.20")
     runtimeOnly("org.yaml:snakeyaml")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.1")
     testImplementation("io.mockk:mockk:1.14.6")
 
     // jackson
@@ -71,7 +71,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
 
     // caching
-    implementation("com.github.ben-manes.caffeine:caffeine:3.2.2")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
