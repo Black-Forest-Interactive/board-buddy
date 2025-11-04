@@ -41,7 +41,6 @@ class UnitInstanceService(
         })
     }
 
-
     override fun convert(data: UnitInstanceData): UnitInstance {
         val type = typeService.get(data.unitTypeId) ?: throw CannotFindUnitType(data.unitTypeId)
         return data.convert(type)
@@ -60,5 +59,6 @@ class UnitInstanceService(
         if (request.damage <= 0 || !request.type.damagePoints.isWithin(request.damage)) throw UnitInstanceDamageValidationFailed(request.damage)
         if (request.health <= 0 || !request.type.healthPoints.isWithin(request.health)) throw UnitInstanceHealthValidationFailed(request.health)
     }
+
 
 }

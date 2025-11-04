@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 @Table(name = "game_session")
 data class GameSessionData(
     @Id @GeneratedValue var id: Long,
-    @GeneratedValue var key: String,
+    var key: String,
     var name: String,
     var hostId: Long,
     var gameId: Long,

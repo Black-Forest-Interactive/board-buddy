@@ -13,10 +13,11 @@ data class Workflow(
     val participants: List<Player>,
     val game: Game,
     val ruleSet: RuleSet,
-    val timestamp: LocalDateTime
+    val timestamp: LocalDateTime,
+    val activeBattle: Battle?
 ) {
     companion object {
-        fun create(session: GameSession): Workflow {
+        fun create(session: GameSession, battle: Battle?): Workflow {
             return Workflow(
                 session.key,
                 session.name,
@@ -24,7 +25,8 @@ data class Workflow(
                 session.participants,
                 session.game,
                 session.ruleSet,
-                session.timestamp
+                session.timestamp,
+                battle
             )
         }
     }

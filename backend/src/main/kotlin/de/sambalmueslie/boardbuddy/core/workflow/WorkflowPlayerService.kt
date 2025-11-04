@@ -34,4 +34,10 @@ class WorkflowPlayerService(
         sessionService.assignPlayer(session, player)
         return player
     }
+
+    fun join(session: GameSession, player: Player): Player {
+        if (session.participants.any { it.id == player.id }) throw WorkflowPlayerJoinError()
+        sessionService.assignPlayer(session, player)
+        return player
+    }
 }

@@ -17,6 +17,7 @@ import de.sambalmueslie.boardbuddy.core.session.db.GameSessionRepository
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstance
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
+import java.util.*
 
 @Singleton
 class GameSessionService(
@@ -72,7 +73,16 @@ class GameSessionService(
     fun revokeUnit(gameSessionId: Long, player: Player, instance: UnitInstance): GameSession? {
         val data = repository.findByIdOrNull(gameSessionId) ?: return null
         sessionUnitService.revoke(data, player, instance)
-       return sessionUpdated(data)
+        return sessionUpdated(data)
+    }
+
+    fun getAssignedUnits(gameSession: GameSession, player: Player): List<UnitInstance> {
+        return getAssignedUnits(gameSession.id, player)
+    }
+
+    fun getAssignedUnits(gameSessionId: Long, player: Player): List<UnitInstance> {
+        val data = repository.findByIdOrNull(gameSessionId) ?: return emptyList()
+        return sessionUnitService.getAssignedUnits(data, player)
     }
 
     private fun sessionUpdated(data: GameSessionData): GameSession {
@@ -94,7 +104,11 @@ class GameSessionService(
     }
 
     override fun createData(request: GameSessionChangeRequest): GameSessionData {
-        return GameSessionData(0, "", request.name, request.host.id, request.game.id, request.ruleSet.id, timeProvider.currentTime())
+        return GameSessionData(0, UUID.randomUUID().toString(), request.name, request.host.id, request.game.id, request.ruleSet.id, timeProvider.currentTime())
+    }
+
+    override fun createDependencies(request: GameSessionChangeRequest, data: GameSessionData) {
+        sessionPlayerService.assign(data, request.host)
     }
 
     override fun updateData(existing: GameSessionData, request: GameSessionChangeRequest): GameSessionData {
@@ -111,7 +125,6 @@ class GameSessionService(
         sessionPlayerService.revokeAll(data)
         sessionUnitService.revokeAll(data)
     }
-
 
 
 }

@@ -34,10 +34,16 @@ abstract class BaseEntityService<T : Entity, R : EntityChangeRequest, D : Entity
     override fun create(request: R): T {
         validate(request)
         val data = createData(request)
-        return sender.notifyCreate { convert(repository.save(data)) }
+        val result = repository.save(data)
+        createDependencies(request, result)
+        return sender.notifyCreate { convert(result) }
     }
 
     protected abstract fun createData(request: R): D
+
+    protected open fun createDependencies(request: R, data: D) {
+        // intentionally left empty
+    }
 
     override fun update(id: Long, request: R): T {
         val existing = repository.findByIdOrNull(id) ?: return create(request)

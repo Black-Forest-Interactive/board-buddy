@@ -84,7 +84,7 @@ CREATE SEQUENCE game_session_seq;
 CREATE TABLE game_session
 (
     id          BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('game_session_seq'::regclass),
-    key         UUID                              DEFAULT gen_random_uuid(),
+    key         VARCHAR(40)  NOT NULL UNIQUE,
     name        VARCHAR(255) NOT NULL,
     host_id     BIGINT REFERENCES player (id),
     game_id     BIGINT REFERENCES game (id),

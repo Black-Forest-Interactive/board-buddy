@@ -2,11 +2,11 @@ package de.sambalmueslie.boardbuddy.core.workflow
 
 import de.sambalmueslie.boardbuddy.core.engine.GameEngine
 import de.sambalmueslie.boardbuddy.core.game.GameService
+import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
-import de.sambalmueslie.boardbuddy.core.unit.UnitInstanceService
 import de.sambalmueslie.boardbuddy.core.workflow.api.*
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -17,7 +17,7 @@ class WorkflowService(
     private val gameService: GameService,
     private val ruleSetService: RuleSetService,
     private val unitTypeService: WorkflowUnitTypeService,
-    private val unitInstanceService: UnitInstanceService,
+    private val battleService: WorkflowBattleService,
     private val sessionService: GameSessionService,
     private val engine: GameEngine
 ) {
@@ -31,12 +31,18 @@ class WorkflowService(
         val game = gameService.get(request.gameId) ?: throw WorkflowInvalidGame(request.gameId)
         val ruleSet = ruleSetService.get(request.ruleSetId) ?: throw WorkflowInvalidRuleSet(request.ruleSetId)
         val session = sessionService.create(GameSessionChangeRequest(request.name, host, game, ruleSet))
-        return Workflow.create(session)
+        return Workflow.create(session, null)
     }
 
     fun join(id: String, request: WorkflowPlayerJoinRequest): Workflow {
         val session = getSession(id)
         playerService.join(session, request)
+        return get(id)
+    }
+
+    fun join(id: String, player: Player): Workflow {
+        val session = getSession(id)
+        playerService.join(session, player)
         return get(id)
     }
 
@@ -50,13 +56,33 @@ class WorkflowService(
         return get(id)
     }
 
+    fun battleStart(id: String, request: WorkflowBattleStartRequest): Workflow {
+        val session = getSession(id)
+        battleService.start(session, request)
+        return get(id)
+    }
+
+    fun battleCreateFront(id: String, request: WorkflowBattleCreateFrontRequest): Workflow {
+        val session = getSession(id)
+        battleService.createFront(session, request)
+        return get(id)
+    }
+
+    fun battleAttackFront(id: String, request: WorkflowBattleAttackFrontRequest): Workflow {
+        val session = getSession(id)
+        battleService.attackFront(session, request)
+        return get(id)
+    }
 
     fun get(id: String): Workflow {
         val session = sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
-        return Workflow.create(session)
+        val battle = battleService.get(session)
+        return Workflow.create(session, battle)
     }
 
     private fun getSession(id: String): GameSession {
         return sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
     }
+
+
 }
