@@ -49,43 +49,62 @@ class WorkflowBattleService(
     fun createFront(session: GameSession, request: WorkflowBattleCreateFrontRequest): Battle {
         val player = getAndValidatePlayer(session, request.playerId)
         val battle = getData(session) ?: throw WorkflowBattleNotExisting(session.key)
-        val participant = getAndValidateParticipant(battle, player)
-        val unit = getAndValidateUnitInstance(participant, request.unitInstanceId)
-        participant.units.remove(unit)
+        battle.validatePlayerIsActive(player)
+        val participant = battle.getAndValidateParticipant(player)
+        val unit = participant.getAndValidateUnitInstance(request.unitInstanceId)
+        participant.createFront(unit)
 
-        val front = BattleFrontData((participant.fronts.lastOrNull()?.index ?: 0) + 1, unit)
-        participant.fronts.add(front)
-
-        switchActivePlayer(battle, player)
+        battle.switchActivePlayer(player)
         return battle.convert()
     }
 
-    private fun switchActivePlayer(battle: BattleData, player: Player) {
-        val currentIndex = battle.participant.indexOfFirst { it.player.id == player.id }
-        val nextIndex = if (currentIndex > battle.participant.size - 1) 0 else currentIndex + 1
-        val nextPlayer = battle.participant[nextIndex].player
-        battle.activePlayer = nextPlayer
+    fun attackFront(session: GameSession, request: WorkflowBattleAttackFrontRequest): Battle {
+        val attacker = getAndValidatePlayer(session, request.attackerId)
+        val defender = getAndValidatePlayer(session, request.defenderId)
+
+        val battle = getData(session) ?: throw WorkflowBattleNotExisting(session.key)
+        battle.validatePlayerIsActive(attacker)
+        val attackParticipant = battle.getAndValidateParticipant(attacker)
+        val defendParticipant = battle.getAndValidateParticipant(defender)
+
+
+        val defendFront = defendParticipant.fronts.find { it.index == request.frontIndex } ?: throw WorkflowBattleInvalidFrontIndex(request.frontIndex)
+        val defendUnit = defendFront.unit
+
+        val attackUnit = attackParticipant.getAndValidateUnitInstance(request.unitInstanceId)
+        val attackFront = attackParticipant.createFront(attackUnit, request.frontIndex)
+
+        defendFront.takeHit(attackUnit)
+
+        val isAttackerCounterClass = attackUnit.type.counterClass != null && attackUnit.type.counterClass == defendUnit.type.unitClass
+        val defenderStrikesBack = !defendFront.defeated || !isAttackerCounterClass
+        if (defenderStrikesBack) attackFront.takeHit(defendUnit)
+
+        battle.switchActivePlayer(attacker)
+        return battle.convert()
     }
 
-    private fun getAndValidateParticipant(battle: BattleData, player: Player): BattleParticipantData {
-        val participant = battle.participant.find { it.player.id == player.id } ?: throw WorkflowBattleInvalidPlayer(player.id)
-        if (participant.player.id != battle.activePlayer.id) throw WorkflowBattlePlayerIsNotActive(player.id)
-        return participant
-    }
-
-    private fun getAndValidateUnitInstance(participant: BattleParticipantData, unitInstanceId: Long): UnitInstance {
-        return participant.units.find { it.id == unitInstanceId } ?: throw WorkflowBattleUnitNotExisting(unitInstanceId)
-    }
-
-    fun attackFront(session: GameSession, request: WorkflowBattleAttackFrontRequest) {
-        TODO("Not yet implemented")
-    }
 
     private data class BattleData(
         val participant: List<BattleParticipantData>,
         var activePlayer: Player,
     ) {
         fun convert() = Battle(participant.map { it.convert() }, activePlayer)
+
+        fun getAndValidateParticipant(player: Player): BattleParticipantData {
+            return participant.find { it.player.id == player.id } ?: throw WorkflowBattleInvalidPlayer(player.id)
+        }
+
+        fun validatePlayerIsActive(player: Player) {
+            if (player.id != activePlayer.id) throw WorkflowBattlePlayerIsNotActive(player.id)
+        }
+
+        fun switchActivePlayer(player: Player) {
+            val currentIndex = participant.indexOfFirst { it.player.id == player.id }
+            val nextIndex = if (currentIndex >= participant.size - 1) 0 else currentIndex + 1
+            val nextPlayer = participant[nextIndex].player
+            activePlayer = nextPlayer
+        }
     }
 
     private data class BattleParticipantData(
@@ -94,6 +113,28 @@ class WorkflowBattleService(
         val fronts: MutableList<BattleFrontData> = mutableListOf()
     ) {
         fun convert() = BattleParticipant(player, units, fronts.map { it.convert() })
+
+        fun getAndValidateUnitInstance(unitInstanceId: Long): UnitInstance {
+            return units.find { it.id == unitInstanceId } ?: throw WorkflowBattleUnitNotExisting(unitInstanceId)
+        }
+
+        fun createFront(unit: UnitInstance): BattleFrontData {
+            val index = (fronts.lastOrNull()?.index ?: 0) + 1
+            return createFront(unit, index)
+        }
+
+        fun createFront(unit: UnitInstance, index: Int): BattleFrontData {
+            if (!units.any { it.id == unit.id }) throw WorkflowBattleUnitNotExisting(unit.id)
+            units.remove(unit)
+
+            val existing = fronts.find { it.index == index }
+            if (existing != null) throw WorkflowBattleInvalidFrontIndex(index)
+
+            val front = BattleFrontData(index, unit)
+            fronts.add(front)
+            return front
+        }
+
     }
 
     private data class BattleFrontData(
@@ -103,5 +144,10 @@ class WorkflowBattleService(
         var defeated: Boolean = remainingHealth <= 0,
     ) {
         fun convert() = BattleFront(index, unit, remainingHealth, defeated)
+
+        fun takeHit(unit: UnitInstance) {
+            remainingHealth -= unit.health
+            defeated = remainingHealth <= 0
+        }
     }
 }

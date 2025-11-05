@@ -19,4 +19,5 @@ class WorkflowBattleInvalidPlayer(value: Long) : WorkflowException(i++, "Invalid
 class WorkflowBattleNotExisting(value: String) : WorkflowException(i++, "Battle is not existing for workflow $value")
 class WorkflowBattlePlayerIsNotActive(value: Long) : WorkflowException(i++, "Player is not active for battle $value")
 class WorkflowBattleUnitNotExisting(value: Long) : WorkflowException(i++, "Unit is not existing within battle $value")
+class WorkflowBattleInvalidFrontIndex(value: Int) : WorkflowException(i++, "Battle front index is invalid $value")
 

@@ -11,13 +11,12 @@ import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
 import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitClass
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstance
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitTypeChangeRequest
-import de.sambalmueslie.boardbuddy.core.workflow.api.WorkflowBattleCreateFrontRequest
-import de.sambalmueslie.boardbuddy.core.workflow.api.WorkflowBattleStartRequest
-import de.sambalmueslie.boardbuddy.core.workflow.api.WorkflowCreateRequest
-import de.sambalmueslie.boardbuddy.core.workflow.api.WorkflowCreateUnitRequest
+import de.sambalmueslie.boardbuddy.core.workflow.api.*
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -89,9 +88,44 @@ class WorkflowServiceTest {
         val battle = workflow.activeBattle
         assertNotNull(battle)
 
-        var participant = battle!!.participant.find { it.player == battle.activePlayer }
-        assertNotNull(participant)
-        workflow = service.battleCreateFront(workflow.id, WorkflowBattleCreateFrontRequest(battle.activePlayer.id, participant!!.units.first().id))
+        assertEquals(p1, battle!!.activePlayer)
+        val bp1 = battle.participant.find { it.player.id == p1.id }
+        assertNotNull(bp1)
+
+        assertEquals(3, bp1!!.units.size)
+        val bp1u1 = bp1.units.find { it.type == inf }!!
+        assertEquals(UnitInstance(bp1u1.id, inf, bp1u1.damage, bp1u1.health, 1), bp1u1)
+
+        val bp1u2 = bp1.units.find { it.type == cav }!!
+        assertEquals(UnitInstance(bp1u2.id, cav, bp1u2.damage, bp1u2.health, 1), bp1u2)
+
+        val bp1u3 = bp1.units.find { it.type == art }!!
+        assertEquals(UnitInstance(bp1u3.id, art, bp1u3.damage, bp1u3.health, 1), bp1u3)
+
+        val bp2 = battle.participant.find { it.player.id == p2.id }
+        assertNotNull(bp2)
+
+        assertEquals(emptyList<BattleFront>(), bp1.fronts)
+
+
+        assertEquals(3, bp2!!.units.size)
+        val bp2u1 = bp2.units.find { it.type == inf }!!
+        assertEquals(UnitInstance(bp2u1.id, inf, bp2u1.damage, bp2u1.health, 1), bp2u1)
+
+        val bp2u2 = bp2.units.find { it.type == cav }!!
+        assertEquals(UnitInstance(bp2u2.id, cav, bp2u2.damage, bp2u2.health, 1), bp2u2)
+
+        val bp2u3 = bp2.units.find { it.type == art }!!
+        assertEquals(UnitInstance(bp2u3.id, art, bp2u3.damage, bp2u3.health, 1), bp2u3)
+
+        assertEquals(emptyList<BattleFront>(), bp2.fronts)
+
+        workflow = service.battleCreateFront(workflow.id, WorkflowBattleCreateFrontRequest(p1.id, bp1u1.id))
+        assertEquals(listOf(BattleFront(1, bp1u1, bp1u1.health, false)), workflow.activeBattle!!.participant.find { it.player.id == p1.id }!!.fronts)
+        assertEquals(p2.id, workflow.activeBattle.activePlayer.id)
+
+        workflow = service.battleAttackFront(workflow.id, WorkflowBattleAttackFrontRequest(p2.id, p1.id, bp2u2.id,1))
+        assertEquals(p1.id, workflow.activeBattle!!.activePlayer.id)
 
     }
 }
