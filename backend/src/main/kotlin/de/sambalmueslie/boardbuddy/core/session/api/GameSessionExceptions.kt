@@ -1,6 +1,6 @@
 package de.sambalmueslie.boardbuddy.core.session.api
 
-import de.sambalmueslie.boardbuddy.core.common.EntityException
+import de.sambalmueslie.boardbuddy.common.EntityException
 import de.sambalmueslie.boardbuddy.core.game.api.Game
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 

@@ -1,4 +1,4 @@
-package de.sambalmueslie.boardbuddy.core.common
+package de.sambalmueslie.boardbuddy.common
 
 import jakarta.inject.Singleton
 import java.time.LocalDateTime

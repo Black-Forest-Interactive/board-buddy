@@ -1,6 +1,6 @@
 package de.sambalmueslie.boardbuddy.core.player.db
 
-import de.sambalmueslie.boardbuddy.core.common.EntityData
+import de.sambalmueslie.boardbuddy.common.EntityData
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import jakarta.persistence.Entity

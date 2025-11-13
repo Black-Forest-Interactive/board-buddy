@@ -1,12 +1,13 @@
 package de.sambalmueslie.boardbuddy.core.unit.api
 
-import de.sambalmueslie.boardbuddy.core.common.Entity
+import de.sambalmueslie.boardbuddy.common.Entity
+import de.sambalmueslie.boardbuddy.engine.api.UnitType
 
-data class UnitType(
+data class UnitDefinition(
     override val id: Long,
     val name: String,
-    val unitClass: UnitClass,
-    val counterClass: UnitClass?,
+    val unitType: UnitType,
+    val counterType: UnitType?,
     val damagePoints: PointsRange,
     val healthPoints: PointsRange,
     val maxLevel: Int,

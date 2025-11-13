@@ -1,6 +1,6 @@
 package de.sambalmueslie.boardbuddy.core.game.db
 
-import de.sambalmueslie.boardbuddy.core.common.EntityData
+import de.sambalmueslie.boardbuddy.common.EntityData
 import de.sambalmueslie.boardbuddy.core.game.api.Game
 import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet

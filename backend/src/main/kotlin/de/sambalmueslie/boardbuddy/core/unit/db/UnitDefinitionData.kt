@@ -1,20 +1,20 @@
 package de.sambalmueslie.boardbuddy.core.unit.db
 
-import de.sambalmueslie.boardbuddy.core.common.EntityData
+import de.sambalmueslie.boardbuddy.common.EntityData
 import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitClass
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitType
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitTypeChangeRequest
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
+import de.sambalmueslie.boardbuddy.engine.api.UnitType
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
-@Entity(name = "UnitType")
-@Table(name = "unit_type")
-data class UnitTypeData(
+@Entity(name = "UnitDefinition")
+@Table(name = "unit_definition")
+data class UnitDefinitionData(
     @Id @GeneratedValue var id: Long,
     var name: String,
-    @Enumerated(EnumType.STRING) var unitClass: UnitClass,
-    @Enumerated(EnumType.STRING) var counterClass: UnitClass?,
+    @Enumerated(EnumType.STRING) var unitType: UnitType,
+    @Enumerated(EnumType.STRING) var counterClass: UnitType?,
     var minDamagePoints: Int,
     var maxDamagePoints: Int,
     var minHealthPoints: Int,
@@ -24,10 +24,10 @@ data class UnitTypeData(
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert() = UnitType(id, name, unitClass, counterClass, PointsRange(minDamagePoints, maxDamagePoints), PointsRange(minHealthPoints, maxHealthPoints), maxLevel)
-    fun update(request: UnitTypeChangeRequest, currentTime: LocalDateTime): UnitTypeData {
+    fun convert() = UnitDefinition(id, name, unitType, counterClass, PointsRange(minDamagePoints, maxDamagePoints), PointsRange(minHealthPoints, maxHealthPoints), maxLevel)
+    fun update(request: UnitDefinitionChangeRequest, currentTime: LocalDateTime): UnitDefinitionData {
         name = request.name
-        unitClass = request.unitClass
+        unitType = request.unitType
         counterClass = request.counterClass
         minDamagePoints = request.damagePoints.min
         maxDamagePoints = request.damagePoints.max

@@ -1,7 +1,7 @@
 package de.sambalmueslie.boardbuddy.core.unit
 
-import de.sambalmueslie.boardbuddy.core.common.BaseEntityService
-import de.sambalmueslie.boardbuddy.core.common.TimeProvider
+import de.sambalmueslie.boardbuddy.common.BaseEntityService
+import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
 import de.sambalmueslie.boardbuddy.core.unit.api.*
@@ -26,16 +26,16 @@ class UnitInstanceService(
     }
 
     init {
-        eventService.register(UnitType::class, object : EventConsumer<UnitType> {
-            override fun created(obj: UnitType) {
+        eventService.register(UnitDefinition::class, object : EventConsumer<UnitDefinition> {
+            override fun created(obj: UnitDefinition) {
                 // intentionally left empty
             }
 
-            override fun updated(obj: UnitType) {
+            override fun updated(obj: UnitDefinition) {
                 // intentionally left empty
             }
 
-            override fun deleted(obj: UnitType) {
+            override fun deleted(obj: UnitDefinition) {
                 PageableSequence() { repository.getByUnitTypeId(obj.id, it) }.forEach { delete(it) }
             }
         })

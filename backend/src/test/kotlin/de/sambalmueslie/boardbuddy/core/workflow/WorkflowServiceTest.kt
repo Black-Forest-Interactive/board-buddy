@@ -10,10 +10,10 @@ import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
 import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitClass
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstance
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitTypeChangeRequest
 import de.sambalmueslie.boardbuddy.core.workflow.api.*
+import de.sambalmueslie.boardbuddy.engine.api.UnitType
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -50,9 +50,9 @@ class WorkflowServiceTest {
     fun testSimpleGame() {
         var ruleSet = ruleSetService.create(RuleSetChangeRequest("default"))
 
-        val inf = unitTypeService.create(UnitTypeChangeRequest("infantery", UnitClass.INFANTRY, UnitClass.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
-        val cav = unitTypeService.create(UnitTypeChangeRequest("cavalery", UnitClass.CAVALRY, UnitClass.ARTILLERY, PointsRange(1, 3), PointsRange(1, 3), 4))
-        val art = unitTypeService.create(UnitTypeChangeRequest("artillery", UnitClass.ARTILLERY, UnitClass.INFANTRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val inf = unitTypeService.create(UnitDefinitionChangeRequest("infantery", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val cav = unitTypeService.create(UnitDefinitionChangeRequest("cavalery", UnitType.CAVALRY, UnitType.ARTILLERY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val art = unitTypeService.create(UnitDefinitionChangeRequest("artillery", UnitType.ARTILLERY, UnitType.INFANTRY, PointsRange(1, 3), PointsRange(1, 3), 4))
         ruleSet = ruleSetService.assignUnitType(ruleSet, inf)!!
         ruleSet = ruleSetService.assignUnitType(ruleSet, cav)!!
         ruleSet = ruleSetService.assignUnitType(ruleSet, art)!!

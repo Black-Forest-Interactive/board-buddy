@@ -7,9 +7,9 @@ import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetNameValidationFailed
 import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
 import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitClass
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitType
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitTypeChangeRequest
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
+import de.sambalmueslie.boardbuddy.engine.api.UnitType
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
@@ -104,11 +104,11 @@ class RuleSetServiceTest {
     @Test
     fun testUnitTypeRelations() {
         val ruleSet = service.create(request)
-        val unitType = unitTypeService.create(UnitTypeChangeRequest("name", UnitClass.INFANTRY, UnitClass.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
 
         val assigned = service.assignUnitType(ruleSet, unitType)
         Assertions.assertNotNull(assigned)
-        assertEquals(listOf(unitType), assigned!!.unitTypes)
+        assertEquals(listOf(unitType), assigned!!.unitDefinitions)
         verify { eventCollector.updated(assigned) }
 
         val response = service.get(assigned.id)
@@ -117,7 +117,7 @@ class RuleSetServiceTest {
 
         val revoked = service.revokeUnitType(ruleSet, unitType)
         Assertions.assertNotNull(revoked)
-        assertEquals(listOf<UnitType>(), revoked!!.unitTypes)
+        assertEquals(listOf<UnitDefinition>(), revoked!!.unitDefinitions)
         verify { eventCollector.updated(revoked) }
     }
 
@@ -125,7 +125,7 @@ class RuleSetServiceTest {
     @Test
     fun testDeletionWithRelations() {
         val ruleSet = service.create(request)
-        val unitType = unitTypeService.create(UnitTypeChangeRequest("name", UnitClass.INFANTRY, UnitClass.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
 
         service.assignUnitType(ruleSet, unitType)
 

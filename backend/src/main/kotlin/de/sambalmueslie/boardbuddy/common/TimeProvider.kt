@@ -1,4 +1,4 @@
-package de.sambalmueslie.boardbuddy.core.common
+package de.sambalmueslie.boardbuddy.common
 
 import java.time.LocalDateTime
 

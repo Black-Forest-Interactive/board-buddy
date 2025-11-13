@@ -1,6 +1,5 @@
 package de.sambalmueslie.boardbuddy.core.workflow
 
-import de.sambalmueslie.boardbuddy.core.engine.GameEngine
 import de.sambalmueslie.boardbuddy.core.game.GameService
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
@@ -8,6 +7,7 @@ import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
 import de.sambalmueslie.boardbuddy.core.workflow.api.*
+import de.sambalmueslie.boardbuddy.engine.GameEngine
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 

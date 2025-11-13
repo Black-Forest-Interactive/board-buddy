@@ -1,34 +1,34 @@
 package de.sambalmueslie.boardbuddy.core.unit
 
-import de.sambalmueslie.boardbuddy.core.common.BaseEntityService
-import de.sambalmueslie.boardbuddy.core.common.TimeProvider
+import de.sambalmueslie.boardbuddy.common.BaseEntityService
+import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.unit.api.*
-import de.sambalmueslie.boardbuddy.core.unit.db.UnitTypeData
-import de.sambalmueslie.boardbuddy.core.unit.db.UnitTypeRepository
+import de.sambalmueslie.boardbuddy.core.unit.db.UnitDefinitionData
+import de.sambalmueslie.boardbuddy.core.unit.db.UnitDefinitionRepository
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton
 class UnitTypeService(
-    repository: UnitTypeRepository,
+    repository: UnitDefinitionRepository,
     eventService: EventService,
     private val timeProvider: TimeProvider
-) : BaseEntityService<UnitType, UnitTypeChangeRequest, UnitTypeData>(repository, eventService, UnitType::class) {
+) : BaseEntityService<UnitDefinition, UnitDefinitionChangeRequest, UnitDefinitionData>(repository, eventService, UnitDefinition::class) {
 
     companion object {
         private val logger = LoggerFactory.getLogger(UnitTypeService::class.java)
     }
 
-    override fun convert(data: UnitTypeData): UnitType {
+    override fun convert(data: UnitDefinitionData): UnitDefinition {
         return data.convert()
     }
 
-    override fun createData(request: UnitTypeChangeRequest): UnitTypeData {
-        return UnitTypeData(
+    override fun createData(request: UnitDefinitionChangeRequest): UnitDefinitionData {
+        return UnitDefinitionData(
             0,
             request.name,
-            request.unitClass,
+            request.unitType,
             request.counterClass,
             request.damagePoints.min,
             request.damagePoints.max,
@@ -39,17 +39,17 @@ class UnitTypeService(
         )
     }
 
-    override fun updateData(existing: UnitTypeData, request: UnitTypeChangeRequest): UnitTypeData {
+    override fun updateData(existing: UnitDefinitionData, request: UnitDefinitionChangeRequest): UnitDefinitionData {
         return existing.update(request, timeProvider.currentTime())
     }
 
-    override fun validate(request: UnitTypeChangeRequest) {
-        if (request.name.isBlank()) throw UnitTypeNameValidationFailed(request.name)
-        if (request.counterClass == request.unitClass) throw UnitTypeCounterClassValidationFailed(request.counterClass)
-        if (request.damagePoints.min <= 0) throw UnitTypeDamageValidationFailed(request.damagePoints)
-        if (request.damagePoints.min > request.damagePoints.max) throw UnitTypeDamageValidationFailed(request.damagePoints)
-        if (request.healthPoints.min <= 0) throw UnitTypeHealthValidationFailed(request.healthPoints)
-        if (request.healthPoints.min > request.healthPoints.max) throw UnitTypeHealthValidationFailed(request.damagePoints)
-        if (request.maxLevel <= 0) throw UnitTypeLevelValidationFailed(request.maxLevel)
+    override fun validate(request: UnitDefinitionChangeRequest) {
+        if (request.name.isBlank()) throw UnitDefinitionNameValidationFailed(request.name)
+        if (request.counterClass == request.unitType) throw UnitDefinitionCounterClassValidationFailed(request.counterClass)
+        if (request.damagePoints.min <= 0) throw UnitDefinitionDamageValidationFailed(request.damagePoints)
+        if (request.damagePoints.min > request.damagePoints.max) throw UnitDefinitionDamageValidationFailed(request.damagePoints)
+        if (request.healthPoints.min <= 0) throw UnitDefinitionHealthValidationFailed(request.healthPoints)
+        if (request.healthPoints.min > request.healthPoints.max) throw UnitDefinitionHealthValidationFailed(request.damagePoints)
+        if (request.maxLevel <= 0) throw UnitDefinitionLevelValidationFailed(request.maxLevel)
     }
 }

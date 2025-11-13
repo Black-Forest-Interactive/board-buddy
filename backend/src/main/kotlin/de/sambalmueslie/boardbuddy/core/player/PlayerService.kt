@@ -1,7 +1,7 @@
 package de.sambalmueslie.boardbuddy.core.player
 
-import de.sambalmueslie.boardbuddy.core.common.BaseEntityService
-import de.sambalmueslie.boardbuddy.core.common.TimeProvider
+import de.sambalmueslie.boardbuddy.common.BaseEntityService
+import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest

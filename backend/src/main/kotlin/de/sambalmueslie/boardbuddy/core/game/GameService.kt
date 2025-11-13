@@ -1,8 +1,8 @@
 package de.sambalmueslie.boardbuddy.core.game
 
-import de.sambalmueslie.boardbuddy.core.common.BaseEntityService
-import de.sambalmueslie.boardbuddy.core.common.TimeProvider
-import de.sambalmueslie.boardbuddy.core.common.findByIdOrNull
+import de.sambalmueslie.boardbuddy.common.BaseEntityService
+import de.sambalmueslie.boardbuddy.common.TimeProvider
+import de.sambalmueslie.boardbuddy.common.findByIdOrNull
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.game.api.Game
 import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest

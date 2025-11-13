@@ -1,6 +1,6 @@
 package de.sambalmueslie.boardbuddy.core.ruleset.api
 
-import de.sambalmueslie.boardbuddy.core.common.EntityException
+import de.sambalmueslie.boardbuddy.common.EntityException
 
 
 sealed class RuleSetRequestValidationException(code: Int, msg: String) : EntityException(RuleSet::class, code, msg)

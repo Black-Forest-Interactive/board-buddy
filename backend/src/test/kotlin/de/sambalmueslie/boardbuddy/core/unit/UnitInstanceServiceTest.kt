@@ -3,6 +3,7 @@ package de.sambalmueslie.boardbuddy.core.unit
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
 import de.sambalmueslie.boardbuddy.core.unit.api.*
+import de.sambalmueslie.boardbuddy.engine.api.UnitType
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
@@ -22,7 +23,7 @@ class UnitInstanceServiceTest {
     var typeService: UnitTypeService? = null
         set(value) {
             field = value
-            type = typeService!!.create(UnitTypeChangeRequest("name", UnitClass.INFANTRY, UnitClass.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+            type = typeService!!.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
             request = UnitInstanceChangeRequest(type, 3, 1, 1)
         }
 
@@ -30,7 +31,7 @@ class UnitInstanceServiceTest {
     lateinit var eventService: EventService
 
     private val eventCollector: EventConsumer<UnitInstance> = mockk()
-    private lateinit var type: UnitType
+    private lateinit var type: UnitDefinition
     private lateinit var request: UnitInstanceChangeRequest
 
     init {

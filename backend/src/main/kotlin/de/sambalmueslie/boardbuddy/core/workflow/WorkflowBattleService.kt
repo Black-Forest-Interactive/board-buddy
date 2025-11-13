@@ -76,7 +76,7 @@ class WorkflowBattleService(
 
         defendFront.takeHit(attackUnit)
 
-        val isAttackerCounterClass = attackUnit.type.counterClass != null && attackUnit.type.counterClass == defendUnit.type.unitClass
+        val isAttackerCounterClass = attackUnit.type.counterType != null && attackUnit.type.counterType == defendUnit.type.unitType
         val defenderStrikesBack = !defendFront.defeated || !isAttackerCounterClass
         if (defenderStrikesBack) attackFront.takeHit(defendUnit)
 

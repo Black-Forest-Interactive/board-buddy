@@ -6,7 +6,7 @@ import de.sambalmueslie.boardbuddy.core.ruleset.db.RuleSetData
 import de.sambalmueslie.boardbuddy.core.ruleset.db.RuleSetUnitTypeRelation
 import de.sambalmueslie.boardbuddy.core.ruleset.db.RuleSetUnitTypeRelationRepository
 import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitType
+import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
@@ -21,34 +21,34 @@ class RuleSetUnitTypeService(
     }
 
     init {
-        eventService.register(UnitType::class, object : EventConsumer<UnitType> {
-            override fun created(obj: UnitType) {
+        eventService.register(UnitDefinition::class, object : EventConsumer<UnitDefinition> {
+            override fun created(obj: UnitDefinition) {
                 // intentionally left empty
             }
 
-            override fun updated(obj: UnitType) {
+            override fun updated(obj: UnitDefinition) {
                 // intentionally left empty
             }
 
-            override fun deleted(obj: UnitType) {
+            override fun deleted(obj: UnitDefinition) {
                 repository.deleteByUnitTypeId(obj.id)
             }
         })
     }
 
-    internal fun assign(ruleSet: RuleSetData, unitType: UnitType) {
-        val existing = repository.findByRuleSetIdAndUnitTypeId(ruleSet.id, unitType.id)
+    internal fun assign(ruleSet: RuleSetData, unitDefinition: UnitDefinition) {
+        val existing = repository.findByRuleSetIdAndUnitTypeId(ruleSet.id, unitDefinition.id)
         if (existing != null) return
 
-        val relation = RuleSetUnitTypeRelation(ruleSet.id, unitType.id)
+        val relation = RuleSetUnitTypeRelation(ruleSet.id, unitDefinition.id)
         repository.save(relation)
     }
 
-    internal fun revoke(ruleSet: RuleSetData, unitType: UnitType) {
-        repository.deleteByRuleSetIdAndUnitTypeId(ruleSet.id, unitType.id)
+    internal fun revoke(ruleSet: RuleSetData, unitDefinition: UnitDefinition) {
+        repository.deleteByRuleSetIdAndUnitTypeId(ruleSet.id, unitDefinition.id)
     }
 
-    internal fun getAssignedUnitTypes(data: RuleSetData): List<UnitType> {
+    internal fun getAssignedUnitTypes(data: RuleSetData): List<UnitDefinition> {
         val relations = repository.findByRuleSetId(data.id)
         val unitTypeIds = relations.map { it.unitTypeId }.toSet()
         return unitTypeService.getByIds(unitTypeIds)

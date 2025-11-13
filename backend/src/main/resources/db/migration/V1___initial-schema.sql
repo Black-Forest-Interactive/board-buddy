@@ -1,8 +1,8 @@
 -- unit
-CREATE SEQUENCE unit_type_seq;
-CREATE TABLE unit_type
+CREATE SEQUENCE unit_definition_seq;
+CREATE TABLE unit_definition
 (
-    id                BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('unit_type_seq'::regclass),
+    id                BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('unit_definition_seq'::regclass),
     name              VARCHAR(255) NOT NULL,
     unit_class        VARCHAR(255) NOT NULL,
     counter_class     VARCHAR(255),
@@ -24,7 +24,7 @@ CREATE TABLE unit_instance
     health       INT    NOT NULL,
     level        INT    NOT NULL,
 
-    unit_type_id BIGINT REFERENCES unit_type (id),
+    unit_definition_id BIGINT REFERENCES unit_definition (id),
 
     created      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated      TIMESTAMP WITHOUT TIME ZONE
@@ -41,11 +41,11 @@ CREATE TABLE rule_set
     updated TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE rule_set_unit_type
+CREATE TABLE rule_set_unit_definition
 (
     rule_set_id  BIGINT REFERENCES rule_set (id),
-    unit_type_id BIGINT REFERENCES unit_type (id),
-    PRIMARY KEY (rule_set_id, unit_type_id)
+    unit_definition_id BIGINT REFERENCES unit_definition (id),
+    PRIMARY KEY (rule_set_id, unit_definition_id)
 );
 
 -- game

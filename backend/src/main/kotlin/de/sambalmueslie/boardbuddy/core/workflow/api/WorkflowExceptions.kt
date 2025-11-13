@@ -1,6 +1,6 @@
 package de.sambalmueslie.boardbuddy.core.workflow.api
 
-import de.sambalmueslie.boardbuddy.core.common.EntityException
+import de.sambalmueslie.boardbuddy.common.EntityException
 
 
 sealed class WorkflowException(code: Int, msg: String) : EntityException(Workflow::class, code, msg)

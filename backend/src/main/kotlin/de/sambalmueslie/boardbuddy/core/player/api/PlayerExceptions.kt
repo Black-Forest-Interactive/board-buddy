@@ -1,6 +1,6 @@
 package de.sambalmueslie.boardbuddy.core.player.api
 
-import de.sambalmueslie.boardbuddy.core.common.EntityException
+import de.sambalmueslie.boardbuddy.common.EntityException
 
 
 sealed class PlayerRequestValidationException(code: Int, msg: String) : EntityException(Player::class, code, msg)
