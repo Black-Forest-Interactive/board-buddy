@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.allopen") version "2.2.21"
     kotlin("plugin.jpa") version "2.2.21"
     kotlin("plugin.serialization") version "2.2.21"
-    id("com.google.devtools.ksp") version "2.3.0"
+    id("com.google.devtools.ksp") version "2.3.2"
     id("org.sonarqube") version "7.0.1.6134"
     id("net.researchgate.release") version "3.1.0"
     id("com.google.cloud.tools.jib") version "3.4.5"
@@ -111,7 +111,7 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
 
     // opensearch
-    implementation("com.jillesvangurp:search-client:2.6.7")
+    implementation("com.jillesvangurp:search-client:2.7.9")
     // jsoup
     implementation("org.jsoup:jsoup:1.21.2")
 }
