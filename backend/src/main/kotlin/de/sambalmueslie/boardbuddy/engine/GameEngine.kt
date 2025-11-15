@@ -2,11 +2,11 @@ package de.sambalmueslie.boardbuddy.engine
 
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
-import de.sambalmueslie.boardbuddy.core.unit.UnitInstanceService
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstance
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstanceChangeRequest
 import de.sambalmueslie.boardbuddy.engine.api.*
+import de.sambalmueslie.boardbuddy.engine.db.GameComponentStorage
+import de.sambalmueslie.boardbuddy.engine.db.GameEntityStorage
+import de.sambalmueslie.boardbuddy.engine.system.CombatSystem
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
@@ -14,15 +14,16 @@ import kotlin.random.Random
 @Singleton
 class GameEngine(
     private val unitInstanceService: UnitInstanceService,
-    private val entityService: GameEntityService,
-    private val storeService: ComponentStoreService
+    private val entityStorage: GameEntityStorage,
+    private val componentStorage: GameComponentStorage,
+    private val combatSystem: CombatSystem
 ) {
 
     companion object {
         private val logger = LoggerFactory.getLogger(GameEngine::class.java)
     }
 
-
+    @Deprecated("use create unit instead")
     fun createUnit(player: Player, session: GameSession, unitDefinition: UnitDefinition): UnitInstance {
         // TODO calculate damage and health more smart
         val damage = Random.nextInt(unitDefinition.damagePoints.min, unitDefinition.damagePoints.max + 1)
@@ -34,24 +35,30 @@ class GameEngine(
 
 
     fun createUnit(unitDefinition: UnitDefinition): GameEntity {
-        val entity = entityService.createEntity()
+        val entity = entityStorage.create()
 
         val damage = Random.nextInt(unitDefinition.damagePoints.min, unitDefinition.damagePoints.max + 1)
-        storeService.get(Damage::class).create(entity) { Damage(damage) }
+        componentStorage.create(entity, Damage::class) { Damage(damage) }
 
         val health = Random.nextInt(unitDefinition.healthPoints.min, unitDefinition.healthPoints.max + 1)
-        storeService.get(Health::class).create(entity) { Health(health) }
+        componentStorage.create(entity, Health::class) { Health(damage) }
 
         val level = 1
-        storeService.get(Level::class).create(entity) { Level(level) }
+        componentStorage.create(entity, Level::class) { Level(level) }
 
         val type = unitDefinition.unitType
-        storeService.get(Type::class).create(entity) { Type(type) }
+        componentStorage.create(entity, Type::class) { Type(type) }
 
         val counterType = unitDefinition.counterType
-        if (counterType != null) storeService.get(CounterType::class).create(entity) { CounterType(counterType) }
+        if (counterType != null) componentStorage.create(entity, CounterType::class) { CounterType(counterType) }
 
         return entity
+    }
+
+    fun combat(attackerId: Long, defenderId: Long) {
+        val attacker = entityStorage.get(attackerId) ?: return
+        val defender = entityStorage.get(defenderId) ?: return
+        combatSystem.combat(attacker, defender)
     }
 
 }

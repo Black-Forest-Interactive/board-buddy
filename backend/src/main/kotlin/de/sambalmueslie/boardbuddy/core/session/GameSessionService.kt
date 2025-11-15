@@ -14,7 +14,6 @@ import de.sambalmueslie.boardbuddy.core.session.api.GameSessionNameValidationFai
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionRuleSetValidationFailed
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionData
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionRepository
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstance
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.util.*

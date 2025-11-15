@@ -11,9 +11,9 @@ import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
 import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstance
-import de.sambalmueslie.boardbuddy.core.workflow.api.*
 import de.sambalmueslie.boardbuddy.engine.api.UnitType
+import de.sambalmueslie.boardbuddy.workflow.WorkflowService
+import de.sambalmueslie.boardbuddy.workflow.api.*
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -124,7 +124,7 @@ class WorkflowServiceTest {
         assertEquals(listOf(BattleFront(1, bp1u1, bp1u1.health, false)), workflow.activeBattle!!.participant.find { it.player.id == p1.id }!!.fronts)
         assertEquals(p2.id, workflow.activeBattle.activePlayer.id)
 
-        workflow = service.battleAttackFront(workflow.id, WorkflowBattleAttackFrontRequest(p2.id, p1.id, bp2u2.id,1))
+        workflow = service.battleAttackFront(workflow.id, WorkflowBattleAttackFrontRequest(p2.id, p1.id, bp2u2.id, 1))
         assertEquals(p1.id, workflow.activeBattle!!.activePlayer.id)
 
     }

@@ -6,8 +6,6 @@ import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionData
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionUnitRelation
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionUnitRelationRepository
-import de.sambalmueslie.boardbuddy.core.unit.UnitInstanceService
-import de.sambalmueslie.boardbuddy.core.unit.api.UnitInstance
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
