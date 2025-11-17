@@ -1,4 +1,4 @@
-package de.sambalmueslie.boardbuddy.engine.db
+package de.sambalmueslie.boardbuddy.engine.storage
 
 import de.sambalmueslie.boardbuddy.common.EntityRepository
 import io.micronaut.data.annotation.Repository

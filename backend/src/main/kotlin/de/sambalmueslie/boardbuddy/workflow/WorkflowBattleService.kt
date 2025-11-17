@@ -4,6 +4,8 @@ import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
+import de.sambalmueslie.boardbuddy.engine.GameEngine
+import de.sambalmueslie.boardbuddy.engine.api.GameEntity
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory
 class WorkflowBattleService(
     private val playerService: PlayerService,
     private val sessionService: GameSessionService,
+    private val gameEngine: GameEngine,
 ) {
 
     companion object {
@@ -52,7 +55,7 @@ class WorkflowBattleService(
         battle.validatePlayerIsActive(player)
 
         val participant = battle.getAndValidateParticipant(player)
-        val unit = participant.getAndValidateUnitInstance(request.unitInstanceId)
+        val unit = participant.getAndValidateUnitEntity(request.unitInstanceId)
 
         val index = request.index
 
@@ -66,7 +69,7 @@ class WorkflowBattleService(
         val battle = getData(session) ?: throw WorkflowBattleNotExisting(session.key)
         battle.validatePlayerIsActive(player)
         val participant = battle.getAndValidateParticipant(player)
-        val unit = participant.getAndValidateUnitInstance(request.unitInstanceId)
+        val unit = participant.getAndValidateUnitEntity(request.unitInstanceId)
         participant.createFront(unit)
 
         battle.switchActivePlayer(player)
@@ -86,14 +89,9 @@ class WorkflowBattleService(
         val defendFront = defendParticipant.fronts.find { it.index == request.frontIndex } ?: throw WorkflowBattleInvalidFrontIndex(request.frontIndex)
         val defendUnit = defendFront.unit
 
-        val attackUnit = attackParticipant.getAndValidateUnitInstance(request.unitInstanceId)
-        val attackFront = attackParticipant.createFront(attackUnit, request.frontIndex)
+        val attackUnit = attackParticipant.getAndValidateUnitEntity(request.unitInstanceId)
 
-        defendFront.takeHit(attackUnit)
-
-        val isAttackerCounterClass = attackUnit.type.counterType != null && attackUnit.type.counterType == defendUnit.type.unitType
-        val defenderStrikesBack = !defendFront.defeated || !isAttackerCounterClass
-        if (defenderStrikesBack) attackFront.takeHit(defendUnit)
+        gameEngine.combat(attackUnit, defendUnit)
 
         battle.switchActivePlayer(attacker)
         return battle.convert()
@@ -124,22 +122,22 @@ class WorkflowBattleService(
 
     private data class BattleParticipantData(
         val player: Player,
-        val units: MutableList<UnitInstance>,
+        val units: MutableList<GameEntity>,
         val fronts: MutableList<BattleFrontData> = mutableListOf()
     ) {
         fun convert() = BattleParticipant(player, units, fronts.map { it.convert() })
 
-        fun getAndValidateUnitInstance(unitInstanceId: Long): UnitInstance {
-            return units.find { it.id == unitInstanceId } ?: throw WorkflowBattleUnitNotExisting(unitInstanceId)
+        fun getAndValidateUnitEntity(entityId: Long): GameEntity {
+            return units.find { it == entityId } ?: throw WorkflowBattleUnitNotExisting(entityId)
         }
 
-        fun createFront(unit: UnitInstance): BattleFrontData {
+        fun createFront(unit: GameEntity): BattleFrontData {
             val index = (fronts.lastOrNull()?.index ?: 0) + 1
             return createFront(unit, index)
         }
 
-        fun createFront(unit: UnitInstance, index: Int): BattleFrontData {
-            if (!units.any { it.id == unit.id }) throw WorkflowBattleUnitNotExisting(unit.id)
+        fun createFront(unit: GameEntity, index: Int): BattleFrontData {
+            if (!units.any { it == unit }) throw WorkflowBattleUnitNotExisting(unit)
             units.remove(unit)
 
             val existing = fronts.find { it.index == index }
@@ -154,15 +152,8 @@ class WorkflowBattleService(
 
     private data class BattleFrontData(
         val index: Int,
-        val unit: UnitInstance,
-        var remainingHealth: Int = unit.health,
-        var defeated: Boolean = remainingHealth <= 0,
+        val unit: GameEntity
     ) {
-        fun convert() = BattleFront(index, unit, remainingHealth, defeated)
-
-        fun takeHit(unit: UnitInstance) {
-            remainingHealth -= unit.health
-            defeated = remainingHealth <= 0
-        }
+        fun convert() = BattleFront(index, unit)
     }
 }

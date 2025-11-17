@@ -1,8 +1,8 @@
 package de.sambalmueslie.boardbuddy.workflow.api
 
+import de.sambalmueslie.boardbuddy.engine.api.GameEntity
+
 data class BattleFront(
     val index: Int,
-    val unit: UnitInstance,
-    val remainingHealth: Int,
-    val defeated: Boolean,
+    val unit: GameEntity
 )

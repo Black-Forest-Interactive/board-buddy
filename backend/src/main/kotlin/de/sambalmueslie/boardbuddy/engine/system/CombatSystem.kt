@@ -2,7 +2,7 @@ package de.sambalmueslie.boardbuddy.engine.system
 
 import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.engine.db.GameComponentStorage
-import de.sambalmueslie.boardbuddy.engine.db.GameEntityStorage
+import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import kotlin.math.min
@@ -11,7 +11,7 @@ import kotlin.math.min
 class CombatSystem(
     private val storage: GameEntityStorage,
     private val componentStorage: GameComponentStorage,
-) {
+) : GameSystem {
 
     companion object {
         private val logger = LoggerFactory.getLogger(CombatSystem::class.java)

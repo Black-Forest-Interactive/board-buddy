@@ -1,4 +1,4 @@
-package de.sambalmueslie.boardbuddy.engine.db
+package de.sambalmueslie.boardbuddy.engine.storage
 
 import de.sambalmueslie.boardbuddy.engine.api.Health
 import jakarta.persistence.Entity

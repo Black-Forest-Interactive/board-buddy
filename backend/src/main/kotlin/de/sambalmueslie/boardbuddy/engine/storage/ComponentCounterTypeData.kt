@@ -1,4 +1,4 @@
-package de.sambalmueslie.boardbuddy.engine.db
+package de.sambalmueslie.boardbuddy.engine.storage
 
 import de.sambalmueslie.boardbuddy.engine.api.CounterType
 import de.sambalmueslie.boardbuddy.engine.api.UnitType
