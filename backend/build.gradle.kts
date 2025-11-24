@@ -5,10 +5,10 @@ plugins {
     kotlin("plugin.allopen") version "2.2.21"
     kotlin("plugin.jpa") version "2.2.21"
     kotlin("plugin.serialization") version "2.2.21"
-    id("com.google.devtools.ksp") version "2.3.2"
-    id("org.sonarqube") version "7.0.1.6134"
+    id("com.google.devtools.ksp") version "2.3.3"
+    id("org.sonarqube") version "7.1.0.6387"
     id("net.researchgate.release") version "3.1.0"
-    id("com.google.cloud.tools.jib") version "3.4.5"
+    id("com.google.cloud.tools.jib") version "3.5.1"
     id("io.micronaut.application") version "4.6.1"
     id("io.micronaut.test-resources") version "4.6.1"
     id("io.micronaut.aot") version "4.6.1"
@@ -29,7 +29,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.5.20")
+    implementation("ch.qos.logback:logback-classic:1.5.21")
     runtimeOnly("org.yaml:snakeyaml")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.1")
@@ -89,8 +89,8 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
 
     // qrcode
-    implementation("com.google.zxing:core:3.5.3")
-    implementation("com.google.zxing:javase:3.5.3")
+    implementation("com.google.zxing:core:3.5.4")
+    implementation("com.google.zxing:javase:3.5.4")
 
     // mail
     implementation("org.simplejavamail:simple-java-mail:8.12.6")
