@@ -1,14 +1,14 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.allopen") version "2.2.21"
-    kotlin("plugin.jpa") version "2.2.21"
-    kotlin("plugin.serialization") version "2.2.21"
-    id("com.google.devtools.ksp") version "2.3.3"
-    id("org.sonarqube") version "7.1.0.6387"
+    kotlin("jvm") version "2.3.0"
+    kotlin("plugin.allopen") version "2.3.0"
+    kotlin("plugin.jpa") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.0"
+    id("com.google.devtools.ksp") version "2.3.4"
+    id("org.sonarqube") version "7.2.2.6593"
     id("net.researchgate.release") version "3.1.0"
-    id("com.google.cloud.tools.jib") version "3.5.1"
+    id("com.google.cloud.tools.jib") version "3.5.2"
     id("io.micronaut.application") version "4.6.1"
     id("io.micronaut.test-resources") version "4.6.1"
     id("io.micronaut.aot") version "4.6.1"
@@ -29,12 +29,12 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.5.21")
+    implementation("ch.qos.logback:logback-classic:1.5.23")
     runtimeOnly("org.yaml:snakeyaml")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.1")
-    testImplementation("io.mockk:mockk:1.14.6")
+    testImplementation("io.mockk:mockk:1.14.7")
 
     // jackson
     ksp("io.micronaut.serde:micronaut-serde-processor")
@@ -62,13 +62,13 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.security:micronaut-security-oauth2")
-    aotPlugins("io.micronaut.security:micronaut-security-aot:4.15.0")
+    aotPlugins("io.micronaut.security:micronaut-security-aot:4.16.1")
 
     // kotlin
     implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.3.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.0")
 
     // caching
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
@@ -102,18 +102,18 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.testcontainers:testcontainers")
-    testImplementation("org.opensearch:opensearch-testcontainers:4.0.0")
+    testImplementation("org.opensearch:opensearch-testcontainers:4.1.0")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testImplementation("io.fusionauth:fusionauth-jwt:5.3.3")
-    testImplementation("io.mockk:mockk:1.14.6")
+    testImplementation("io.mockk:mockk:1.14.7")
 
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
 
     // opensearch
-    implementation("com.jillesvangurp:search-client:2.7.9")
+    implementation("com.jillesvangurp:search-client:2.8.3")
     // jsoup
-    implementation("org.jsoup:jsoup:1.21.2")
+    implementation("org.jsoup:jsoup:1.22.1")
 }
 
 
