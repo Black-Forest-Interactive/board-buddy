@@ -1,0 +1,10 @@
+{
+  "MENU": {
+    "Home": "Startseite",
+    "Language": "Sprache"
+  },
+  "LANG": {
+    "English": "Englisch",
+    "German": "Deutsch"
+  }
+}

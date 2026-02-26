@@ -1,25 +1,5 @@
-<div class="flex justify-center items-center h-screen bg-gray-100 gap-4">
-  <p-card header="Board Buddy" class="w-96 shadow-lg">
-    <div class="flex flex-col gap-4">
-      <p class="text-gray-700 text-center">
-        Welcome to your Angular 21 + Tailwind + PrimeNG app!
-      </p>
-      <button
-        pButton
-        type="button"
-        label="Say Hello"
-        class="bg-blue-500 hover:bg-blue-600 text-white w-full"
-        (click)="sayHello()">
-      </button>
-    </div>
-  </p-card>
-
-
-  <p-card header="Unit Attack" class="w-96 shadow-lg">
-    <div class="flex flex-col gap-4">
-      <p class="text-gray-700">Your warriors attack the enemy city!</p>
-      <button pButton label="Resolve Combat" class="bg-red-500 hover:bg-red-600 text-white w-full" (click)="resolveCombat()"></button>
-    </div>
-  </p-card>
-
+<app-portal-toolbar class="fixed top-0 left-0 right-0 z-10"/>
+<div class="fixed top-16 bottom-14 left-0 right-0 overflow-y-auto">
+  <app-portal-content class="!h-full min-h-0"/>
 </div>
+<app-portal-footer class="fixed bottom-0 left-0 right-0 z-10"/>

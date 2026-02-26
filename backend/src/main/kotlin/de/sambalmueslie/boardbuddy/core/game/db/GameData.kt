@@ -1,8 +1,9 @@
 package de.sambalmueslie.boardbuddy.core.game.db
 
-import de.sambalmueslie.boardbuddy.core.common.EntityData
+import de.sambalmueslie.boardbuddy.common.EntityData
 import de.sambalmueslie.boardbuddy.core.game.api.Game
 import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
+import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -18,7 +19,7 @@ data class GameData(
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert() = Game(id, name, description)
+    fun convert(ruleSets: List<RuleSet>) = Game(id, name, description, ruleSets)
     fun update(request: GameChangeRequest, currentTime: LocalDateTime): GameData {
         name = request.name
         description = request.description

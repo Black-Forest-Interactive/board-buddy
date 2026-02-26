@@ -1,22 +1,15 @@
 import {Component} from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {Card} from "primeng/card";
-import {ButtonDirective} from "primeng/button";
+import {PortalToolbarComponent} from "./portal-toolbar/portal-toolbar.component";
+import {PortalContentComponent} from "./portal-content/portal-content.component";
+import {PortalFooterComponent} from "./portal-footer/portal-footer.component";
 
 @Component({
-  imports: [RouterModule, Card, ButtonDirective],
+  imports: [RouterModule, PortalToolbarComponent, PortalContentComponent, PortalFooterComponent],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
-  protected title = 'board-buddy';
-
-  sayHello() {
-    alert('Hello from Board Buddy!');
-  }
-
-  resolveCombat() {
-
-  }
+  protected title = 'portal-app';
 }

@@ -1,12 +1,13 @@
 package de.sambalmueslie.boardbuddy.core.unit.api
 
-import de.sambalmueslie.boardbuddy.core.common.RequestValidationException
+import de.sambalmueslie.boardbuddy.common.EntityException
+import de.sambalmueslie.boardbuddy.engine.api.UnitType
 
 
-sealed class UnitTypeRequestValidationException(code: Int, msg: String) : RequestValidationException(UnitType::class, code, msg)
+sealed class UnitDefinitionRequestValidationException(code: Int, msg: String) : EntityException(UnitDefinition::class, code, msg)
 
-class UnitTypeNameValidationFailed(value: String) : UnitTypeRequestValidationException(1, "Validation failed due to invalid name '$value'")
-class UnitTypeCounterClassValidationFailed(value: UnitClass?) : UnitTypeRequestValidationException(2, "Validation failed due to invalid counter class '$value'")
-class UnitTypeDamageValidationFailed(value: PointsRange) : UnitTypeRequestValidationException(2, "Validation failed due to invalid damage '$value'")
-class UnitTypeHealthValidationFailed(value: PointsRange) : UnitTypeRequestValidationException(3, "Validation failed due to invalid health '$value'")
-class UnitTypeLevelValidationFailed(value: Int) : UnitTypeRequestValidationException(4, "Validation failed due to invalid level '$value'")
+class UnitDefinitionNameValidationFailed(value: String) : UnitDefinitionRequestValidationException(1, "Validation failed due to invalid name '$value'")
+class UnitDefinitionCounterClassValidationFailed(value: UnitType?) : UnitDefinitionRequestValidationException(2, "Validation failed due to invalid counter class '$value'")
+class UnitDefinitionDamageValidationFailed(value: PointsRange) : UnitDefinitionRequestValidationException(2, "Validation failed due to invalid damage '$value'")
+class UnitDefinitionHealthValidationFailed(value: PointsRange) : UnitDefinitionRequestValidationException(3, "Validation failed due to invalid health '$value'")
+class UnitDefinitionLevelValidationFailed(value: Int) : UnitDefinitionRequestValidationException(4, "Validation failed due to invalid level '$value'")
