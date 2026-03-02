@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.allopen") version "2.3.10"
     kotlin("plugin.jpa") version "2.3.10"
     kotlin("plugin.serialization") version "2.3.10"
-    id("com.google.devtools.ksp") version "2.3.5"
+    id("com.google.devtools.ksp") version "2.3.6"
     id("org.sonarqube") version "7.2.2.6593"
     id("net.researchgate.release") version "3.1.0"
     id("com.google.cloud.tools.jib") version "3.5.3"
@@ -29,11 +29,11 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.5.28")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
     runtimeOnly("org.yaml:snakeyaml")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
     testImplementation("io.mockk:mockk:1.14.9")
 
     // jackson
@@ -62,7 +62,7 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.security:micronaut-security-oauth2")
-    aotPlugins("io.micronaut.security:micronaut-security-aot:4.16.1")
+    aotPlugins("io.micronaut.security:micronaut-security-aot:4.17.1")
 
     // kotlin
     implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
@@ -111,7 +111,7 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
 
     // opensearch
-    implementation("com.jillesvangurp:search-client:2.8.4")
+    implementation("com.jillesvangurp:search-client:2.8.5")
     // jsoup
     implementation("org.jsoup:jsoup:1.22.1")
 }
