@@ -111,7 +111,7 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
 
     // opensearch
-    implementation("com.jillesvangurp:search-client:2.8.6")
+    implementation("com.jillesvangurp:search-client:2.8.7")
     // jsoup
     implementation("org.jsoup:jsoup:1.22.1")
 }
