@@ -74,9 +74,9 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
 
     // coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.10.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.11.0")
     // reactor
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut.reactor:micronaut-reactor-http-client")
