@@ -5,7 +5,7 @@ import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetNameValidationFailed
-import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
+import de.sambalmueslie.boardbuddy.core.unit.UnitDefinitionService
 import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
@@ -25,7 +25,7 @@ class RuleSetServiceTest {
     lateinit var service: RuleSetService
 
     @Inject
-    lateinit var unitTypeService: UnitTypeService
+    lateinit var unitTypeService: UnitDefinitionService
 
     @Inject
     lateinit var eventService: EventService

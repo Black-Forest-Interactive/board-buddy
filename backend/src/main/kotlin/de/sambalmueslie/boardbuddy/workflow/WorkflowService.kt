@@ -7,6 +7,8 @@ import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
 import de.sambalmueslie.boardbuddy.engine.GameEngine
+import de.sambalmueslie.boardbuddy.engine.api.GameEntityInfo
+import de.sambalmueslie.boardbuddy.engine.api.GameUnit
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -53,7 +55,7 @@ class WorkflowService(
         val unitType = unitTypeService.get(session, request.unitTypeId)
         val entity = engine.createUnit(unitType)
 
-//        sessionService.assignUnit(session, player, entity)
+        sessionService.assignEntity(session, player, entity)
         return get(id)
     }
 
@@ -89,6 +91,14 @@ class WorkflowService(
 
     private fun getSession(id: String): GameSession {
         return sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
+    }
+
+    fun getUnitInfos(p: BattleParticipant): List<GameEntityInfo> {
+        return p.units.map { engine.getInfo(it) }
+    }
+
+    fun getUnits(p: BattleParticipant): List<GameUnit> {
+        return p.units.map { engine.getUnit(it) }
     }
 
 

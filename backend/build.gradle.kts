@@ -34,8 +34,6 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
-    testImplementation("io.mockk:mockk:1.14.9")
-
     // jackson
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut:micronaut-jackson-databind")
@@ -122,7 +120,7 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
 }
 
 
@@ -158,13 +156,13 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
 tasks {
     compileKotlin {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
+            jvmTarget.set(JvmTarget.JVM_25)
         }
     }
 
     compileTestKotlin {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
+            jvmTarget.set(JvmTarget.JVM_25)
         }
     }
 }
@@ -199,7 +197,7 @@ sonar {
 
 
 jib {
-    from.image = "eclipse-temurin:21-jre-ubi9-minimal"
+    from.image = "eclipse-temurin:25-jre-alpine"
     to {
         image = "open-event-backend"
         tags = setOf(version.toString(), "latest")

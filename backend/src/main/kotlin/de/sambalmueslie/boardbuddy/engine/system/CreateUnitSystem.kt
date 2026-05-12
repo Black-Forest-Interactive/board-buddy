@@ -11,7 +11,7 @@ import kotlin.random.Random
 @Singleton
 class CreateUnitSystem(
     private val model: GameEntityModel,
-    private val componentModelService: GameComponentModelService,
+    componentModelService: GameComponentModelService,
 ) : GameSystem {
     companion object {
         private val logger = LoggerFactory.getLogger(CreateUnitSystem::class.java)

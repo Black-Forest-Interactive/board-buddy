@@ -14,7 +14,7 @@ data class UnitDefinitionData(
     @Id @GeneratedValue var id: Long,
     var name: String,
     @Enumerated(EnumType.STRING) var unitType: UnitType,
-    @Enumerated(EnumType.STRING) var counterClass: UnitType?,
+    @Enumerated(EnumType.STRING) var counterType: UnitType?,
     var minDamagePoints: Int,
     var maxDamagePoints: Int,
     var minHealthPoints: Int,
@@ -24,11 +24,11 @@ data class UnitDefinitionData(
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert() = UnitDefinition(id, name, unitType, counterClass, PointsRange(minDamagePoints, maxDamagePoints), PointsRange(minHealthPoints, maxHealthPoints), maxLevel)
+    fun convert() = UnitDefinition(id, name, unitType, counterType, PointsRange(minDamagePoints, maxDamagePoints), PointsRange(minHealthPoints, maxHealthPoints), maxLevel)
     fun update(request: UnitDefinitionChangeRequest, currentTime: LocalDateTime): UnitDefinitionData {
         name = request.name
         unitType = request.unitType
-        counterClass = request.counterClass
+        counterType = request.counterType
         minDamagePoints = request.damagePoints.min
         maxDamagePoints = request.damagePoints.max
         minHealthPoints = request.damagePoints.min

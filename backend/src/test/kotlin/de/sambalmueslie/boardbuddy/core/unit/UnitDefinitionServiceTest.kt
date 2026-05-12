@@ -14,9 +14,9 @@ import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest
 @Testcontainers
-class UnitTypeServiceTest {
+class UnitDefinitionServiceTest {
     @Inject
-    lateinit var service: UnitTypeService
+    lateinit var service: UnitDefinitionService
 
     @Inject
     lateinit var eventService: EventService
@@ -46,7 +46,7 @@ class UnitTypeServiceTest {
     fun testCrudOperations() {
         // CREATE
         val response = service.create(request)
-        var reference = UnitDefinition(response.id, request.name, request.unitType, request.counterClass, request.damagePoints, request.healthPoints, request.maxLevel)
+        var reference = UnitDefinition(response.id, request.name, request.unitType, request.counterType, request.damagePoints, request.healthPoints, request.maxLevel)
         assertEquals(reference, response)
         verify { eventCollector.created(reference) }
 
@@ -56,7 +56,7 @@ class UnitTypeServiceTest {
 
         // UPDATE
         val update = UnitDefinitionChangeRequest("name-update", UnitType.CAVALRY, UnitType.ARTILLERY, PointsRange(2, 4), PointsRange(2, 4), 4)
-        reference = UnitDefinition(response.id, update.name, update.unitType, update.counterClass, update.damagePoints, update.healthPoints, update.maxLevel)
+        reference = UnitDefinition(response.id, update.name, update.unitType, update.counterType, update.damagePoints, update.healthPoints, update.maxLevel)
         assertEquals(reference, service.update(reference.id, update))
         verify { eventCollector.updated(reference) }
 
@@ -78,7 +78,7 @@ class UnitTypeServiceTest {
         service.create(request)
 
         val updateResponse = service.update(99, request)
-        val updateReference = UnitDefinition(updateResponse.id, request.name, request.unitType, request.counterClass, request.damagePoints, request.healthPoints, request.maxLevel)
+        val updateReference = UnitDefinition(updateResponse.id, request.name, request.unitType, request.counterType, request.damagePoints, request.healthPoints, request.maxLevel)
         assertEquals(updateReference, updateResponse)
         verify { eventCollector.created(updateReference) }
     }
@@ -86,24 +86,24 @@ class UnitTypeServiceTest {
     @Test
     fun testValidation() {
 
-        val invalidNameRequest = UnitDefinitionChangeRequest("", request.unitType, request.counterClass, request.damagePoints, request.healthPoints, request.maxLevel)
+        val invalidNameRequest = UnitDefinitionChangeRequest("", request.unitType, request.counterType, request.damagePoints, request.healthPoints, request.maxLevel)
         assertThrows<UnitDefinitionNameValidationFailed> { service.create(invalidNameRequest) }
         val invalidCounterClassRequest = UnitDefinitionChangeRequest(request.name, request.unitType, request.unitType, request.damagePoints, request.healthPoints, request.maxLevel)
         assertThrows<UnitDefinitionCounterClassValidationFailed> { service.create(invalidCounterClassRequest) }
 
-        val invalidDamageRequest1 = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterClass, PointsRange(-1, 3), request.healthPoints, request.maxLevel)
+        val invalidDamageRequest1 = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterType, PointsRange(-1, 3), request.healthPoints, request.maxLevel)
         assertThrows<UnitDefinitionDamageValidationFailed> { service.create(invalidDamageRequest1) }
 
-        val invalidDamageRequest2 = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterClass, PointsRange(3, 1), request.healthPoints, request.maxLevel)
+        val invalidDamageRequest2 = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterType, PointsRange(3, 1), request.healthPoints, request.maxLevel)
         assertThrows<UnitDefinitionDamageValidationFailed> { service.create(invalidDamageRequest2) }
 
-        val invalidHealthRequest1 = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterClass, request.damagePoints, PointsRange(-1, 3), request.maxLevel)
+        val invalidHealthRequest1 = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterType, request.damagePoints, PointsRange(-1, 3), request.maxLevel)
         assertThrows<UnitDefinitionHealthValidationFailed> { service.create(invalidHealthRequest1) }
 
-        val invalidHealthRequest2 = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterClass, request.damagePoints, PointsRange(2, 1), request.maxLevel)
+        val invalidHealthRequest2 = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterType, request.damagePoints, PointsRange(2, 1), request.maxLevel)
         assertThrows<UnitDefinitionHealthValidationFailed> { service.create(invalidHealthRequest2) }
 
-        val invalidUnitLevelRequest = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterClass, request.damagePoints, request.healthPoints, 0)
+        val invalidUnitLevelRequest = UnitDefinitionChangeRequest(request.name, request.unitType, request.counterType, request.damagePoints, request.healthPoints, 0)
         assertThrows<UnitDefinitionLevelValidationFailed> { service.create(invalidUnitLevelRequest) }
 
 

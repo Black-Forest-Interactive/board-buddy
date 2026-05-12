@@ -10,14 +10,14 @@ import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton
-class UnitTypeService(
+class UnitDefinitionService(
     repository: UnitDefinitionRepository,
     eventService: EventService,
     private val timeProvider: TimeProvider
 ) : BaseEntityService<UnitDefinition, UnitDefinitionChangeRequest, UnitDefinitionData>(repository, eventService, UnitDefinition::class) {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(UnitTypeService::class.java)
+        private val logger = LoggerFactory.getLogger(UnitDefinitionService::class.java)
     }
 
     override fun convert(data: UnitDefinitionData): UnitDefinition {
@@ -29,7 +29,7 @@ class UnitTypeService(
             0,
             request.name,
             request.unitType,
-            request.counterClass,
+            request.counterType,
             request.damagePoints.min,
             request.damagePoints.max,
             request.healthPoints.min,
@@ -45,7 +45,7 @@ class UnitTypeService(
 
     override fun validate(request: UnitDefinitionChangeRequest) {
         if (request.name.isBlank()) throw UnitDefinitionNameValidationFailed(request.name)
-        if (request.counterClass == request.unitType) throw UnitDefinitionCounterClassValidationFailed(request.counterClass)
+        if (request.counterType == request.unitType) throw UnitDefinitionCounterClassValidationFailed(request.counterType)
         if (request.damagePoints.min <= 0) throw UnitDefinitionDamageValidationFailed(request.damagePoints)
         if (request.damagePoints.min > request.damagePoints.max) throw UnitDefinitionDamageValidationFailed(request.damagePoints)
         if (request.healthPoints.min <= 0) throw UnitDefinitionHealthValidationFailed(request.healthPoints)

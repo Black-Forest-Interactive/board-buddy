@@ -1,7 +1,7 @@
 package de.sambalmueslie.boardbuddy.workflow
 
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
-import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
+import de.sambalmueslie.boardbuddy.core.unit.UnitDefinitionService
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowInvalidUnitType
 import jakarta.inject.Singleton
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 
 @Singleton
 class WorkflowUnitTypeService(
-    private val unitTypeService: UnitTypeService,
+    private val unitTypeService: UnitDefinitionService,
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(WorkflowUnitTypeService::class.java)

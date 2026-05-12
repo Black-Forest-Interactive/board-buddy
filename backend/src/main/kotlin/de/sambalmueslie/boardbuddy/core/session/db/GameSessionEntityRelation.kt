@@ -4,10 +4,10 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 
 @Suppress("JpaMissingIdInspection")
-@Entity(name = "GameSessionUnit")
-@Table(name = "game_session_unit")
-data class GameSessionUnitRelation(
+@Entity(name = "GameSessionEntity")
+@Table(name = "game_session_entity")
+data class GameSessionEntityRelation(
     val gameSessionId: Long,
     val playerId: Long,
-    val unitInstanceId: Long
+    val entityId: Long
 )

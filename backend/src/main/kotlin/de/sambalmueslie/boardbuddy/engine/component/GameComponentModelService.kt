@@ -41,4 +41,8 @@ class GameComponentModelService(
         model.forEach { (type, model) -> model.load(entity) }
     }
 
+    fun getInfo(entity: GameEntity): GameEntityInfo {
+        val components = model.values.mapNotNull { it.get(entity) }
+        return GameEntityInfo(entity, components)
+    }
 }

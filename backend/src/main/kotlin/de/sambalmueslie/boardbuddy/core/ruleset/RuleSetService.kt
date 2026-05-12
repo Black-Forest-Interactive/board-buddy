@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
 @Singleton
 class RuleSetService(
     private val repository: RuleSetRepository,
-    private val unitTypeService: RuleSetUnitTypeService,
+    private val unitTypeService: RuleSetUnitDefinitionService,
     eventService: EventService,
     private val timeProvider: TimeProvider
 ) : BaseEntityService<RuleSet, RuleSetChangeRequest, RuleSetData>(repository, eventService, RuleSet::class) {
@@ -51,7 +51,7 @@ class RuleSetService(
     }
 
     override fun convert(data: RuleSetData): RuleSet {
-        return data.convert(unitTypeService.getAssignedUnitTypes(data))
+        return data.convert(unitTypeService.getAssignedUnitDefinitions(data))
     }
 
     override fun createData(request: RuleSetChangeRequest): RuleSetData {

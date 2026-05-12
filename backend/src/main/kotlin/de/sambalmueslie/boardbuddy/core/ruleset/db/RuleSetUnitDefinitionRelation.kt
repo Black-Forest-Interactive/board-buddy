@@ -4,9 +4,9 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Table
 
 @Suppress("JpaMissingIdInspection")
-@Entity(name = "RuleSetUnitType")
-@Table(name = "rule_set_unit_type")
-data class RuleSetUnitTypeRelation(
+@Entity(name = "RuleSetUnitDefinition")
+@Table(name = "rule_set_unit_definition")
+data class RuleSetUnitDefinitionRelation(
     val ruleSetId: Long,
-    val unitTypeId: Long
+    val unitDefinitionId: Long
 )

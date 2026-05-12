@@ -4,8 +4,8 @@ CREATE TABLE unit_definition
 (
     id                BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('unit_definition_seq'::regclass),
     name              VARCHAR(255) NOT NULL,
-    unit_class        VARCHAR(255) NOT NULL,
-    counter_class     VARCHAR(255),
+    unit_type         VARCHAR(255) NOT NULL,
+    counter_type      VARCHAR(255),
     min_damage_points INT          NOT NULL,
     max_damage_points INT          NOT NULL,
     min_health_points INT          NOT NULL,
@@ -14,20 +14,6 @@ CREATE TABLE unit_definition
 
     created           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated           TIMESTAMP WITHOUT TIME ZONE
-);
-
-CREATE SEQUENCE unit_instance_seq;
-CREATE TABLE unit_instance
-(
-    id                 BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('unit_instance_seq'::regclass),
-    damage             INT    NOT NULL,
-    health             INT    NOT NULL,
-    level              INT    NOT NULL,
-
-    unit_definition_id BIGINT REFERENCES unit_definition (id),
-
-    created            TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated            TIMESTAMP WITHOUT TIME ZONE
 );
 
 -- rule set
@@ -79,6 +65,69 @@ CREATE TABLE player
     updated TIMESTAMP WITHOUT TIME ZONE
 );
 
+
+-- engine
+
+CREATE SEQUENCE game_entity_seq;
+CREATE TABLE game_entity
+(
+    id      BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('game_entity_seq'::regclass),
+    created TIMESTAMP WITHOUT TIME ZONE NOT NULL
+);
+
+CREATE TABLE component_counter_type
+(
+    entity_id BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
+
+    kind      VARCHAR(50) NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE component_damage
+(
+    entity_id BIGINT NOT NULL PRIMARY KEY references game_entity (id),
+
+    amount    INT    NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
+
+CREATE TABLE component_health
+(
+    entity_id BIGINT NOT NULL PRIMARY KEY references game_entity (id),
+
+    amount    INT    NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE component_level
+(
+    entity_id BIGINT NOT NULL PRIMARY KEY references game_entity (id),
+
+    value     INT    NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
+
+
+CREATE TABLE component_type
+(
+    entity_id BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
+
+    kind      VARCHAR(50) NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
 -- session
 CREATE SEQUENCE game_session_seq;
 CREATE TABLE game_session
@@ -102,72 +151,10 @@ CREATE TABLE game_session_player
 );
 
 
-CREATE TABLE game_session_unit
+CREATE TABLE game_session_entity
 (
-    game_session_id  BIGINT REFERENCES game_session (id),
-    player_id        BIGINT REFERENCES player (id),
-    unit_instance_id BIGINT REFERENCES unit_instance (id),
-    PRIMARY KEY (game_session_id, player_id, unit_instance_id)
-);
-
--- engine
-
-CREATE SEQUENCE game_entity_seq;
-CREATE TABLE game_entity
-(
-    id      BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('game_entity_seq'::regclass),
-    created TIMESTAMP WITHOUT TIME ZONE NOT NULL
-);
-
-CREATE TABLE component_counter_type
-(
-    entity_id      BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
-
-    kind    VARCHAR(50) NOT NULL,
-
-    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated TIMESTAMP WITHOUT TIME ZONE
-);
-
-CREATE TABLE component_damage
-(
-    entity_id      BIGINT NOT NULL PRIMARY KEY references game_entity (id),
-
-    amount  INT    NOT NULL,
-
-    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated TIMESTAMP WITHOUT TIME ZONE
-);
-
-
-CREATE TABLE component_health
-(
-    entity_id      BIGINT NOT NULL PRIMARY KEY references game_entity (id),
-
-    amount  INT    NOT NULL,
-
-    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated TIMESTAMP WITHOUT TIME ZONE
-);
-
-CREATE TABLE component_level
-(
-    entity_id      BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
-
-    value    INT    NOT NULL,
-
-    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated TIMESTAMP WITHOUT TIME ZONE
-);
-
-
-
-CREATE TABLE component_type
-(
-    entity_id      BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
-
-    kind    VARCHAR(50) NOT NULL,
-
-    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated TIMESTAMP WITHOUT TIME ZONE
+    game_session_id BIGINT REFERENCES game_session (id),
+    player_id       BIGINT REFERENCES player (id),
+    entity_id       BIGINT REFERENCES game_entity (id),
+    PRIMARY KEY (game_session_id, player_id, entity_id)
 );

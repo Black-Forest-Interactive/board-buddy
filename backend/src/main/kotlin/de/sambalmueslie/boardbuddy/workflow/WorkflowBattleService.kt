@@ -27,8 +27,8 @@ class WorkflowBattleService(
     fun start(session: GameSession, request: WorkflowBattleStartRequest): Battle {
         val attacker = getAndValidatePlayer(session, request.attackerId)
         val defender = getAndValidatePlayer(session, request.defenderId)
-        val attackerUnits = sessionService.getAssignedUnits(session, attacker).shuffled().take(UNITS_PER_BATTLE).toMutableList()
-        val defenderUnits = sessionService.getAssignedUnits(session, defender).shuffled().take(UNITS_PER_BATTLE).toMutableList()
+        val attackerUnits = sessionService.getAssignedEntities(session, attacker).shuffled().take(UNITS_PER_BATTLE).toMutableList()
+        val defenderUnits = sessionService.getAssignedEntities(session, defender).shuffled().take(UNITS_PER_BATTLE).toMutableList()
         val battle = BattleData(listOf(BattleParticipantData(attacker, attackerUnits), BattleParticipantData(defender, defenderUnits)), attacker)
         activeBattles[session.key] = battle
         return battle.convert()
@@ -55,7 +55,7 @@ class WorkflowBattleService(
         battle.validatePlayerIsActive(player)
 
         val participant = battle.getAndValidateParticipant(player)
-        val unit = participant.getAndValidateUnitEntity(request.unitInstanceId)
+        val unit = participant.getAndValidateUnitEntity(request.entityId)
 
         val index = request.index
 
@@ -69,7 +69,7 @@ class WorkflowBattleService(
         val battle = getData(session) ?: throw WorkflowBattleNotExisting(session.key)
         battle.validatePlayerIsActive(player)
         val participant = battle.getAndValidateParticipant(player)
-        val unit = participant.getAndValidateUnitEntity(request.unitInstanceId)
+        val unit = participant.getAndValidateUnitEntity(request.entityId)
         participant.createFront(unit)
 
         battle.switchActivePlayer(player)
@@ -89,7 +89,7 @@ class WorkflowBattleService(
         val defendFront = defendParticipant.fronts.find { it.index == request.frontIndex } ?: throw WorkflowBattleInvalidFrontIndex(request.frontIndex)
         val defendUnit = defendFront.unit
 
-        val attackUnit = attackParticipant.getAndValidateUnitEntity(request.unitInstanceId)
+        val attackUnit = attackParticipant.getAndValidateUnitEntity(request.entityId)
 
         gameEngine.combat(attackUnit, defendUnit)
 
