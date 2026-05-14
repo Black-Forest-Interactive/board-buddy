@@ -53,9 +53,9 @@ class WorkflowServiceTest {
         val inf = unitTypeService.create(UnitDefinitionChangeRequest("infantery", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
         val cav = unitTypeService.create(UnitDefinitionChangeRequest("cavalery", UnitType.CAVALRY, UnitType.ARTILLERY, PointsRange(1, 3), PointsRange(1, 3), 4))
         val art = unitTypeService.create(UnitDefinitionChangeRequest("artillery", UnitType.ARTILLERY, UnitType.INFANTRY, PointsRange(1, 3), PointsRange(1, 3), 4))
-        ruleSet = ruleSetService.assignUnitType(ruleSet, inf)!!
-        ruleSet = ruleSetService.assignUnitType(ruleSet, cav)!!
-        ruleSet = ruleSetService.assignUnitType(ruleSet, art)!!
+        ruleSet = ruleSetService.assignUnitDefinition(ruleSet, inf)!!
+        ruleSet = ruleSetService.assignUnitDefinition(ruleSet, cav)!!
+        ruleSet = ruleSetService.assignUnitDefinition(ruleSet, art)!!
 
         var game = gameService.create(GameChangeRequest("default", "default"))
         game = gameService.assignRuleSet(game, ruleSet)!!

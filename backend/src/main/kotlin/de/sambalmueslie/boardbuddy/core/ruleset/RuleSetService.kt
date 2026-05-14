@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
 @Singleton
 class RuleSetService(
     private val repository: RuleSetRepository,
-    private val unitTypeService: RuleSetUnitDefinitionService,
+    private val unitDefinitionService: RuleSetUnitDefinitionService,
     eventService: EventService,
     private val timeProvider: TimeProvider
 ) : BaseEntityService<RuleSet, RuleSetChangeRequest, RuleSetData>(repository, eventService, RuleSet::class) {
@@ -26,32 +26,32 @@ class RuleSetService(
         private val logger = LoggerFactory.getLogger(RuleSetService::class.java)
     }
 
-    fun assignUnitType(ruleSet: RuleSet, unitDefinition: UnitDefinition): RuleSet? {
-        return assignUnitType(ruleSet.id, unitDefinition)
+    fun assignUnitDefinition(ruleSet: RuleSet, unitDefinition: UnitDefinition): RuleSet? {
+        return assignUnitDefinition(ruleSet.id, unitDefinition)
     }
 
-    fun assignUnitType(ruleSetId: Long, unitDefinition: UnitDefinition): RuleSet? {
+    fun assignUnitDefinition(ruleSetId: Long, unitDefinition: UnitDefinition): RuleSet? {
         val data = repository.findByIdOrNull(ruleSetId) ?: return null
-        unitTypeService.assign(data, unitDefinition)
+        unitDefinitionService.assign(data, unitDefinition)
         val result = convert(data)
         notifyUpdate(result)
         return result
     }
 
-    fun revokeUnitType(ruleSet: RuleSet, unitDefinition: UnitDefinition): RuleSet? {
-        return revokeUnitType(ruleSet.id, unitDefinition)
+    fun revokeUnitDefinition(ruleSet: RuleSet, unitDefinition: UnitDefinition): RuleSet? {
+        return revokeUnitDefinition(ruleSet.id, unitDefinition)
     }
 
-    fun revokeUnitType(ruleSetId: Long, unitDefinition: UnitDefinition): RuleSet? {
+    fun revokeUnitDefinition(ruleSetId: Long, unitDefinition: UnitDefinition): RuleSet? {
         val data = repository.findByIdOrNull(ruleSetId) ?: return null
-        unitTypeService.revoke(data, unitDefinition)
+        unitDefinitionService.revoke(data, unitDefinition)
         val result = convert(data)
         notifyUpdate(result)
         return result
     }
 
     override fun convert(data: RuleSetData): RuleSet {
-        return data.convert(unitTypeService.getAssignedUnitDefinitions(data))
+        return data.convert(unitDefinitionService.getAssignedUnitDefinitions(data))
     }
 
     override fun createData(request: RuleSetChangeRequest): RuleSetData {
@@ -67,6 +67,6 @@ class RuleSetService(
     }
 
     override fun deleteDependencies(data: RuleSetData) {
-        unitTypeService.revokeAll(data)
+        unitDefinitionService.revokeAll(data)
     }
 }

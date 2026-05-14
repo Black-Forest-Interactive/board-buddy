@@ -40,10 +40,6 @@ class GameEngine(
         combatSystem.combat(attacker, defender)
     }
 
-    fun getInfo(entity: GameEntity): GameEntityInfo {
-        return componentModelService.getInfo(entity)
-    }
-
     fun getUnit(entity: GameEntity): GameUnit {
         val damage = damageModel.get(entity)
         val health = healthModel.get(entity)

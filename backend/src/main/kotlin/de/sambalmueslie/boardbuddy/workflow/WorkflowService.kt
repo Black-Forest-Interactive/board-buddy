@@ -7,7 +7,6 @@ import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
 import de.sambalmueslie.boardbuddy.engine.GameEngine
-import de.sambalmueslie.boardbuddy.engine.api.GameEntityInfo
 import de.sambalmueslie.boardbuddy.engine.api.GameUnit
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import jakarta.inject.Singleton
@@ -18,7 +17,7 @@ class WorkflowService(
     private val playerService: WorkflowPlayerService,
     private val gameService: GameService,
     private val ruleSetService: RuleSetService,
-    private val unitTypeService: WorkflowUnitTypeService,
+    private val unitDefinitionService: WorkflowUnitDefinitionService,
     private val battleService: WorkflowBattleService,
     private val sessionService: GameSessionService,
     private val engine: GameEngine
@@ -52,7 +51,7 @@ class WorkflowService(
         val session = getSession(id)
 
         val player = playerService.get(session, request.playerId)
-        val unitType = unitTypeService.get(session, request.unitTypeId)
+        val unitType = unitDefinitionService.get(session, request.unitTypeId)
         val entity = engine.createUnit(unitType)
 
         sessionService.assignEntity(session, player, entity)
@@ -93,12 +92,13 @@ class WorkflowService(
         return sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
     }
 
-    fun getUnitInfos(p: BattleParticipant): List<GameEntityInfo> {
-        return p.units.map { engine.getInfo(it) }
-    }
-
     fun getUnits(p: BattleParticipant): List<GameUnit> {
         return p.units.map { engine.getUnit(it) }
+    }
+
+    fun getBattleInfo(id: String): BattleInfo? {
+        val session = sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
+        return battleService.getInfo(session)
     }
 
 

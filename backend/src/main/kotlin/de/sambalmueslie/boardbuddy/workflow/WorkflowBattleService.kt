@@ -38,6 +38,11 @@ class WorkflowBattleService(
         return getData(session)?.convert()
     }
 
+
+    fun getInfo(session: GameSession): BattleInfo? {
+        return getData(session)?.toInfo(gameEngine)
+    }
+
     private fun getData(session: GameSession): BattleData? {
         return activeBattles[session.key]
     }
@@ -103,6 +108,7 @@ class WorkflowBattleService(
         var activePlayer: Player,
     ) {
         fun convert() = Battle(participant.map { it.convert() }, activePlayer)
+        fun toInfo(engine: GameEngine) = BattleInfo(participant.map { it.toInfo(engine) }, activePlayer)
 
         fun getAndValidateParticipant(player: Player): BattleParticipantData {
             return participant.find { it.player.id == player.id } ?: throw WorkflowBattleInvalidPlayer(player.id)
@@ -126,6 +132,8 @@ class WorkflowBattleService(
         val fronts: MutableList<BattleFrontData> = mutableListOf()
     ) {
         fun convert() = BattleParticipant(player, units, fronts.map { it.convert() })
+
+        fun toInfo(engine: GameEngine) = BattleParticipantInfo(player, units.map { engine.getUnit(it)}, fronts.map { it.toInfo(engine) })
 
         fun getAndValidateUnitEntity(entityId: Long): GameEntity {
             return units.find { it == entityId } ?: throw WorkflowBattleUnitNotExisting(entityId)
@@ -155,5 +163,6 @@ class WorkflowBattleService(
         val unit: GameEntity
     ) {
         fun convert() = BattleFront(index, unit)
+        fun toInfo(engine: GameEngine) = BattleFrontInfo(index, engine.getUnit(unit))
     }
 }

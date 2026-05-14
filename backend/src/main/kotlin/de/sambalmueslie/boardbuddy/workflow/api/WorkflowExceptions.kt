@@ -12,7 +12,7 @@ class WorkflowInvalidHost(value: Long) : WorkflowException(i++, "Invalid host id
 class WorkflowInvalidGame(value: Long) : WorkflowException(i++, "Invalid game id $value")
 class WorkflowInvalidRuleSet(value: Long) : WorkflowException(i++, "Invalid rule set id $value")
 class WorkflowInvalidPlayer(value: Long) : WorkflowException(i++, "Invalid player id $value")
-class WorkflowInvalidUnitType(value: Long) : WorkflowException(i++, "Invalid unit type id $value")
+class WorkflowInvalidUnitDefinition(value: Long) : WorkflowException(i++, "Invalid unit definition id $value")
 class WorkflowPlayerJoinError() : WorkflowException(i++, "Player not able to join")
 class WorkflowPlayerActionForbidden(value: Long) : WorkflowException(i++, "Player action not allowed for player $value")
 class WorkflowBattleInvalidPlayer(value: Long) : WorkflowException(i++, "Invalid player selected for battle $value")
