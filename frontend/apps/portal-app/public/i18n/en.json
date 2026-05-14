@@ -1,0 +1,26 @@
+{
+  "action": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "logout": "Logout"
+  },
+  "lang": {
+    "en": "English",
+    "de": "German"
+  },
+  "ACTION": {
+    "Language": "Language",
+    "Help": "Help"
+  },
+  "LANG": {
+    "English": "English",
+    "German": "German"
+  },
+  "MENU": {
+    "Home": "Home",
+    "Title": "Navigation"
+  }
+}

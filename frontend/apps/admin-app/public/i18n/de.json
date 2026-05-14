@@ -1,0 +1,26 @@
+{
+  "action": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "logout": "Abmelden"
+  },
+  "lang": {
+    "en": "Englisch",
+    "de": "Deutsch"
+  },
+  "ACTION": {
+    "Language": "Sprache",
+    "Help": "Hilfe"
+  },
+  "LANG": {
+    "English": "Englisch",
+    "German": "Deutsch"
+  },
+  "MENU": {
+    "Home": "Startseite",
+    "Title": "Navigation"
+  }
+}

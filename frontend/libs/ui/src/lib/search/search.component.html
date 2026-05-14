@@ -1,0 +1,22 @@
+<mat-form-field class="flex-auto w-full dense-3" appearance="outline" subscriptSizing="dynamic">
+  <mat-label>{{ label() | translate }}</mat-label>
+  <input
+    matInput
+    (keyup)="handleKeyUp(input.value)"
+    placeholder=""
+    #input
+    [disabled]="disabled()">
+
+  @if (input.value) {
+    <button
+      matSuffix
+      matIconButton
+      (click)="clearSearch(input)"
+      type="button"
+      aria-label="Clear search">
+      <mat-icon>clear</mat-icon>
+    </button>
+  } @else {
+    <mat-icon matSuffix>{{ icon() }}</mat-icon>
+  }
+</mat-form-field>

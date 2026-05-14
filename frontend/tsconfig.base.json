@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@board-buddy/core": ["./libs/core/src/index.ts"],
+      "@board-buddy/portal": ["./libs/portal/src/index.ts"],
+      "@board-buddy/admin": ["./libs/admin/src/index.ts"],
+      "@board-buddy/ui": ["./libs/ui/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

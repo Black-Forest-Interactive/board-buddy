@@ -1,0 +1,13 @@
+@reference "tailwindcss";
+
+.menu-link {
+  @apply flex items-center gap-3 px-4 py-3 text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-700 border transition-colors cursor-pointer;
+}
+
+.menu-link span {
+  @apply text-sm font-medium;
+}
+
+.active-nav-link {
+  @apply bg-green-200 text-green-700 border-green-400 hover:bg-green-300 hover:border-green-500;
+}

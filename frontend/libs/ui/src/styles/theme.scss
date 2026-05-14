@@ -1,0 +1,91 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$cyan-palette,
+    tertiary: mat.$azure-palette,
+  )
+));
+
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$cyan-palette,
+    tertiary: mat.$azure-palette,
+  ),
+));
+
+html {
+  @include mat.all-component-themes($light-theme);
+  @include mat.all-component-typographies($light-theme);
+
+  // Anthrazit light
+  --mat-sys-primary: #455a64;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #cfd8dc;
+  --mat-sys-on-primary-container: #263238;
+
+  --mat-sys-secondary: #546e7a;
+  --mat-sys-on-secondary: #ffffff;
+  --mat-sys-secondary-container: #b0bec5;
+  --mat-sys-on-secondary-container: #1c313a;
+
+  --mat-sys-tertiary: #00838f;
+  --mat-sys-on-tertiary: #ffffff;
+  --mat-sys-tertiary-container: #b2ebf2;
+  --mat-sys-on-tertiary-container: #002f35;
+
+  --mat-sys-error: #ba1a1a;
+  --mat-sys-on-error: #ffffff;
+  --mat-sys-error-container: #ffdad6;
+  --mat-sys-on-error-container: #410002;
+
+  --mat-app-background-color: #f5f5f5;
+}
+
+html.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+
+  // Anthrazit dark
+  --mat-sys-primary: #b0bec5;
+  --mat-sys-on-primary: #1c313a;
+  --mat-sys-primary-container: #37474f;
+  --mat-sys-on-primary-container: #cfd8dc;
+
+  --mat-sys-secondary: #90a4ae;
+  --mat-sys-on-secondary: #1c313a;
+  --mat-sys-secondary-container: #37474f;
+  --mat-sys-on-secondary-container: #cfd8dc;
+
+  --mat-sys-tertiary: #4dd0e1;
+  --mat-sys-on-tertiary: #002f35;
+  --mat-sys-tertiary-container: #004f58;
+  --mat-sys-on-tertiary-container: #b2ebf2;
+
+  --mat-sys-error: #ffb4ab;
+  --mat-sys-on-error: #690005;
+  --mat-sys-error-container: #93000a;
+  --mat-sys-on-error-container: #ffdad6;
+
+  --mat-app-background-color: #1a1c1e;
+}
+
+.mat-mdc-form-field,
+.mat-date-range-input-container,
+.mdc-text-field__input {
+  line-height: 1.5 !important;
+}
+
+.mat-mdc-form-field,
+.mat-date-range-input-mirror {
+  font: inherit !important;
+  line-height: 1.5 !important;
+  height: auto !important;
+}
+
+.dense-1 { @include mat.all-component-densities(-1) }
+.dense-2 { @include mat.all-component-densities(-2) }
+.dense-3 { @include mat.all-component-densities(-3) }
