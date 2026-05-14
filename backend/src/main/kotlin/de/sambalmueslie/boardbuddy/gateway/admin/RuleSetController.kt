@@ -15,7 +15,7 @@ class RuleSetController(private val gateway: RuleSetGateway) {
     @Get
     fun getAll(pageable: Pageable) = gateway.getAll(pageable)
 
-    @Post()
+    @Post
     fun create(@Body request: RuleSetChangeRequest) = gateway.create(request)
 
     @Put("{id}")
@@ -23,4 +23,12 @@ class RuleSetController(private val gateway: RuleSetGateway) {
 
     @Delete("{id}")
     fun delete(id: Long) = gateway.delete(id)
+
+    @Post("{id}/unit-definition/{unitDefinitionId}")
+    fun assignUnitDefinition(id: Long, unitDefinitionId: Long) =
+        gateway.assignUnitDefinition(id, unitDefinitionId)
+
+    @Delete("{id}/unit-definition/{unitDefinitionId}")
+    fun revokeUnitDefinition(id: Long, unitDefinitionId: Long) =
+        gateway.revokeUnitDefinition(id, unitDefinitionId)
 }

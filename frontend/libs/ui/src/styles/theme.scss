@@ -22,55 +22,67 @@ html {
   @include mat.all-component-themes($light-theme);
   @include mat.all-component-typographies($light-theme);
 
-  // Anthrazit light
-  --mat-sys-primary: #455a64;
-  --mat-sys-on-primary: #ffffff;
-  --mat-sys-primary-container: #cfd8dc;
-  --mat-sys-on-primary-container: #263238;
+  // Dunkles Anthrazit — light mode
+  --mat-sys-primary:                #263238;  // Blue Grey 900
+  --mat-sys-on-primary:             #ffffff;
+  --mat-sys-primary-container:      #546e7a;  // Blue Grey 600
+  --mat-sys-on-primary-container:   #ffffff;
 
-  --mat-sys-secondary: #546e7a;
-  --mat-sys-on-secondary: #ffffff;
-  --mat-sys-secondary-container: #b0bec5;
-  --mat-sys-on-secondary-container: #1c313a;
+  --mat-sys-secondary:              #37474f;  // Blue Grey 800
+  --mat-sys-on-secondary:           #ffffff;
+  --mat-sys-secondary-container:    #90a4ae;  // Blue Grey 300
+  --mat-sys-on-secondary-container: #1c2b30;
 
-  --mat-sys-tertiary: #00838f;
-  --mat-sys-on-tertiary: #ffffff;
-  --mat-sys-tertiary-container: #b2ebf2;
-  --mat-sys-on-tertiary-container: #002f35;
+  --mat-sys-tertiary:               #00838f;
+  --mat-sys-on-tertiary:            #ffffff;
+  --mat-sys-tertiary-container:     #b2ebf2;
+  --mat-sys-on-tertiary-container:  #002f35;
 
-  --mat-sys-error: #ba1a1a;
-  --mat-sys-on-error: #ffffff;
-  --mat-sys-error-container: #ffdad6;
-  --mat-sys-on-error-container: #410002;
+  --mat-sys-error:                  #ba1a1a;
+  --mat-sys-on-error:               #ffffff;
+  --mat-sys-error-container:        #ffdad6;
+  --mat-sys-on-error-container:     #410002;
 
-  --mat-app-background-color: #f5f5f5;
+  --mat-sys-surface:                    #f5f5f5;
+  --mat-sys-surface-container-lowest:  #ffffff;
+  --mat-sys-surface-container-low:     #eceff1;  // Blue Grey 50
+  --mat-sys-surface-container:         #e0e5e7;
+  --mat-sys-surface-container-high:    #d4dadd;
+  --mat-sys-on-surface:                #1a1c1e;
+  --mat-app-background-color:          #f5f5f5;
 }
 
 html.dark-theme {
   @include mat.all-component-colors($dark-theme);
 
-  // Anthrazit dark
-  --mat-sys-primary: #b0bec5;
-  --mat-sys-on-primary: #1c313a;
-  --mat-sys-primary-container: #37474f;
-  --mat-sys-on-primary-container: #cfd8dc;
+  // Dunkles Anthrazit — dark mode
+  --mat-sys-primary:                #90a4ae;  // Blue Grey 300
+  --mat-sys-on-primary:             #1c2b30;
+  --mat-sys-primary-container:      #37474f;  // Blue Grey 800
+  --mat-sys-on-primary-container:   #eceff1;
 
-  --mat-sys-secondary: #90a4ae;
-  --mat-sys-on-secondary: #1c313a;
-  --mat-sys-secondary-container: #37474f;
+  --mat-sys-secondary:              #78909c;  // Blue Grey 400
+  --mat-sys-on-secondary:           #1c2b30;
+  --mat-sys-secondary-container:    #2e3f47;
   --mat-sys-on-secondary-container: #cfd8dc;
 
-  --mat-sys-tertiary: #4dd0e1;
-  --mat-sys-on-tertiary: #002f35;
-  --mat-sys-tertiary-container: #004f58;
-  --mat-sys-on-tertiary-container: #b2ebf2;
+  --mat-sys-tertiary:               #4dd0e1;
+  --mat-sys-on-tertiary:            #002f35;
+  --mat-sys-tertiary-container:     #004f58;
+  --mat-sys-on-tertiary-container:  #b2ebf2;
 
-  --mat-sys-error: #ffb4ab;
-  --mat-sys-on-error: #690005;
-  --mat-sys-error-container: #93000a;
-  --mat-sys-on-error-container: #ffdad6;
+  --mat-sys-error:                  #ffb4ab;
+  --mat-sys-on-error:               #690005;
+  --mat-sys-error-container:        #93000a;
+  --mat-sys-on-error-container:     #ffdad6;
 
-  --mat-app-background-color: #1a1c1e;
+  --mat-sys-surface:                    #1a1c1e;
+  --mat-sys-surface-container-lowest:  #141618;
+  --mat-sys-surface-container-low:     #1f2426;
+  --mat-sys-surface-container:         #232b2d;
+  --mat-sys-surface-container-high:    #2a3336;
+  --mat-sys-on-surface:                #e2e3e5;
+  --mat-app-background-color:          #1a1c1e;
 }
 
 .mat-mdc-form-field,

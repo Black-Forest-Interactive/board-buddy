@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>{{ 'session.dialog.unit.title' | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.player' | translate }}</mat-label>
+      <mat-select formControlName="player">
+        @for (p of participants; track p.id) {
+          <mat-option [value]="p">{{ p.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'unit-definition.title' | translate }}</mat-label>
+      <mat-select formControlName="unitDefinition">
+        @for (u of unitDefinitions(); track u.id) {
+          <mat-option [value]="u">
+            {{ u.name }} ({{ 'unit-definition.type.' + u.unitType | translate }})
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">
+    {{ 'action.create' | translate }}
+  </button>
+</mat-dialog-actions>

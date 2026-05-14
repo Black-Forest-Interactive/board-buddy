@@ -1,0 +1,45 @@
+<ui-main-content [title]="'session.title' | translate">
+
+  <button matButton="filled" actions (click)="openCreate()">
+    <mat-icon>add</mat-icon>
+    {{ 'session.create' | translate }}
+  </button>
+
+  <mat-table [dataSource]="items()">
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>{{ 'session.table.name' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="host">
+      <mat-header-cell *matHeaderCellDef>{{ 'session.table.host' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.host.name }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="game">
+      <mat-header-cell *matHeaderCellDef>{{ 'session.table.game' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.game.name }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="participants">
+      <mat-header-cell *matHeaderCellDef>{{ 'session.table.participants' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.participants.length }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button matIconButton [matTooltip]="'action.detail' | translate" (click)="openDetail(row)"><mat-icon>more_horiz</mat-icon></button>
+        <button matIconButton [matTooltip]="'action.delete' | translate" (click)="delete(row)"><mat-icon>delete</mat-icon></button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+  </mat-table>
+
+  <mat-paginator footer [length]="totalSize()" [pageSize]="20" [pageSizeOptions]="[10,20,50]" (page)="handlePageChange($event)"></mat-paginator>
+
+</ui-main-content>

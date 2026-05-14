@@ -9,14 +9,14 @@ import {provideTranslateService} from '@ngx-translate/core'
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader'
 import {registerLocaleData} from '@angular/common'
 import de from '@angular/common/locales/de'
-import {provideAnimationsAsync} from '@angular/platform-browser/animations/async'
-import {provideToastConfig} from "@board-buddy/ui"
+import {provideAnimations} from '@angular/platform-browser/animations'
+import {provideToastConfig} from '@board-buddy/ui'
 
 registerLocaleData(de)
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAnimationsAsync(),
+    provideAnimations(),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({eventCoalescing: true}),
     provideLuxonDateAdapter(),
@@ -24,13 +24,9 @@ export const appConfig: ApplicationConfig = {
     {provide: LOCALE_ID, useValue: 'de-DE'},
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
     provideToastConfig(),
-    provideZoneChangeDetection({eventCoalescing: true}),
     provideHttpClient(),
     provideTranslateService({
-      loader: provideTranslateHttpLoader({
-        prefix: '/i18n/',
-        suffix: '.json'
-      }),
+      loader: provideTranslateHttpLoader({prefix: '/i18n/', suffix: '.json'}),
       fallbackLang: 'de',
       lang: 'en'
     }),

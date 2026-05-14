@@ -6,3 +6,41 @@ html, body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+// Right-align the actions column in all Material tables
+.mat-column-actions {
+  justify-content: flex-end;
+  flex: 0 0 auto !important;
+  padding-right: 8px !important;
+}
+
+// Map Material M3 system tokens to Tailwind color utilities.
+// Usage: bg-primary, text-on-primary, bg-surface-low, border-primary-container, …
+@theme inline {
+  --color-primary:                  var(--mat-sys-primary);
+  --color-on-primary:               var(--mat-sys-on-primary);
+  --color-primary-container:        var(--mat-sys-primary-container);
+  --color-on-primary-container:     var(--mat-sys-on-primary-container);
+
+  --color-secondary:                var(--mat-sys-secondary);
+  --color-on-secondary:             var(--mat-sys-on-secondary);
+  --color-secondary-container:      var(--mat-sys-secondary-container);
+  --color-on-secondary-container:   var(--mat-sys-on-secondary-container);
+
+  --color-tertiary:                 var(--mat-sys-tertiary);
+  --color-on-tertiary:              var(--mat-sys-on-tertiary);
+  --color-tertiary-container:       var(--mat-sys-tertiary-container);
+  --color-on-tertiary-container:    var(--mat-sys-on-tertiary-container);
+
+  --color-error:                    var(--mat-sys-error);
+  --color-on-error:                 var(--mat-sys-on-error);
+  --color-error-container:          var(--mat-sys-error-container);
+  --color-on-error-container:       var(--mat-sys-on-error-container);
+
+  --color-surface:                  var(--mat-sys-surface);
+  --color-on-surface:               var(--mat-sys-on-surface);
+  --color-surface-lowest:           var(--mat-sys-surface-container-lowest);
+  --color-surface-low:              var(--mat-sys-surface-container-low);
+  --color-surface-container:        var(--mat-sys-surface-container);
+  --color-surface-high:             var(--mat-sys-surface-container-high);
+}

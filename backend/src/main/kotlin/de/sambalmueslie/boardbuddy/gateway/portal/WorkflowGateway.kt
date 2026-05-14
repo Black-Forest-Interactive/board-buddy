@@ -21,5 +21,6 @@ class WorkflowGateway(
     fun battleAddUnit(id: String, request: WorkflowBattleAddUnitRequest) = service.battleAddUnit(id, request)
     fun battleCreateFront(id: String, request: WorkflowBattleCreateFrontRequest) = service.battleCreateFront(id, request)
     fun battleAttackFront(id: String, request: WorkflowBattleAttackFrontRequest) = service.battleAttackFront(id, request)
+    fun getParticipantsInfo(id: String) = service.getParticipantsInfo(id)
     fun getBattleInfo(id: String) = service.getBattleInfo(id)
 }

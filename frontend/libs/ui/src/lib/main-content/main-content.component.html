@@ -1,37 +1,26 @@
-<div class="flex flex-col h-[calc(100vh-120px)] min-h-0">
-  <!-- Optional loading bar slot -->
-  <ng-content select="[loadingBar]"/>
+<mat-card class="flex flex-col h-[calc(100vh-120px)] min-h-0" appearance="raised">
 
-  <!-- Header toolbar -->
-  <div class="shadow-sm sticky top-0 z-20 !bg-gray-300">
-    <div class="gap-6 flex-wrap !h-auto !min-h-fit flex items-center px-4 py-2">
+    <mat-toolbar class="content-toolbar">
       <span class="text-xl font-semibold">{{ title() }}</span>
-      <!-- Search area in toolbar -->
       @if (enableSearch()) {
         <div class="flex-1"></div>
-        <div class="flex items-stretch gap-3 !min-w-128">
+        <div class="flex items-stretch gap-3 min-w-96">
           <ui-search [label]="searchLabel()" (search)="handleSearch($event)" class="flex-auto"/>
         </div>
       }
-      <!-- Spacer when no search -->
       <div class="flex-1"></div>
-      <!-- Action buttons slot -->
       <div class="flex flex-wrap gap-3">
         <ng-content select="[actions]"/>
       </div>
-    </div>
-  </div>
+    </mat-toolbar>
 
-  <!-- Content section -->
-  <div class="flex-1 overflow-auto">
-    <div [class]="containerClass()">
-      <mat-card [class]="cardClass()" class="!rounded-t-none">
-        <!-- Main content -->
-        <ng-content/>
-      </mat-card>
-    </div>
-  </div>
+    <ng-content select="[loadingBar]"/>
 
-  <!-- Footer slot (for paginator, etc.) -->
-  <ng-content select="[footer]"/>
-</div>
+    <div class="flex-1 overflow-auto">
+      <div [class]="containerClass()">
+          <ng-content/>
+      </div>
+    </div>
+
+    <ng-content select="[footer]" class="border-r"/>
+</mat-card>

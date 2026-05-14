@@ -1,1 +1,6 @@
-export * from './lib/admin/admin';
+export * from './lib/game/game.service'
+export * from './lib/player/player.service'
+export * from './lib/session/session.service'
+export * from './lib/rule-set/rule-set.service'
+export * from './lib/unit-definition/unit-definition.service'
+export * from './lib/workflow/workflow.service'

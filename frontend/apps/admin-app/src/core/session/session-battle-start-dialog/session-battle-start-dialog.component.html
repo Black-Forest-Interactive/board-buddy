@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{ 'session.dialog.battle.title' | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.attacker' | translate }}</mat-label>
+      <mat-select formControlName="attacker">
+        @for (p of participants; track p.id) {
+          <mat-option [value]="p">{{ p.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.defender' | translate }}</mat-label>
+      <mat-select formControlName="defender">
+        @for (p of defenders(); track p.id) {
+          <mat-option [value]="p">{{ p.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">
+    {{ 'session.action.startBattle' | translate }}
+  </button>
+</mat-dialog-actions>

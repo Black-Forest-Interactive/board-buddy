@@ -85,6 +85,7 @@ class WorkflowService(
     fun get(id: String): Workflow {
         val session = sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
         val battle = battleService.get(session)
+        engine
         return Workflow.create(session, battle)
     }
 
@@ -94,6 +95,15 @@ class WorkflowService(
 
     fun getUnits(p: BattleParticipant): List<GameUnit> {
         return p.units.map { engine.getUnit(it) }
+    }
+
+    fun getParticipantsInfo(id: String): List<WorkflowParticipantInfo> {
+        val session = sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
+        return session.participants.map { player ->
+            val entities = sessionService.getAssignedEntities(session, player)
+            val units = entities.map { engine.getUnit(it) }
+            WorkflowParticipantInfo(player, units)
+        }
     }
 
     fun getBattleInfo(id: String): BattleInfo? {
