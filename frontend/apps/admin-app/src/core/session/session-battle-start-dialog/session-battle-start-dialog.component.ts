@@ -1,4 +1,4 @@
-import {Component, computed, inject} from '@angular/core'
+import {Component, computed, effect, inject} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
@@ -41,6 +41,13 @@ export class SessionBattleStartDialogComponent {
   readonly defenders = computed(() =>
     this.participants.filter(p => p.id !== this.selectedAttacker()?.id)
   )
+
+  constructor() {
+    effect(() => {
+      const available = this.defenders()
+      if (available.length === 1) this.form.controls.defender.setValue(available[0])
+    })
+  }
 
   submit() {
     if (this.form.invalid) return

@@ -75,12 +75,6 @@ class WorkflowService(
         return get(id)
     }
 
-    fun battleAddUnit(id: String, request: WorkflowBattleAddUnitRequest): Workflow {
-        val session = getSession(id)
-        battleService.addUnit(session, request)
-        return get(id)
-    }
-
     fun battleCreateFront(id: String, request: WorkflowBattleCreateFrontRequest): Workflow {
         val session = getSession(id)
         battleService.createFront(session, request)
@@ -90,6 +84,11 @@ class WorkflowService(
     fun battleAttackFront(id: String, request: WorkflowBattleAttackFrontRequest): Battle {
         val session = getSession(id)
         return battleService.attackFront(session, request)
+    }
+
+    fun battleFinish(id: String) {
+        val session = getSession(id)
+        battleService.finish(session)
     }
 
     fun get(id: String): Workflow {

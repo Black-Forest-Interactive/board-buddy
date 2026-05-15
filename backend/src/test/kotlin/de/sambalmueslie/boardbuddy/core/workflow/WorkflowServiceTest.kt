@@ -60,7 +60,6 @@ class WorkflowServiceTest {
         var game = gameService.create(GameChangeRequest("default", "default"))
         game = gameService.assignRuleSet(game, ruleSet)!!
 
-
         val p1 = playerService.create(PlayerChangeRequest("p1"))
         val p2 = playerService.create(PlayerChangeRequest("p2"))
         val p3 = playerService.create(PlayerChangeRequest("p3"))
@@ -88,13 +87,13 @@ class WorkflowServiceTest {
         val battle = workflow.activeBattle
         assertNotNull(battle)
 
-        assertEquals(p1, battle!!.activePlayer)
+        assertEquals(p1.id, battle!!.activePlayer.player.id)
+        assertEquals(emptyList<BattleFront>(), battle.fronts)
+
         val bp1 = battle.participant.find { it.player.player.id == p1.id }
         assertNotNull(bp1)
-
         assertEquals(3, bp1!!.units.size)
         val bp1Units = service.getUnits(bp1)
-
 
         val bp1u1 = bp1Units.find { it.type?.kind == inf.unitType }!!
         assertEquals(GameUnit(bp1u1.entity, bp1u1.damage, bp1u1.health, Level(1), Type(inf.unitType), CounterType(inf.counterType!!)), bp1u1)
@@ -107,9 +106,6 @@ class WorkflowServiceTest {
 
         val bp2 = battle.participant.find { it.player.player.id == p2.id }
         assertNotNull(bp2)
-
-        assertEquals(emptyList<BattleFront>(), bp1.fronts)
-
         assertEquals(3, bp2!!.units.size)
         val bp2Units = service.getUnits(bp2)
 
@@ -122,14 +118,18 @@ class WorkflowServiceTest {
         val bp2u3 = bp2Units.find { it.type?.kind == art.unitType }!!
         assertEquals(GameUnit(bp2u3.entity, bp2u3.damage, bp2u3.health, Level(1), Type(art.unitType), CounterType(art.counterType)), bp2u3)
 
-        assertEquals(emptyList<BattleFront>(), bp2.fronts)
-
+        // create front with bp1u1 (infantry)
         workflow = service.battleCreateFront(workflow.id, WorkflowBattleCreateFrontRequest(p1.id, bp1u1.entity))
-        assertEquals(listOf(BattleFront(1, bp1u1.entity)), workflow.activeBattle!!.participant.find { it.player.player.id == p1.id }!!.fronts)
-        assertEquals(p2.id, workflow.activeBattle.activePlayer.player.id)
+        val battleAfterFront = workflow.activeBattle!!
+        val fronts = battleAfterFront.fronts
+        assertEquals(1, fronts.size)
+        assertEquals(1, fronts[0].index)
+        assertEquals(1, fronts[0].units.size)
+        assertEquals(bp1u1.entity, fronts[0].units[0].unit.entity)
+        assertEquals(p2.id, battleAfterFront.activePlayer.player.id)
 
-        workflow = service.battleAttackFront(workflow.id, WorkflowBattleAttackFrontRequest(p2.id, p1.id, bp2u2.entity, 1))
-        assertEquals(p1.id, workflow.activeBattle!!.activePlayer.player.id)
-
+        // p2 attacks front 1 with cavalry
+        val battleAfterAttack = service.battleAttackFront(workflow.id, WorkflowBattleAttackFrontRequest(p2.id, p1.id, bp2u2.entity, 1))
+        assertEquals(p1.id, battleAfterAttack.activePlayer.player.id)
     }
 }

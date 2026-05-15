@@ -7,5 +7,6 @@ data class Battle(
     val fronts: List<BattleFront>,
     val logEntries: List<BattleLogEntry>,
     val activePlayer: GameSessionPlayer,
-    val status: BattleStatus
+    val status: BattleStatus,
+    val winner: GameSessionPlayer? = null,
 )

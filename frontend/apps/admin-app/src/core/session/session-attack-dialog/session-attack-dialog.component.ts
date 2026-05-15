@@ -7,11 +7,7 @@ import {MatSelectModule} from '@angular/material/select'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {WorkflowService} from '@board-buddy/admin'
-import {
-  BattleParticipantInfo,
-  GameUnit,
-  WorkflowBattleAttackFrontRequest,
-} from '@board-buddy/core'
+import {Battle, GameUnit, WorkflowBattleAttackFrontRequest} from '@board-buddy/core'
 
 @Component({
   selector: 'admin-session-attack-dialog',
@@ -20,20 +16,19 @@ import {
 })
 export class SessionAttackDialogComponent {
   private service = inject(WorkflowService)
-  private dialogRef = inject(MatDialogRef<SessionAttackDialogComponent>)
+  private dialogRef = inject(MatDialogRef<SessionAttackDialogComponent, Battle>)
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)
 
   readonly data: {
     sessionKey: string
-    attacker: BattleParticipantInfo
-    defender: BattleParticipantInfo
+    attackerId: number
+    defenderId: number
     frontIndex: number
+    availableUnits: GameUnit[]
   } = inject(MAT_DIALOG_DATA)
 
-  readonly availableUnits = this.data.attacker.units.filter(u =>
-    !this.data.attacker.fronts.some(f => f.unit.entity === u.entity)
-  )
+  readonly availableUnits = this.data.availableUnits
 
   readonly form = new FormGroup({
     unit: new FormControl<GameUnit | null>(null, Validators.required),
@@ -42,15 +37,15 @@ export class SessionAttackDialogComponent {
   submit() {
     if (this.form.invalid) return
     const request = new WorkflowBattleAttackFrontRequest(
-      this.data.attacker.player.player.id,
-      this.data.defender.player.player.id,
+      this.data.attackerId,
+      this.data.defenderId,
       this.form.value.unit!.entity,
       this.data.frontIndex,
     )
     this.service.battleAttackFront(this.data.sessionKey, request).subscribe({
-      next: () => {
+      next: (battle) => {
         this.translate.get('session.battle.attacked').subscribe(t => this.toast.success(t))
-        this.dialogRef.close(true)
+        this.dialogRef.close(battle)
       },
       error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
     })

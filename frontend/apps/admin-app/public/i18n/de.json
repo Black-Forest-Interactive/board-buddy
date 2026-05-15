@@ -215,10 +215,31 @@
       "fronts": "Fronten",
       "front": "Front",
       "noUnits": "Keine Einheiten",
+      "noFrontsYet": "Noch keine Fronten",
       "onFront": "An Front",
       "openFront": "Front eröffnen",
       "attackFront": "Front angreifen",
       "attack": "Angreifen",
+      "reserveUnits": "Reservetruppen",
+      "unitDestroyed": "Zerstört",
+      "log": "Kampfverlauf",
+      "logAction": {
+        "damageDealt": "{{unit}} fügt {{amount}} Schaden zu",
+        "damageTaken": "{{unit}} nimmt {{amount}} Schaden",
+        "unitDestroyed": "{{unit}} wurde zerstört"
+      },
+      "winner": "Sieger",
+      "draw": "Unentschieden",
+      "finishAction": "Gefecht beenden",
+      "status": {
+        "INIT": "Initialisierung",
+        "ONGOING": "Laufend",
+        "FINISHED": "Beendet"
+      },
+      "activity": {
+        "CREATE_FRONT": "Front eröffnet",
+        "ATTACK_FRONT": "Front angegriffen"
+      },
       "type": {
         "ARMY_VS_ARMY": "Armee vs. Armee",
         "ARMY_VS_CITY": "Armee vs. Stadt",

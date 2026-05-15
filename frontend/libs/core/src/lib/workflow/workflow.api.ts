@@ -44,38 +44,62 @@ export interface GameUnit {
   counterType: {kind: UnitType} | null
 }
 
-export interface BattleFrontInfo {
-  index: number
-  unit: GameUnit
+export const BattleStatus = {
+  INIT: 'INIT',
+  ONGOING: 'ONGOING',
+  FINISHED: 'FINISHED',
+} as const
+export type BattleStatus = typeof BattleStatus[keyof typeof BattleStatus]
+
+export const BattleActivity = {
+  CREATE_FRONT: 'CREATE_FRONT',
+  ATTACK_FRONT: 'ATTACK_FRONT',
+} as const
+export type BattleActivity = typeof BattleActivity[keyof typeof BattleActivity]
+
+export const CombatActionType = {
+  DAMAGE_DEALT: 'DAMAGE_DEALT',
+  DAMAGE_TAKEN: 'DAMAGE_TAKEN',
+  UNIT_DESTROYED: 'UNIT_DESTROYED',
+} as const
+export type CombatActionType = typeof CombatActionType[keyof typeof CombatActionType]
+
+export interface CombatAction {
+  type: CombatActionType
+  unit: number
+  amount?: number
 }
 
-export interface BattleParticipantInfo {
+export interface BattleFrontUnit {
   player: GameSessionPlayer
-  armyCount: number
-  units: GameUnit[]
-  fronts: BattleFrontInfo[]
-}
-
-export interface BattleInfo {
-  participant: BattleParticipantInfo[]
-  activePlayer: GameSessionPlayer
+  unit: GameUnit
+  currentHealth: number
 }
 
 export interface BattleFront {
   index: number
-  unit: number
+  units: BattleFrontUnit[]
+}
+
+export interface BattleLogEntry {
+  player: GameSessionPlayer
+  activity: BattleActivity
+  actions: CombatAction[]
 }
 
 export interface BattleParticipant {
   player: GameSessionPlayer
   armyCount: number
-  units: number[]
-  fronts: BattleFront[]
+  units: GameUnit[]
 }
 
 export interface Battle {
   participant: BattleParticipant[]
+  fronts: BattleFront[]
+  logEntries: BattleLogEntry[]
   activePlayer: GameSessionPlayer
+  status: BattleStatus
+  winner: GameSessionPlayer | null
 }
 
 export interface Workflow {

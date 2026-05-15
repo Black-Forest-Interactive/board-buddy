@@ -15,7 +15,7 @@ class BattleConverter(
         val fronts = data.fronts.map { convert(it) }
         val logEntries = data.logEntries.map { convert(it) }
         val activePlayer = data.activePlayer
-        return Battle(participant, fronts, logEntries, activePlayer, data.status)
+        return Battle(participant, fronts, logEntries, activePlayer, data.status, data.winner)
     }
 
     private fun convert(data: BattleParticipantData): BattleParticipant {

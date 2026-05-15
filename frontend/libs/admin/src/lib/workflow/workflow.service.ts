@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core'
 import {Observable} from 'rxjs'
 import {BaseService} from '@board-buddy/shared'
 import {
-  BattleInfo,
+  Battle,
   Workflow,
   WorkflowAssignPlayerRequest,
   WorkflowCreateRequest,
@@ -41,15 +41,19 @@ export class WorkflowService extends BaseService {
     return this.post<Workflow>(`${sessionKey}/battle/start`, request)
   }
 
-  getBattleInfo(sessionKey: string): Observable<BattleInfo> {
-    return this.get<BattleInfo>(`${sessionKey}/battle`)
+  getBattleInfo(sessionKey: string): Observable<Battle> {
+    return this.get<Battle>(`${sessionKey}/battle`)
   }
 
-  battleCreateFront(sessionKey: string, request: WorkflowBattleCreateFrontRequest): Observable<BattleInfo> {
-    return this.post<BattleInfo>(`${sessionKey}/battle/front`, request)
+  battleCreateFront(sessionKey: string, request: WorkflowBattleCreateFrontRequest): Observable<Workflow> {
+    return this.post<Workflow>(`${sessionKey}/battle/front`, request)
   }
 
-  battleAttackFront(sessionKey: string, request: WorkflowBattleAttackFrontRequest): Observable<BattleInfo> {
-    return this.post<BattleInfo>(`${sessionKey}/battle/attack`, request)
+  battleAttackFront(sessionKey: string, request: WorkflowBattleAttackFrontRequest): Observable<Battle> {
+    return this.post<Battle>(`${sessionKey}/battle/attack`, request)
+  }
+
+  battleFinish(sessionKey: string): Observable<void> {
+    return this.post<void>(`${sessionKey}/battle/finish`, {})
   }
 }
