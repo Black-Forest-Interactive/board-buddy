@@ -13,6 +13,11 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{ 'session.form.attackerArmyCount' | translate }}</mat-label>
+      <input matInput type="number" formControlName="attackerArmyCount" min="1">
+    </mat-form-field>
+
+    <mat-form-field>
       <mat-label>{{ 'session.form.defender' | translate }}</mat-label>
       <mat-select formControlName="defender">
         @for (p of defenders(); track p.id) {
@@ -20,6 +25,22 @@
         }
       </mat-select>
     </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.defenderArmyCount' | translate }}</mat-label>
+      <input matInput type="number" formControlName="defenderArmyCount" min="1">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.battleType' | translate }}</mat-label>
+      <mat-select formControlName="type">
+        @for (t of battleTypes; track t) {
+          <mat-option [value]="t">{{ 'session.battle.type.' + t | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="isWalled">{{ 'session.form.isWalled' | translate }}</mat-checkbox>
 
   </form>
 </mat-dialog-content>

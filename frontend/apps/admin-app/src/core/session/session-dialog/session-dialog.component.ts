@@ -8,8 +8,8 @@ import {MatInputModule} from '@angular/material/input'
 import {MatSelectModule} from '@angular/material/select'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {GameService, PlayerService, SessionService} from '@board-buddy/admin'
-import {Game, GameSessionChangeRequest, RuleSet} from '@board-buddy/core'
+import {GameService, PlayerService, WorkflowService} from '@board-buddy/admin'
+import {Game, NationType, Player, RuleSet, WorkflowCreateRequest} from '@board-buddy/core'
 import {toPromise} from '@board-buddy/shared'
 
 @Component({
@@ -18,7 +18,7 @@ import {toPromise} from '@board-buddy/shared'
   templateUrl: './session-dialog.component.html',
 })
 export class SessionDialogComponent {
-  private service = inject(SessionService)
+  private workflowService = inject(WorkflowService)
   private dialogRef = inject(MatDialogRef<SessionDialogComponent>)
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)
@@ -30,10 +30,12 @@ export class SessionDialogComponent {
 
   readonly players = computed(() => this.playersResource.value()?.content ?? [])
   readonly games = computed(() => this.gamesResource.value()?.content ?? [])
+  readonly nations = Object.values(NationType)
 
   readonly form = new FormGroup({
     name: new FormControl('', Validators.required),
-    host: new FormControl<Game | null>(null, Validators.required),
+    host: new FormControl<Player | null>(null, Validators.required),
+    nation: new FormControl<NationType>(NationType.AMERICA, Validators.required),
     game: new FormControl<Game | null>(null, Validators.required),
     ruleSet: new FormControl<RuleSet | null>({value: null, disabled: true}, Validators.required),
   })
@@ -59,8 +61,8 @@ export class SessionDialogComponent {
   submit() {
     if (this.form.invalid) return
     const v = this.form.getRawValue()
-    const request = new GameSessionChangeRequest(v.name!, v.host!, v.game!, v.ruleSet!)
-    this.service.create(request).subscribe({
+    const request = new WorkflowCreateRequest(v.name!, v.host!.id, v.game!.id, v.ruleSet!.id, v.nation!)
+    this.workflowService.create(request).subscribe({
       next: () => {
         this.translate.get('session.message.created').subscribe(t => this.toast.success(t))
         this.dialogRef.close(true)

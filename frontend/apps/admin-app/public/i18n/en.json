@@ -168,10 +168,15 @@
       "error": {
         "name": "Name required"
       },
+      "nation": "Nation",
       "attacker": "Attacker",
+      "attackerArmyCount": "Attacker army figures",
       "defender": "Defender",
+      "defenderArmyCount": "Defender army figures",
       "player": "Player",
-      "attackUnit": "Attacking unit"
+      "attackUnit": "Attacking unit",
+      "battleType": "Battle type",
+      "isWalled": "Walled city"
     },
     "dialog": {
       "create": {
@@ -213,9 +218,32 @@
       "onFront": "On front",
       "openFront": "Open front",
       "attackFront": "Attack front",
-      "attack": "Attack"
+      "attack": "Attack",
+      "type": {
+        "ARMY_VS_ARMY": "Army vs. Army",
+        "ARMY_VS_CITY": "Army vs. City",
+        "ARMY_VS_BARBARIANS": "Army vs. Barbarians"
+      }
     },
-    "unitPool": "Available Units"
+    "unitPool": "Available Units",
+    "nation": {
+      "AMERICA": "America",
+      "CHINA": "China",
+      "EGYPT": "Egypt",
+      "GERMANY": "Germany",
+      "ROME": "Rome",
+      "RUSSIA": "Russia",
+      "ARABS": "Arabs",
+      "GREEKS": "Greeks",
+      "INDIANS": "Indians",
+      "SPANISH": "Spanish",
+      "AZTECS": "Aztecs",
+      "ENGLISH": "English",
+      "FRENCH": "French",
+      "JAPANESE": "Japanese",
+      "MONGOLS": "Mongols",
+      "ZULU": "Zulu"
+    }
   },
   "rule-set": {
     "title": "Rule Sets",

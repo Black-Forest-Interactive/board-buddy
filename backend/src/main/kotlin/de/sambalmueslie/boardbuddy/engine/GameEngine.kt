@@ -4,15 +4,16 @@ import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
-import de.sambalmueslie.boardbuddy.engine.model.GameEntityModel
+import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import de.sambalmueslie.boardbuddy.engine.system.*
 import de.sambalmueslie.boardbuddy.workflow.api.BattleType
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
+import kotlin.reflect.KClass
 
 @Singleton
 class GameEngine(
-    private val entityModel: GameEntityModel,
+    private val entityStorage: GameEntityStorage,
     private val createUnitSystem: CreateUnitSystem,
     private val createPlayerSystem: CreatePlayerSystem,
     private val combatSystem: CombatSystem,
@@ -30,6 +31,7 @@ class GameEngine(
     private val levelModel = componentModelService.get(Level::class)
     private val typeModel = componentModelService.get(Type::class)
     private val counterTypeModel = componentModelService.get(CounterType::class)
+    private val nationModel = componentModelService.get(Nation::class)
     private val governmentModel = componentModelService.get(Government::class)
 
 
@@ -45,20 +47,30 @@ class GameEngine(
         return entity
     }
 
-    fun combat(attackingUnitId: Long, defendingUnitId: Long) {
-        val attacker = entityModel.get(attackingUnitId) ?: return
-        val defender = entityModel.get(defendingUnitId) ?: return
-        combatSystem.combat(attacker, defender)
+    fun combat(attackingUnit: CombatParticipant, defendingUnit: CombatParticipant): List<CombatAction> {
+        return combatSystem.combat(attackingUnit, defendingUnit)
+    }
+
+    fun <T : GameComponent> getComponent(entity: GameEntity, type: KClass<T>): T? {
+        return componentModelService.get(type).get(entity)
     }
 
 
     fun getUnit(entity: GameEntity): GameUnit {
-        val damage = damageModel.get(entity)
-        val health = healthModel.get(entity)
-        val level = levelModel.get(entity)
-        val type = typeModel.get(entity)
-        val counterType = counterTypeModel.get(entity)
-        return GameUnit(entity, damage, health, level, type, counterType)
+        val unitEntity = entityStorage.get(entity, GameEntityType.UNIT) ?: throw WorkflowInvalidGameEntity(entity)
+        val damage = damageModel.get(unitEntity)
+        val health = healthModel.get(unitEntity)
+        val level = levelModel.get(unitEntity)
+        val type = typeModel.get(unitEntity)
+        val counterType = counterTypeModel.get(unitEntity)
+        return GameUnit(unitEntity, damage, health, level, type, counterType)
+    }
+
+    fun getPlayer(entity: GameEntity): GamePlayer {
+        val playerEntity = entityStorage.get(entity, GameEntityType.PLAYER) ?: throw WorkflowInvalidGameEntity(entity)
+        val nation = nationModel.get(playerEntity)
+        val government = governmentModel.get(playerEntity)
+        return GamePlayer(playerEntity, nation, government)
     }
 
     fun determineStartPlayer(attacker: GameSessionPlayer, defender: GameSessionPlayer, type: BattleType, isWalled: Boolean): GameSessionPlayer {
@@ -75,6 +87,14 @@ class GameEngine(
 
     private fun determineBattleUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>, isAttacker: Boolean): List<GameEntity> {
         return battleHandSystem.determine(participant, armyCount, type, units, isAttacker)
+    }
+
+    fun exists(entity: GameEntity): Boolean {
+        return entityStorage.exists(entity)
+    }
+
+    fun delete(entity: GameEntity) {
+        entityStorage.delete(entity)
     }
 
 

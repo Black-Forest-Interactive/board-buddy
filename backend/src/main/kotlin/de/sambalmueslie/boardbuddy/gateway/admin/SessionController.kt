@@ -15,9 +15,6 @@ class SessionController(private val gateway: SessionGateway) {
     @Get
     fun getAll(pageable: Pageable) = gateway.getAll(pageable)
 
-    @Post
-    fun create(@Body request: GameSessionChangeRequest) = gateway.create(request)
-
     @Put("{id}")
     fun update(id: Long, @Body request: GameSessionChangeRequest) = gateway.update(id, request)
 

@@ -10,6 +10,7 @@ import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.engine.api.GameUnit
 import de.sambalmueslie.boardbuddy.engine.api.NationType
 import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.battle.WorkflowBattleService
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
@@ -52,6 +53,11 @@ class WorkflowService(
         return get(id)
     }
 
+    fun assignPlayer(id: String, request: WorkflowAssignPlayerRequest): Workflow {
+        val player = playerService.getHost(request.playerId)
+        return join(id, player, request.nation)
+    }
+
     fun createUnit(id: String, request: WorkflowCreateUnitRequest): Workflow {
         val session = getSession(id)
 
@@ -81,10 +87,9 @@ class WorkflowService(
         return get(id)
     }
 
-    fun battleAttackFront(id: String, request: WorkflowBattleAttackFrontRequest): Workflow {
+    fun battleAttackFront(id: String, request: WorkflowBattleAttackFrontRequest): Battle {
         val session = getSession(id)
-        battleService.attackFront(session, request)
-        return get(id)
+        return battleService.attackFront(session, request)
     }
 
     fun get(id: String): Workflow {
@@ -99,7 +104,7 @@ class WorkflowService(
     }
 
     fun getUnits(p: BattleParticipant): List<GameUnit> {
-        return p.units.map { engine.getUnit(it) }
+        return p.units.map { engine.getUnit(it.entity) }
     }
 
     fun getParticipantsInfo(id: String): List<WorkflowParticipantInfo> {
@@ -111,9 +116,9 @@ class WorkflowService(
         }
     }
 
-    fun getBattleInfo(id: String): BattleInfo? {
+    fun getBattleInfo(id: String): Battle? {
         val session = sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
-        return battleService.getInfo(session)
+        return battleService.get(session)
     }
 
 

@@ -2,12 +2,12 @@ package de.sambalmueslie.boardbuddy.engine.system
 
 import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
-import de.sambalmueslie.boardbuddy.engine.model.GameEntityModel
+import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import jakarta.inject.Singleton
 
 @Singleton
 class CreatePlayerSystem(
-    private val model: GameEntityModel,
+    private val model: GameEntityStorage,
     componentModelService: GameComponentModelService,
 ) : GameSystem {
     private val nationModel = componentModelService.get(Nation::class)

@@ -1,6 +1,17 @@
 <h2 mat-dialog-title>{{ 'session.dialog.assign.title' | translate }}</h2>
 
 <mat-dialog-content>
+  <div class="pt-2 pb-4">
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
+      <mat-select [value]="selectedNation()" (selectionChange)="selectedNation.set($event.value)">
+        @for (n of nations; track n) {
+          <mat-option [value]="n">{{ 'session.nation.' + n | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   @if (available().length === 0) {
     <p class="text-on-surface/60 py-4">{{ 'session.dialog.assign.empty' | translate }}</p>
   } @else {

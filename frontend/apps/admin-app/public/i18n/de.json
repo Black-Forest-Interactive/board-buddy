@@ -168,10 +168,15 @@
       "error": {
         "name": "Name erforderlich"
       },
+      "nation": "Nation",
       "attacker": "Angreifer",
+      "attackerArmyCount": "Armee-Figuren Angreifer",
       "defender": "Verteidiger",
+      "defenderArmyCount": "Armee-Figuren Verteidiger",
       "player": "Spieler",
-      "attackUnit": "Angreifende Einheit"
+      "attackUnit": "Angreifende Einheit",
+      "battleType": "Kampftyp",
+      "isWalled": "Befestigte Stadt"
     },
     "dialog": {
       "create": {
@@ -213,9 +218,32 @@
       "onFront": "An Front",
       "openFront": "Front eröffnen",
       "attackFront": "Front angreifen",
-      "attack": "Angreifen"
+      "attack": "Angreifen",
+      "type": {
+        "ARMY_VS_ARMY": "Armee vs. Armee",
+        "ARMY_VS_CITY": "Armee vs. Stadt",
+        "ARMY_VS_BARBARIANS": "Armee vs. Barbaren"
+      }
     },
-    "unitPool": "Verfügbare Einheiten"
+    "unitPool": "Verfügbare Einheiten",
+    "nation": {
+      "AMERICA": "Amerika",
+      "CHINA": "China",
+      "EGYPT": "Ägypten",
+      "GERMANY": "Deutschland",
+      "ROME": "Rom",
+      "RUSSIA": "Russland",
+      "ARABS": "Araber",
+      "GREEKS": "Griechen",
+      "INDIANS": "Inder",
+      "SPANISH": "Spanier",
+      "AZTECS": "Azteken",
+      "ENGLISH": "Engländer",
+      "FRENCH": "Franzosen",
+      "JAPANESE": "Japaner",
+      "MONGOLS": "Mongolen",
+      "ZULU": "Zulu"
+    }
   },
   "rule-set": {
     "title": "Regelsets",

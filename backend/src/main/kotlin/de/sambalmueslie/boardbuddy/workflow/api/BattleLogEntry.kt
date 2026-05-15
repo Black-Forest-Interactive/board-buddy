@@ -1,10 +1,10 @@
 package de.sambalmueslie.boardbuddy.workflow.api
 
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
-import de.sambalmueslie.boardbuddy.engine.api.GameUnit
+import de.sambalmueslie.boardbuddy.engine.api.CombatAction
 
-data class BattleParticipant(
+data class BattleLogEntry(
     val player: GameSessionPlayer,
-    val armyCount: Int,
-    val units: List<GameUnit>,
+    val activity: BattleActivity,
+    val actions: List<CombatAction>
 )

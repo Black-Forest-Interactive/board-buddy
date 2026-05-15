@@ -15,11 +15,10 @@ import {SessionService, WorkflowService} from '@board-buddy/admin'
 import {
   BattleInfo,
   BattleParticipantInfo,
+  GameSessionPlayer,
   GameUnit,
-  Player,
   UnitDefinition,
   WorkflowBattleCreateFrontRequest,
-  WorkflowBattleStartRequest,
   WorkflowCreateUnitRequest,
   WorkflowParticipantInfo,
 } from '@board-buddy/core'
@@ -77,20 +76,25 @@ export class SessionDetailComponent {
   readonly participantsInfo = computed(() => this.participantsInfoResource.value() ?? [])
   readonly battleInfo = computed(() => this.battleInfoResource.value() as BattleInfo | null)
   readonly hasBattle = computed(() => this.battleInfo() != null)
-  readonly activePlayerId = computed(() => this.battleInfo()?.activePlayer.id ?? null)
+  readonly activePlayerId = computed(() => this.battleInfo()?.activePlayer.player.id ?? null)
 
   openAssign() {
-    const id = this.id()
-    if (!id) return
-    this.dialog.open(SessionAssignDialogComponent, {
-      data: {sessionId: id, participants: this.participants()}
-    }).afterClosed().subscribe(saved => {if (saved) this.sessionResource.reload()})
-  }
-
-  createUnit(player: Player, unitDef: UnitDefinition) {
     const key = this.sessionKey()
     if (!key) return
-    const request = new WorkflowCreateUnitRequest(player.id, unitDef.id)
+    this.dialog.open(SessionAssignDialogComponent, {
+      data: {sessionKey: key, participants: this.participants().map(p => p.player)}
+    }).afterClosed().subscribe(saved => {
+      if (saved) {
+        this.sessionResource.reload()
+        this.participantsInfoResource.reload()
+      }
+    })
+  }
+
+  createUnit(player: GameSessionPlayer, unitDef: UnitDefinition) {
+    const key = this.sessionKey()
+    if (!key) return
+    const request = new WorkflowCreateUnitRequest(player.player.id, unitDef.id)
     this.workflowService.createUnit(key, request).subscribe({
       next: () => {
         this.translate.get('session.message.unitCreated').subscribe(t => this.toast.success(t))
@@ -104,16 +108,16 @@ export class SessionDetailComponent {
     const key = this.sessionKey()
     if (!key) return
     this.dialog.open(SessionBattleStartDialogComponent, {
-      data: {sessionKey: key, participants: this.participants()}
+      data: {sessionKey: key, participants: this.participants().map(p => p.player)}
     }).afterClosed().subscribe(saved => {if (saved) this.battleInfoResource.reload()})
   }
 
   createFront(participant: BattleParticipantInfo, unit: GameUnit) {
     const key = this.sessionKey()
     if (!key) return
-    this.workflowService.battleCreateFront(key, new WorkflowBattleCreateFrontRequest(participant.player.id, unit.entity))
+    this.workflowService.battleCreateFront(key, new WorkflowBattleCreateFrontRequest(participant.player.player.id, unit.entity))
       .subscribe({
-        next: (info) => this.battleInfoResource.set(info),
+        next: () => this.battleInfoResource.reload(),
         error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
       })
   }
@@ -123,11 +127,11 @@ export class SessionDetailComponent {
     if (!key) return
     this.dialog.open(SessionAttackDialogComponent, {
       data: {sessionKey: key, attacker, defender, frontIndex}
-    }).afterClosed().subscribe(info => {if (info) this.battleInfoResource.set(info)})
+    }).afterClosed().subscribe(saved => {if (saved) this.battleInfoResource.reload()})
   }
 
   isActive(participant: BattleParticipantInfo): boolean {
-    return participant.player.id === this.activePlayerId()
+    return participant.player.player.id === this.activePlayerId()
   }
 
   isOnFront(participant: BattleParticipantInfo, unit: GameUnit): boolean {
@@ -135,13 +139,13 @@ export class SessionDetailComponent {
   }
 
   opponentOf(participant: BattleParticipantInfo): BattleParticipantInfo | undefined {
-    return this.battleInfo()?.participant.find(p => p.player.id !== participant.player.id)
+    return this.battleInfo()?.participant.find(p => p.player.player.id !== participant.player.player.id)
   }
 
-  revokePlayer(player: Player) {
+  revokePlayer(player: GameSessionPlayer) {
     const id = this.id()
     if (!id) return
-    this.sessionService.revokePlayer(id, player.id).subscribe({
+    this.sessionService.revokePlayer(id, player.player.id).subscribe({
       next: (updated) => {
         this.sessionResource.set(updated)
         this.translate.get('session.message.playerRevoked').subscribe(t => this.toast.success(t))

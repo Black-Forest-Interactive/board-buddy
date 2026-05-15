@@ -1,7 +1,7 @@
 <ui-main-content [title]="name()">
 
   <div actions class="flex gap-2 flex-wrap">
-    <button matButton (click)="openAssign()">
+    <button matButton="tonal" (click)="openAssign()">
       <mat-icon>person_add</mat-icon>
       {{ 'session.assignPlayer' | translate }}
     </button>
@@ -16,13 +16,13 @@
   <!-- No battle: participant cards with unit pool -->
   @if (!hasBattle()) {
     <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-      @for (info of participantsInfo(); track info.player.id) {
+      @for (info of participantsInfo(); track info.player.player.id) {
         <mat-card appearance="outlined">
 
           <div class="flex items-center gap-3 p-4 pb-2">
             <mat-icon>person</mat-icon>
             <div>
-              <div class="font-semibold">{{ info.player.name }}</div>
+              <div class="font-semibold">{{ info.player.player.name }}</div>
               <div class="text-sm text-on-surface/60">{{ info.units.length }} {{ 'session.battle.units' | translate }}</div>
             </div>
           </div>
@@ -87,16 +87,16 @@
       <div class="flex items-center gap-2 mb-4 px-4 py-2 rounded bg-primary-container text-on-primary-container">
         <mat-icon>swords</mat-icon>
         <span class="font-semibold">{{ 'session.battle.activePlayer' | translate }}:</span>
-        <span>{{ battleInfo()!.activePlayer.name }}</span>
+        <span>{{ battleInfo()!.activePlayer.player.name }}</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        @for (participant of battleInfo()!.participant; track participant.player.id) {
+        @for (participant of battleInfo()!.participant; track participant.player.player.id) {
           <mat-card appearance="raised" [class.ring-2]="isActive(participant)" [class.ring-primary]="isActive(participant)">
 
             <div class="flex items-center gap-3 p-4 pb-2">
               <mat-icon>{{ isActive(participant) ? 'sports_martial_arts' : 'person' }}</mat-icon>
-              <div class="font-semibold">{{ participant.player.name }}</div>
+              <div class="font-semibold">{{ participant.player.player.name }}</div>
               @if (isActive(participant)) {
                 <mat-chip class="ml-auto !bg-primary !text-on-primary text-xs">
                   {{ 'session.battle.active' | translate }}

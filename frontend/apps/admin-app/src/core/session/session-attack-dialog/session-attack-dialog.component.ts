@@ -8,7 +8,6 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {WorkflowService} from '@board-buddy/admin'
 import {
-  BattleInfo,
   BattleParticipantInfo,
   GameUnit,
   WorkflowBattleAttackFrontRequest,
@@ -43,15 +42,15 @@ export class SessionAttackDialogComponent {
   submit() {
     if (this.form.invalid) return
     const request = new WorkflowBattleAttackFrontRequest(
-      this.data.attacker.player.id,
-      this.data.defender.player.id,
+      this.data.attacker.player.player.id,
+      this.data.defender.player.player.id,
       this.form.value.unit!.entity,
       this.data.frontIndex,
     )
     this.service.battleAttackFront(this.data.sessionKey, request).subscribe({
-      next: (info: BattleInfo) => {
+      next: () => {
         this.translate.get('session.battle.attacked').subscribe(t => this.toast.success(t))
-        this.dialogRef.close(info)
+        this.dialogRef.close(true)
       },
       error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
     })

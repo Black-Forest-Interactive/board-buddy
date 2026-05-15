@@ -20,6 +20,8 @@ class GameComponentModelService(
         Pair(Level::class, createModel(Level::class)),
         Pair(Type::class, createModel(Type::class)),
         Pair(CounterType::class, createModel(CounterType::class)),
+        Pair(Government::class, createModel(Government::class)),
+        Pair(Nation::class, createModel(Nation::class)),
     )
 
 

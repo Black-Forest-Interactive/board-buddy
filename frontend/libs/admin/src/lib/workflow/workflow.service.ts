@@ -4,6 +4,8 @@ import {BaseService} from '@board-buddy/shared'
 import {
   BattleInfo,
   Workflow,
+  WorkflowAssignPlayerRequest,
+  WorkflowCreateRequest,
   WorkflowParticipantInfo,
   WorkflowBattleAttackFrontRequest,
   WorkflowBattleCreateFrontRequest,
@@ -13,7 +15,15 @@ import {
 
 @Injectable({providedIn: 'root'})
 export class WorkflowService extends BaseService {
-  constructor() { super('portal/workflow') }
+  constructor() { super('admin/workflow') }
+
+  create(request: WorkflowCreateRequest): Observable<Workflow> {
+    return this.post<Workflow>('', request)
+  }
+
+  assignPlayer(sessionKey: string, request: WorkflowAssignPlayerRequest): Observable<Workflow> {
+    return this.post<Workflow>(`${sessionKey}/player`, request)
+  }
 
   getWorkflow(sessionKey: string): Observable<Workflow> {
     return this.get<Workflow>(sessionKey)

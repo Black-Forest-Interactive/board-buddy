@@ -21,6 +21,15 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
+      <mat-select formControlName="nation">
+        @for (n of nations; track n) {
+          <mat-option [value]="n">{{ 'session.nation.' + n | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
       <mat-label>{{ 'session.form.game' | translate }}</mat-label>
       <mat-select formControlName="game">
         @for (game of games(); track game.id) {
