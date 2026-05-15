@@ -4,9 +4,11 @@ import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.Player
+import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionData
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionPlayerRelation
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionPlayerRelationRepository
+import de.sambalmueslie.boardbuddy.engine.api.GameEntity
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
@@ -37,11 +39,11 @@ class GameSessionPlayerService(
     }
 
 
-    internal fun assign(gameSession: GameSessionData, player: Player) {
+    internal fun assign(gameSession: GameSessionData, player: Player, entity: GameEntity) {
         val existing = repository.findByGameSessionIdAndPlayerId(gameSession.id, player.id)
         if (existing != null) return
 
-        val relation = GameSessionPlayerRelation(gameSession.id, player.id)
+        val relation = GameSessionPlayerRelation(gameSession.id, player.id, entity)
         repository.save(relation)
     }
 
@@ -49,10 +51,14 @@ class GameSessionPlayerService(
         repository.deleteByGameSessionIdAndPlayerId(gameSession.id, player.id)
     }
 
-    internal fun getAssignedPlayers(data: GameSessionData): List<Player> {
+    internal fun getAssignedPlayers(data: GameSessionData): List<GameSessionPlayer> {
         val relations = repository.findByGameSessionId(data.id)
         val playerIds = relations.map { it.playerId }.toSet()
-        return playerService.getByIds(playerIds)
+        val players = playerService.getByIds(playerIds).associateBy { it.id }
+        return relations.mapNotNull {
+            val p = players[it.playerId] ?: return@mapNotNull null
+            GameSessionPlayer(p, it.entityId)
+        }
     }
 
     internal fun revokeAll(data: GameSessionData) {

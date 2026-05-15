@@ -1,9 +1,9 @@
 package de.sambalmueslie.boardbuddy.workflow
 
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
-import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
+import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.engine.api.GameEntity
 import de.sambalmueslie.boardbuddy.workflow.api.*
@@ -19,17 +19,24 @@ class WorkflowBattleService(
 
     companion object {
         private val logger = LoggerFactory.getLogger(WorkflowBattleService::class.java)
-        private val UNITS_PER_BATTLE = 3
     }
 
     private val activeBattles = mutableMapOf<String, BattleData>()
 
     fun start(session: GameSession, request: WorkflowBattleStartRequest): Battle {
-        val attacker = getAndValidatePlayer(session, request.attackerId)
-        val defender = getAndValidatePlayer(session, request.defenderId)
-        val attackerUnits = sessionService.getAssignedEntities(session, attacker).shuffled().take(UNITS_PER_BATTLE).toMutableList()
-        val defenderUnits = sessionService.getAssignedEntities(session, defender).shuffled().take(UNITS_PER_BATTLE).toMutableList()
-        val battle = BattleData(listOf(BattleParticipantData(attacker, attackerUnits), BattleParticipantData(defender, defenderUnits)), attacker)
+        val attacker = getAndValidatePlayer(session, request.attacker.id)
+        val defender = getAndValidatePlayer(session, request.defender.id)
+        val battleType = request.type
+
+        val attackerUnits = sessionService.getAssignedEntities(session, attacker).let { gameEngine.determineAttackerUnits(attacker,request.attacker.armyCount, battleType, it) }.toMutableList()
+        val defenderUnits = sessionService.getAssignedEntities(session, defender).let { gameEngine.determineDefenderUnits(defender,request.defender.armyCount, battleType, it) }.toMutableList()
+        val startPlayer = gameEngine.determineStartPlayer(attacker, defender, battleType, request.isWalled)
+
+        val participants = listOf(
+            BattleParticipantData(attacker, request.attacker.armyCount, attackerUnits),
+            BattleParticipantData(defender, request.defender.armyCount, defenderUnits)
+        )
+        val battle = BattleData(participants, battleType, startPlayer)
         activeBattles[session.key] = battle
         return battle.convert()
     }
@@ -47,10 +54,10 @@ class WorkflowBattleService(
         return activeBattles[session.key]
     }
 
-    private fun getAndValidatePlayer(session: GameSession, playerId: Long): Player {
+    private fun getAndValidatePlayer(session: GameSession, playerId: Long): GameSessionPlayer {
         val player = playerService.get(playerId) ?: throw WorkflowBattleInvalidPlayer(playerId)
-        if (!session.participants.any { it.id == playerId }) throw WorkflowBattleInvalidPlayer(playerId)
-        return player
+        val participant = session.participants.find { it.player.id == playerId } ?: throw WorkflowBattleInvalidPlayer(playerId)
+        return participant
     }
 
 
@@ -105,21 +112,22 @@ class WorkflowBattleService(
 
     private data class BattleData(
         val participant: List<BattleParticipantData>,
-        var activePlayer: Player,
+        val type: BattleType,
+        var activePlayer: GameSessionPlayer,
     ) {
         fun convert() = Battle(participant.map { it.convert() }, activePlayer)
         fun toInfo(engine: GameEngine) = BattleInfo(participant.map { it.toInfo(engine) }, activePlayer)
 
-        fun getAndValidateParticipant(player: Player): BattleParticipantData {
-            return participant.find { it.player.id == player.id } ?: throw WorkflowBattleInvalidPlayer(player.id)
+        fun getAndValidateParticipant(player: GameSessionPlayer): BattleParticipantData {
+            return participant.find { it.matches(player) } ?: throw WorkflowBattleInvalidPlayer(player.player.id)
         }
 
-        fun validatePlayerIsActive(player: Player) {
-            if (player.id != activePlayer.id) throw WorkflowBattlePlayerIsNotActive(player.id)
+        fun validatePlayerIsActive(player: GameSessionPlayer) {
+            if (player.player.id != activePlayer.player.id) throw WorkflowBattlePlayerIsNotActive(player.player.id)
         }
 
-        fun switchActivePlayer(player: Player) {
-            val currentIndex = participant.indexOfFirst { it.player.id == player.id }
+        fun switchActivePlayer(player: GameSessionPlayer) {
+            val currentIndex = participant.indexOfFirst { it.matches(player) }
             val nextIndex = if (currentIndex >= participant.size - 1) 0 else currentIndex + 1
             val nextPlayer = participant[nextIndex].player
             activePlayer = nextPlayer
@@ -127,13 +135,14 @@ class WorkflowBattleService(
     }
 
     private data class BattleParticipantData(
-        val player: Player,
+        val player: GameSessionPlayer,
+        val armyCount: Int,
         val units: MutableList<GameEntity>,
         val fronts: MutableList<BattleFrontData> = mutableListOf()
     ) {
-        fun convert() = BattleParticipant(player, units, fronts.map { it.convert() })
+        fun convert() = BattleParticipant(player, armyCount, units, fronts.map { it.convert() })
 
-        fun toInfo(engine: GameEngine) = BattleParticipantInfo(player, units.map { engine.getUnit(it)}, fronts.map { it.toInfo(engine) })
+        fun toInfo(engine: GameEngine) = BattleParticipantInfo(player, armyCount, units.map { engine.getUnit(it) }, fronts.map { it.toInfo(engine) })
 
         fun getAndValidateUnitEntity(entityId: Long): GameEntity {
             return units.find { it == entityId } ?: throw WorkflowBattleUnitNotExisting(entityId)
@@ -155,6 +164,8 @@ class WorkflowBattleService(
             fronts.add(front)
             return front
         }
+
+        fun matches(p: GameSessionPlayer) = player.player.id == p.player.id
 
     }
 

@@ -24,9 +24,4 @@ class SessionController(private val gateway: SessionGateway) {
     @Delete("{id}")
     fun delete(id: Long) = gateway.delete(id)
 
-    @Post("{id}/player/{playerId}")
-    fun assignPlayer(id: Long, playerId: Long) = gateway.assignPlayer(id, playerId)
-
-    @Delete("{id}/player/{playerId}")
-    fun revokePlayer(id: Long, playerId: Long) = gateway.revokePlayer(id, playerId)
 }

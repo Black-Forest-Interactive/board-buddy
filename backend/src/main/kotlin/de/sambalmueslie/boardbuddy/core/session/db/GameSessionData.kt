@@ -6,6 +6,7 @@ import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
+import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -24,7 +25,8 @@ data class GameSessionData(
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert(host: Player, participants: List<Player>, game: Game, ruleSet: RuleSet) = GameSession(id, key, name, host, participants, game, ruleSet, updated ?: created)
+
+    fun convert(host: Player, participants: List<GameSessionPlayer>, game: Game, ruleSet: RuleSet) = GameSession(id, key, name, host, participants, game, ruleSet, updated ?: created)
     fun update(request: GameSessionChangeRequest, currentTime: LocalDateTime): GameSessionData {
         name = request.name
         hostId = request.host.id

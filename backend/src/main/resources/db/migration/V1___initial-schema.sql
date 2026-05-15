@@ -71,7 +71,8 @@ CREATE TABLE player
 CREATE SEQUENCE game_entity_seq;
 CREATE TABLE game_entity
 (
-    id      BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('game_entity_seq'::regclass),
+    id      BIGINT      NOT NULL PRIMARY KEY DEFAULT nextval('game_entity_seq'::regclass),
+    type    VARCHAR(50) NOT NULL,
     created TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
@@ -128,6 +129,26 @@ CREATE TABLE component_type
     updated   TIMESTAMP WITHOUT TIME ZONE
 );
 
+CREATE TABLE component_government
+(
+    entity_id BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
+
+    type      VARCHAR(50) NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE component_nation
+(
+    entity_id BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
+
+    type      VARCHAR(50) NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
 -- session
 CREATE SEQUENCE game_session_seq;
 CREATE TABLE game_session
@@ -147,6 +168,7 @@ CREATE TABLE game_session_player
 (
     game_session_id BIGINT REFERENCES game_session (id),
     player_id       BIGINT REFERENCES player (id),
+    entity_id       BIGINT REFERENCES game_entity (id),
     PRIMARY KEY (game_session_id, player_id)
 );
 

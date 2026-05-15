@@ -3,6 +3,7 @@ package de.sambalmueslie.boardbuddy.engine.model
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import de.sambalmueslie.boardbuddy.engine.api.GameEntity
+import de.sambalmueslie.boardbuddy.engine.api.GameEntityType
 import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import jakarta.inject.Singleton
 import java.util.concurrent.TimeUnit
@@ -16,8 +17,8 @@ class GameEntityModel(private val storage: GameEntityStorage) {
         .recordStats()
         .build()
 
-    fun create(): GameEntity {
-        val data = storage.create()
+    fun create(type: GameEntityType): GameEntity {
+        val data = storage.create(type)
         cache.put(data, data)
         return data
     }

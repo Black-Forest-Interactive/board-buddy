@@ -3,6 +3,7 @@ package de.sambalmueslie.boardbuddy.core.session
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
 import de.sambalmueslie.boardbuddy.core.player.api.Player
+import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionData
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionEntityRelation
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionEntityRelationRepository
@@ -48,8 +49,8 @@ class GameSessionEntityService(
         repository.deleteByGameSessionIdAndPlayerIdAndEntityId(gameSession.id, player.id, entity)
     }
 
-    internal fun get(data: GameSessionData, player: Player): List<GameEntity> {
-        val relations = repository.findByGameSessionIdAndPlayerId(data.id, player.id)
+    internal fun get(data: GameSessionData, player: GameSessionPlayer): List<GameEntity> {
+        val relations = repository.findByGameSessionIdAndPlayerId(data.id, player.player.id)
         return relations.map { it.entityId }
     }
 

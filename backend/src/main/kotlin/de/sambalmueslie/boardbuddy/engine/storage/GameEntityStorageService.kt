@@ -3,6 +3,7 @@ package de.sambalmueslie.boardbuddy.engine.storage
 import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.common.findByIdOrNull
 import de.sambalmueslie.boardbuddy.engine.api.GameEntity
+import de.sambalmueslie.boardbuddy.engine.api.GameEntityType
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
@@ -18,8 +19,8 @@ class GameEntityStorageService(
         private val logger = LoggerFactory.getLogger(GameEntityStorageService::class.java)
     }
 
-    override fun create(): GameEntity {
-        return repository.save(GameEntityData(0, timeProvider.currentTime())).convert()
+    override fun create(type: GameEntityType): GameEntity {
+        return repository.save(GameEntityData(0, type, timeProvider.currentTime())).convert()
     }
 
     override fun get(id: Long): GameEntity? {

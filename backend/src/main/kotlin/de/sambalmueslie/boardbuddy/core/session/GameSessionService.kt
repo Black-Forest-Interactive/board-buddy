@@ -8,10 +8,7 @@ import de.sambalmueslie.boardbuddy.core.game.GameService
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
-import de.sambalmueslie.boardbuddy.core.session.api.GameSession
-import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
-import de.sambalmueslie.boardbuddy.core.session.api.GameSessionNameValidationFailed
-import de.sambalmueslie.boardbuddy.core.session.api.GameSessionRuleSetValidationFailed
+import de.sambalmueslie.boardbuddy.core.session.api.*
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionData
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionRepository
 import de.sambalmueslie.boardbuddy.engine.api.GameEntity
@@ -36,13 +33,13 @@ class GameSessionService(
         private val logger = LoggerFactory.getLogger(GameSessionService::class.java)
     }
 
-    fun assignPlayer(gameSession: GameSession, player: Player): GameSession? {
-        return assignPlayer(gameSession.id, player)
+    fun assignPlayer(gameSession: GameSession, player: Player, entity: GameEntity): GameSession? {
+        return assignPlayer(gameSession.id, player, entity)
     }
 
-    fun assignPlayer(gameSessionId: Long, player: Player): GameSession? {
+    fun assignPlayer(gameSessionId: Long, player: Player, entity: GameEntity): GameSession? {
         val data = repository.findByIdOrNull(gameSessionId) ?: return null
-        sessionPlayerService.assign(data, player)
+        sessionPlayerService.assign(data, player, entity)
         return sessionUpdated(data)
     }
 
@@ -76,11 +73,12 @@ class GameSessionService(
         sessionEntityService.revoke(data, player, entity)
         return sessionUpdated(data)
     }
-    fun getAssignedEntities(gameSession: GameSession, player: Player): List<GameEntity> {
+
+    fun getAssignedEntities(gameSession: GameSession, player: GameSessionPlayer): List<GameEntity> {
         return getAssignedEntities(gameSession.id, player)
     }
 
-    fun getAssignedEntities(gameSessionId: Long, player: Player): List<GameEntity> {
+    fun getAssignedEntities(gameSessionId: Long, player: GameSessionPlayer): List<GameEntity> {
         val data = repository.findByIdOrNull(gameSessionId) ?: return emptyList()
         return sessionEntityService.get(data, player)
     }
@@ -108,7 +106,7 @@ class GameSessionService(
     }
 
     override fun createDependencies(request: GameSessionChangeRequest, data: GameSessionData) {
-        sessionPlayerService.assign(data, request.host)
+        sessionPlayerService.assign(data, request.host, request.hostEntity)
     }
 
     override fun updateData(existing: GameSessionData, request: GameSessionChangeRequest): GameSessionData {

@@ -10,6 +10,9 @@ import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
+import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
+import de.sambalmueslie.boardbuddy.engine.GameEngine
+import de.sambalmueslie.boardbuddy.engine.api.NationType
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.Runs
 import io.mockk.every
@@ -39,6 +42,9 @@ class GameSessionServiceTest {
 
     @Inject
     lateinit var eventService: EventService
+
+    @Inject
+    lateinit var engine: GameEngine
 
     private val eventCollector: EventConsumer<GameSession> = mockk()
 
@@ -70,14 +76,16 @@ class GameSessionServiceTest {
 
         val host = playerService.create(PlayerChangeRequest("host"))
         val player = playerService.create(PlayerChangeRequest("player"))
+        val hostEntity = engine.createPlayer(NationType.GERMANY)
 
-        val request = GameSessionChangeRequest("session", host, game, ruleSet)
+        val request = GameSessionChangeRequest("session", host, hostEntity, game, ruleSet)
         var response = service.create(request)
         var reference = GameSession(response.id, response.key, request.name, request.host, emptyList(), request.game, request.ruleSet, response.timestamp)
         assertEquals(reference, response)
 
-        response = service.assignPlayer(response, player)!!
-        reference = GameSession(response.id, response.key, request.name, request.host, listOf(player), request.game, request.ruleSet, response.timestamp)
+        val playerEntity = engine.createPlayer(NationType.ARABS)
+        response = service.assignPlayer(response, player,playerEntity)!!
+        reference = GameSession(response.id, response.key, request.name, request.host, listOf(GameSessionPlayer(player, playerEntity)), request.game, request.ruleSet, response.timestamp)
         assertEquals(reference, response)
 
         response = service.revokePlayer(response, player)!!

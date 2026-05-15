@@ -24,8 +24,8 @@ class CreateUnitSystem(
     private val counterTypeModel = componentModelService.get(CounterType::class)
 
 
-    fun createUnit(unitDefinition: UnitDefinition): GameEntity {
-        val entity = model.create()
+    fun create(unitDefinition: UnitDefinition): GameEntity {
+        val entity = model.create(GameEntityType.UNIT)
 
         val damage = Random.nextInt(unitDefinition.damagePoints.min, unitDefinition.damagePoints.max + 1)
         damageModel.create(entity) { Damage(damage) }

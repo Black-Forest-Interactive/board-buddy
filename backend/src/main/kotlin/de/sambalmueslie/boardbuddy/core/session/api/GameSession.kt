@@ -11,7 +11,7 @@ data class GameSession(
     val key: String,
     val name: String,
     val host: Player,
-    val participants: List<Player>,
+    val participants: List<GameSessionPlayer>,
     val game: Game,
     val ruleSet: RuleSet,
     val timestamp: LocalDateTime

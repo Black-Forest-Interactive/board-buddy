@@ -8,6 +8,7 @@ import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
 import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.engine.api.GameUnit
+import de.sambalmueslie.boardbuddy.engine.api.NationType
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -31,19 +32,23 @@ class WorkflowService(
         val host = playerService.getHost(request.hostId)
         val game = gameService.get(request.gameId) ?: throw WorkflowInvalidGame(request.gameId)
         val ruleSet = ruleSetService.get(request.ruleSetId) ?: throw WorkflowInvalidRuleSet(request.ruleSetId)
-        val session = sessionService.create(GameSessionChangeRequest(request.name, host, game, ruleSet))
+        val hostEntity = engine.createPlayer(request.nation)
+        val session = sessionService.create(GameSessionChangeRequest(request.name, host, hostEntity, game, ruleSet))
+
         return Workflow.create(session, null)
     }
 
     fun join(id: String, request: WorkflowPlayerJoinRequest): Workflow {
         val session = getSession(id)
-        playerService.join(session, request)
+        val playerEntity = engine.createPlayer(request.nation)
+        playerService.join(session, request, playerEntity)
         return get(id)
     }
 
-    fun join(id: String, player: Player): Workflow {
+    fun join(id: String, player: Player, nation: NationType): Workflow {
         val session = getSession(id)
-        playerService.join(session, player)
+        val playerEntity = engine.createPlayer(nation)
+        playerService.join(session, player, playerEntity)
         return get(id)
     }
 
