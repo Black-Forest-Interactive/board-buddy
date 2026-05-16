@@ -111,7 +111,7 @@ class WorkflowBattleService(
         if (battle.status == BattleStatus.FINISHED) {
             val playerRemainingHealth = battle.fronts.flatMap { it.units }.groupBy { it.player }
                 .mapValues { it.value.sumOf { u -> u.currentHealth } }
-                .filter { it.value <= 0 }
+                .filter { it.value > 0 }
             battle.winner = playerRemainingHealth.maxByOrNull { it.value }?.key
         }
     }
