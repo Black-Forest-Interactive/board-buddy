@@ -167,7 +167,9 @@ tasks {
     }
 }
 
-
+tasks.named("internalStartTestResourcesService") {
+    setProperty("useClassDataSharing", false)
+}
 
 tasks.test {
     useJUnitPlatform()
