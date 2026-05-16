@@ -8,12 +8,10 @@ import de.sambalmueslie.boardbuddy.core.game.GameService
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
-import de.sambalmueslie.boardbuddy.core.session.api.GameSession
-import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
-import de.sambalmueslie.boardbuddy.core.session.api.GameSessionNameValidationFailed
-import de.sambalmueslie.boardbuddy.core.session.api.GameSessionRuleSetValidationFailed
+import de.sambalmueslie.boardbuddy.core.session.api.*
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionData
 import de.sambalmueslie.boardbuddy.core.session.db.GameSessionRepository
+import de.sambalmueslie.boardbuddy.engine.api.GameEntity
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -22,7 +20,7 @@ import java.util.*
 class GameSessionService(
     private val repository: GameSessionRepository,
     private val sessionPlayerService: GameSessionPlayerService,
-    private val sessionUnitService: GameSessionUnitService,
+    private val sessionEntityService: GameSessionEntityService,
 
     private val playerService: PlayerService,
     private val gameService: GameService,
@@ -35,13 +33,13 @@ class GameSessionService(
         private val logger = LoggerFactory.getLogger(GameSessionService::class.java)
     }
 
-    fun assignPlayer(gameSession: GameSession, player: Player): GameSession? {
-        return assignPlayer(gameSession.id, player)
+    fun assignPlayer(gameSession: GameSession, player: Player, entity: GameEntity): GameSession? {
+        return assignPlayer(gameSession.id, player, entity)
     }
 
-    fun assignPlayer(gameSessionId: Long, player: Player): GameSession? {
+    fun assignPlayer(gameSessionId: Long, player: Player, entity: GameEntity): GameSession? {
         val data = repository.findByIdOrNull(gameSessionId) ?: return null
-        sessionPlayerService.assign(data, player)
+        sessionPlayerService.assign(data, player, entity)
         return sessionUpdated(data)
     }
 
@@ -55,33 +53,34 @@ class GameSessionService(
         return sessionUpdated(data)
     }
 
-    fun assignUnit(session: GameSession, player: Player, instance: UnitInstance): GameSession? {
-        return assignUnit(session.id, player, instance)
+
+    fun assignEntity(session: GameSession, player: Player, entity: GameEntity): GameSession? {
+        return assignEntity(session.id, player, entity)
     }
 
-    fun assignUnit(gameSessionId: Long, player: Player, instance: UnitInstance): GameSession? {
+    fun assignEntity(gameSessionId: Long, player: Player, entity: GameEntity): GameSession? {
         val data = repository.findByIdOrNull(gameSessionId) ?: return null
-        sessionUnitService.assign(data, player, instance)
+        sessionEntityService.assign(data, player, entity)
         return sessionUpdated(data)
     }
 
-    fun revokeUnit(gameSession: GameSession, player: Player, instance: UnitInstance): GameSession? {
-        return revokeUnit(gameSession.id, player, instance)
+    fun revokeEntity(session: GameSession, player: Player, entity: GameEntity): GameSession? {
+        return revokeEntity(session.id, player, entity)
     }
 
-    fun revokeUnit(gameSessionId: Long, player: Player, instance: UnitInstance): GameSession? {
+    fun revokeEntity(gameSessionId: Long, player: Player, entity: GameEntity): GameSession? {
         val data = repository.findByIdOrNull(gameSessionId) ?: return null
-        sessionUnitService.revoke(data, player, instance)
+        sessionEntityService.revoke(data, player, entity)
         return sessionUpdated(data)
     }
 
-    fun getAssignedUnits(gameSession: GameSession, player: Player): List<UnitInstance> {
-        return getAssignedUnits(gameSession.id, player)
+    fun getAssignedEntities(gameSession: GameSession, player: GameSessionPlayer): List<GameEntity> {
+        return getAssignedEntities(gameSession.id, player)
     }
 
-    fun getAssignedUnits(gameSessionId: Long, player: Player): List<UnitInstance> {
+    fun getAssignedEntities(gameSessionId: Long, player: GameSessionPlayer): List<GameEntity> {
         val data = repository.findByIdOrNull(gameSessionId) ?: return emptyList()
-        return sessionUnitService.getAssignedUnits(data, player)
+        return sessionEntityService.get(data, player)
     }
 
     private fun sessionUpdated(data: GameSessionData): GameSession {
@@ -107,7 +106,7 @@ class GameSessionService(
     }
 
     override fun createDependencies(request: GameSessionChangeRequest, data: GameSessionData) {
-        sessionPlayerService.assign(data, request.host)
+        sessionPlayerService.assign(data, request.host, request.hostEntity)
     }
 
     override fun updateData(existing: GameSessionData, request: GameSessionChangeRequest): GameSessionData {
@@ -122,7 +121,7 @@ class GameSessionService(
 
     override fun deleteDependencies(data: GameSessionData) {
         sessionPlayerService.revokeAll(data)
-        sessionUnitService.revokeAll(data)
+        sessionEntityService.revokeAll(data)
     }
 
 

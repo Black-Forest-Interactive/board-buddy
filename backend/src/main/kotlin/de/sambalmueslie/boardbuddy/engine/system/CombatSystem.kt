@@ -1,55 +1,60 @@
 package de.sambalmueslie.boardbuddy.engine.system
 
 import de.sambalmueslie.boardbuddy.engine.api.*
-import de.sambalmueslie.boardbuddy.engine.db.GameComponentStorage
-import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
+import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import kotlin.math.min
 
 @Singleton
-class CombatSystem(
-    private val storage: GameEntityStorage,
-    private val componentStorage: GameComponentStorage,
-) : GameSystem {
+class CombatSystem(    componentModelService: GameComponentModelService,) : GameSystem {
 
     companion object {
         private val logger = LoggerFactory.getLogger(CombatSystem::class.java)
     }
+    private val damageModel = componentModelService.get(Damage::class)
+    private val typeModel = componentModelService.get(Type::class)
+    private val counterTypeModel = componentModelService.get(CounterType::class)
 
-    fun combat(attacker: GameEntity, defender: GameEntity) {
-        applyDamage(attacker, defender)
+    fun combat(attacker: CombatParticipant, defender: CombatParticipant): List<CombatAction> {
+        val actions = mutableListOf<CombatAction>()
+        actions.addAll(applyDamage(attacker, defender))
 
         val fightBack = isDefenderFightingBack(attacker, defender)
-        if (fightBack) applyDamage(defender, attacker)
+        if (fightBack) actions.addAll(applyDamage(defender, attacker))
+
+        return actions
     }
 
 
-    private fun applyDamage(attacker: GameEntity, defender: GameEntity) {
-        val attackDamage = componentStorage.get(attacker, Damage::class) ?: return
-        val defendHealth = componentStorage.get(defender, Health::class) ?: return
+    private fun applyDamage(attacker: CombatParticipant, defender: CombatParticipant): List<CombatAction> {
+        val attackDamage = damageModel.get(attacker.unit) ?: return emptyList()
 
-        val damage = min(defendHealth.amount, attackDamage.amount)
-        defendHealth.amount -= damage
-        componentStorage.update(defender, Health::class, defendHealth)
-        // TODO send out damage event
+        val damage = min(defender.currentHealth, attackDamage.amount)
+        defender.currentHealth -= damage
 
-        if (defendHealth.amount <= 0) {
-            storage.delete(defender)
-            // TODO sent out killed event
+        val actions = mutableListOf(
+            CombatAction.DamageDealt(attacker.unit, damage),
+            CombatAction.DamageTaken(defender.unit, damage),
+        )
+
+        if (defender.currentHealth <= 0) {
+            actions.add(CombatAction.UnitDestroyed(defender.unit))
         }
+
+        return actions
     }
 
-    private fun isDefenderFightingBack(attacker: GameEntity, defender: GameEntity): Boolean {
-        val health = componentStorage.get(defender, Health::class) ?: return false
-        val killed = health.amount <= 0
+    private fun isDefenderFightingBack(attacker: CombatParticipant, defender: CombatParticipant): Boolean {
+        val health = defender.currentHealth
+        val killed = health <= 0
         val attackerCounterType = isAttackerCounterType(attacker, defender)
         return !(killed && attackerCounterType)
     }
 
-    private fun isAttackerCounterType(attacker: GameEntity, defender: GameEntity): Boolean {
-        val attackerCounterType = componentStorage.get(attacker, CounterType::class) ?: return false
-        val defenderType = componentStorage.get(defender, Type::class) ?: return false
+    private fun isAttackerCounterType(attacker: CombatParticipant, defender: CombatParticipant): Boolean {
+        val attackerCounterType = counterTypeModel.get(attacker.unit) ?: return false
+        val defenderType = typeModel.get(defender.unit) ?: return false
 
         return attackerCounterType.kind == defenderType.kind
     }

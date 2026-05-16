@@ -4,13 +4,14 @@ import de.sambalmueslie.boardbuddy.core.game.api.Game
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
+import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import java.time.LocalDateTime
 
 data class Workflow(
     val id: String,
     val name: String,
     val host: Player,
-    val participants: List<Player>,
+    val participants: List<GameSessionPlayer>,
     val game: Game,
     val ruleSet: RuleSet,
     val timestamp: LocalDateTime,

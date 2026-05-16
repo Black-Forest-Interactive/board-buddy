@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>{{ 'game.dialog.assign.title' | translate }}</h2>
+
+<mat-dialog-content>
+  @if (available().length === 0) {
+    <p class="text-on-surface/60 py-4">{{ 'game.dialog.assign.empty' | translate }}</p>
+  } @else {
+    <mat-action-list>
+      @for (ruleSet of available(); track ruleSet.id) {
+        <button mat-list-item (click)="assign(ruleSet)">
+          <mat-icon matListItemIcon>rule</mat-icon>
+          <span matListItemTitle>{{ ruleSet.name }}</span>
+        </button>
+      }
+    </mat-action-list>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+</mat-dialog-actions>

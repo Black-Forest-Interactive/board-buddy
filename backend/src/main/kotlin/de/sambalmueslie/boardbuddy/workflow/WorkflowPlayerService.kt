@@ -5,6 +5,7 @@ import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
+import de.sambalmueslie.boardbuddy.engine.api.GameEntity
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -24,20 +25,20 @@ class WorkflowPlayerService(
 
     fun get(session: GameSession, playerId: Long): Player {
         val player = playerService.get(playerId) ?: throw WorkflowInvalidPlayer(playerId)
-        if (!session.participants.contains(player)) throw WorkflowPlayerActionForbidden(player.id)
+        if (session.participants.find { it.player == player } == null) throw WorkflowPlayerActionForbidden(player.id)
         return player
     }
 
-    fun join(session: GameSession, request: WorkflowPlayerJoinRequest): Player {
-        if (session.participants.any { it.name == request.name }) throw WorkflowPlayerJoinError()
+    fun join(session: GameSession, request: WorkflowPlayerJoinRequest, playerEntity: GameEntity): Player {
+        if (session.participants.any { it.player.name == request.name }) throw WorkflowPlayerJoinError()
         val player = playerService.create(PlayerChangeRequest(request.name))
-        sessionService.assignPlayer(session, player)
+        sessionService.assignPlayer(session, player, playerEntity)
         return player
     }
 
-    fun join(session: GameSession, player: Player): Player {
-        if (session.participants.any { it.id == player.id }) throw WorkflowPlayerJoinError()
-        sessionService.assignPlayer(session, player)
+    fun join(session: GameSession, player: Player, playerEntity: GameEntity): Player {
+        if (session.participants.any { it.player.id == player.id }) throw WorkflowPlayerJoinError()
+        sessionService.assignPlayer(session, player, playerEntity)
         return player
     }
 }

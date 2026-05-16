@@ -40,13 +40,13 @@ datasources:
     password: postgres
     schema-generate: NONE
     dialect: POSTGRES
-    schema: byte_buddy
+    schema: board_buddy
 
 flyway:
   datasources:
     default:
       enabled: true
-      default-schema: byte_buddy
+      default-schema: board_buddy
       create-schemas: true
-      schemas: byte_buddy
+      schemas: board_buddy
       clean-schema: false

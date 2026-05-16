@@ -1,0 +1,11 @@
+
+mat-toolbar.content-toolbar {
+  background-color: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary) !important;
+  border-radius: 8px 8px 0 0;
+
+  button,
+  mat-icon {
+    color: var(--mat-sys-on-primary) !important;
+  }
+}

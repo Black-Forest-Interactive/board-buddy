@@ -1,0 +1,44 @@
+<ui-main-content [title]="name()">
+
+  <button matButton="filled" actions (click)="openAssign()">
+    <mat-icon>add</mat-icon>
+    {{ 'rule-set.assignUnit' | translate }}
+  </button>
+
+  <mat-table [dataSource]="unitDefinitions()">
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.name' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="unitType">
+      <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.unitType' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ 'unit-definition.type.' + row.unitType | translate }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="counterType">
+      <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.counterType' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.counterType ? ('unit-definition.type.' + row.counterType | translate) : '—' }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="maxLevel">
+      <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.maxLevel' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.maxLevel }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button matIconButton (click)="revoke(row)" [matTooltip]="'rule-set.revokeUnit' | translate">
+          <mat-icon>link_off</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+  </mat-table>
+
+</ui-main-content>

@@ -1,0 +1,64 @@
+<mat-toolbar class="h-16 sm:h-20 px-3 sm:px-6 !bg-[var(--mat-sys-primary)] !text-[var(--mat-sys-on-primary)]">
+  <div class="flex w-full items-center gap-2 sm:gap-4">
+
+    @if (service.isHandset()) {
+      <button matIconButton routerLink="/" aria-label="Home" class="flex-shrink-0">
+        <mat-icon>home</mat-icon>
+      </button>
+    } @else {
+      <button matButton="filled" routerLink="/" aria-label="Go to home page" class="flex-shrink-0">
+        <mat-icon>home</mat-icon>
+        {{ 'MENU.Home' | translate }}
+      </button>
+    }
+
+    <div class="flex-1"></div>
+
+    <h3 class="text-lg sm:text-2xl font-normal truncate px-2">
+      {{ service.title() | translate }}
+    </h3>
+
+    <div class="flex-1"></div>
+
+    @if (service.isHandset()) {
+      <button matIconButton [matMenuTriggerFor]="langmenu" aria-label="Change language" class="flex-shrink-0">
+        <mat-icon>language</mat-icon>
+      </button>
+    } @else {
+      <button matButton="filled" [matMenuTriggerFor]="langmenu" aria-label="Change language" class="flex-shrink-0">
+        <mat-icon>language</mat-icon>
+        {{ 'ACTION.Language' | translate }}
+      </button>
+    }
+
+    @if (service.isHandset()) {
+      <button matIconButton (click)="showHelp()" aria-label="Help" class="flex-shrink-0">
+        <mat-icon>help</mat-icon>
+      </button>
+    } @else {
+      <button matButton="filled" (click)="showHelp()" aria-label="Help" class="flex-shrink-0">
+        <mat-icon>help</mat-icon>
+        {{ 'ACTION.Help' | translate }}
+      </button>
+    }
+
+    <lib-theme-toggle-button/>
+  </div>
+</mat-toolbar>
+
+<!-- Language Menu -->
+<mat-menu #langmenu="matMenu">
+  <button mat-menu-item (click)="service.setLanguage('en')">
+    @if (service.lang() === 'en') {
+      <mat-icon>check</mat-icon>
+    }
+    <span>{{ 'LANG.English' | translate }}</span>
+  </button>
+  <button mat-menu-item (click)="service.setLanguage('de')">
+    @if (service.lang() === 'de') {
+      <mat-icon>check</mat-icon>
+    }
+    <span>{{ 'LANG.German' | translate }}</span>
+  </button>
+</mat-menu>
+

@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>{{ (unit ? 'unit-definition.dialog.edit.title' : 'unit-definition.dialog.create.title') | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+
+    <mat-form-field>
+      <mat-label>{{ 'unit-definition.form.name' | translate }}</mat-label>
+      <input matInput formControlName="name"/>
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>{{ 'unit-definition.form.error.name' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="flex gap-4">
+      <mat-form-field class="flex-1">
+        <mat-label>{{ 'unit-definition.form.unitType' | translate }}</mat-label>
+        <mat-select formControlName="unitType">
+          @for (type of unitTypes; track type) {
+            <mat-option [value]="type">{{ 'unit-definition.type.' + type | translate }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="flex-1">
+        <mat-label>{{ 'unit-definition.form.counterType' | translate }}</mat-label>
+        <mat-select formControlName="counterType">
+          <mat-option [value]="null">—</mat-option>
+          @for (type of unitTypes; track type) {
+            <mat-option [value]="type">{{ 'unit-definition.type.' + type | translate }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="flex gap-4">
+      <mat-form-field class="flex-1">
+        <mat-label>{{ 'unit-definition.form.damageMin' | translate }}</mat-label>
+        <input matInput type="number" formControlName="damageMin"/>
+      </mat-form-field>
+      <mat-form-field class="flex-1">
+        <mat-label>{{ 'unit-definition.form.damageMax' | translate }}</mat-label>
+        <input matInput type="number" formControlName="damageMax"/>
+      </mat-form-field>
+    </div>
+
+    <div class="flex gap-4">
+      <mat-form-field class="flex-1">
+        <mat-label>{{ 'unit-definition.form.healthMin' | translate }}</mat-label>
+        <input matInput type="number" formControlName="healthMin"/>
+      </mat-form-field>
+      <mat-form-field class="flex-1">
+        <mat-label>{{ 'unit-definition.form.healthMax' | translate }}</mat-label>
+        <input matInput type="number" formControlName="healthMax"/>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <mat-label>{{ 'unit-definition.form.maxLevel' | translate }}</mat-label>
+      <input matInput type="number" formControlName="maxLevel"/>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">{{ 'action.save' | translate }}</button>
+</mat-dialog-actions>

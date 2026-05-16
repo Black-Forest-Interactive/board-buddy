@@ -1,0 +1,6 @@
+@use '../../../libs/ui/src/styles/theme';
+@use '../../../libs/ui/src/styles/fonts';
+@use '../../../libs/ui/src/styles/base';
+
+// Tailwind MUST come after Angular Material theming
+@import "tailwindcss";

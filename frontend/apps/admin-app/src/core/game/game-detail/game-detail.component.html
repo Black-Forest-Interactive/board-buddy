@@ -1,0 +1,29 @@
+<ui-main-content [title]="name()">
+
+  <button matButton="filled" actions (click)="openAssign()">
+    <mat-icon>add</mat-icon>
+    {{ 'game.assignRuleSet' | translate }}
+  </button>
+
+  <mat-table [dataSource]="ruleSets()">
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>{{ 'rule-set.table.name' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button matIconButton [matTooltip]="'action.revoke' | translate" (click)="revoke(row)">
+          <mat-icon>link_off</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+  </mat-table>
+
+</ui-main-content>

@@ -1,0 +1,26 @@
+<mat-card class="flex flex-col h-[calc(100vh-120px)] min-h-0" appearance="raised">
+
+    <mat-toolbar class="content-toolbar">
+      <span class="text-xl font-semibold">{{ title() }}</span>
+      @if (enableSearch()) {
+        <div class="flex-1"></div>
+        <div class="flex items-stretch gap-3 min-w-96">
+          <ui-search [label]="searchLabel()" (search)="handleSearch($event)" class="flex-auto"/>
+        </div>
+      }
+      <div class="flex-1"></div>
+      <div class="flex flex-wrap gap-3">
+        <ng-content select="[actions]"/>
+      </div>
+    </mat-toolbar>
+
+    <ng-content select="[loadingBar]"/>
+
+    <div class="flex-1 overflow-auto">
+      <div [class]="containerClass()">
+          <ng-content/>
+      </div>
+    </div>
+
+    <ng-content select="[footer]" class="border-r"/>
+</mat-card>

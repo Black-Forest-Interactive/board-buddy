@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{ 'session.battle.attackFront' | translate }} #{{ data.frontIndex }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+    <mat-form-field>
+      <mat-label>{{ 'session.form.attackUnit' | translate }}</mat-label>
+      <mat-select formControlName="unit">
+        @for (u of availableUnits; track u.entity) {
+          <mat-option [value]="u">
+            {{ 'unit-definition.type.' + u.type?.kind | translate }}
+            — HP: {{ u.health?.amount ?? '?' }}
+            / DMG: {{ u.damage?.amount ?? '?' }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">
+    {{ 'session.battle.attack' | translate }}
+  </button>
+</mat-dialog-actions>

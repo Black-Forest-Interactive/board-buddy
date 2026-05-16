@@ -6,7 +6,7 @@ import de.sambalmueslie.boardbuddy.engine.api.UnitType
 data class UnitDefinitionChangeRequest(
     val name: String,
     val unitType: UnitType,
-    val counterClass: UnitType?,
+    val counterType: UnitType?,
     val damagePoints: PointsRange,
     val healthPoints: PointsRange,
     val maxLevel: Int,

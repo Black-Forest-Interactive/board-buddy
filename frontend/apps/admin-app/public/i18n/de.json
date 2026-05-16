@@ -1,0 +1,305 @@
+{
+  "action": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "logout": "Abmelden",
+    "detail": "Details",
+    "revoke": "Zuweisung aufheben"
+  },
+  "lang": {
+    "en": "Englisch",
+    "de": "Deutsch"
+  },
+  "ACTION": {
+    "Language": "Sprache",
+    "Help": "Hilfe"
+  },
+  "LANG": {
+    "English": "Englisch",
+    "German": "Deutsch"
+  },
+  "MENU": {
+    "Home": "Startseite",
+    "Title": "Navigation",
+    "group": {
+      "admin": "Verwaltung",
+      "overview": "Übersicht",
+      "configuration": "Konfiguration",
+      "players": "Spieler",
+      "sessions": "Spielsitzungen",
+      "gameplay": "Gameplay"
+    }
+  },
+  "home": {
+    "title": "Dashboard",
+    "card": {
+      "rule-set": "Regelsets verwalten",
+      "unit-definition": "Einheitendefinitionen verwalten",
+      "game": "Spiele verwalten",
+      "player": "Spieler verwalten",
+      "session": "Spielsitzungen verwalten"
+    }
+  },
+  "game": {
+    "title": "Spiele",
+    "create": "Neues Spiel",
+    "table": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "ruleSets": "Regelsets"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "error": {
+        "name": "Name erforderlich",
+        "description": "Beschreibung erforderlich"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Spiel erstellen"
+      },
+      "edit": {
+        "title": "Spiel bearbeiten"
+      },
+      "assign": {
+        "title": "Regelset zuweisen",
+        "empty": "Keine Regelsets verfügbar"
+      }
+    },
+    "message": {
+      "created": "Spiel erstellt",
+      "updated": "Spiel aktualisiert",
+      "deleted": "Spiel gelöscht",
+      "error": "Ein Fehler ist aufgetreten",
+      "ruleSetAssigned": "Regelset zugewiesen",
+      "ruleSetRevoked": "Zuweisung aufgehoben"
+    },
+    "assignRuleSet": "Regelset zuweisen"
+  },
+  "player": {
+    "title": "Spieler",
+    "create": "Neuer Spieler",
+    "table": {
+      "name": "Name"
+    },
+    "form": {
+      "name": "Name",
+      "error": {
+        "name": "Name erforderlich"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Spieler erstellen"
+      },
+      "edit": {
+        "title": "Spieler bearbeiten"
+      }
+    },
+    "message": {
+      "created": "Spieler erstellt",
+      "updated": "Spieler aktualisiert",
+      "deleted": "Spieler gelöscht",
+      "error": "Ein Fehler ist aufgetreten"
+    }
+  },
+  "unit-definition": {
+    "title": "Einheitendefinitionen",
+    "create": "Neue Einheit",
+    "table": {
+      "name": "Name",
+      "unitType": "Typ",
+      "counterType": "Kontertyp",
+      "maxLevel": "Max. Level"
+    },
+    "form": {
+      "name": "Name",
+      "unitType": "Einheitstyp",
+      "counterType": "Kontertyp",
+      "damageMin": "Schaden min.",
+      "damageMax": "Schaden max.",
+      "healthMin": "Leben min.",
+      "healthMax": "Leben max.",
+      "maxLevel": "Max. Level",
+      "error": {
+        "name": "Name erforderlich"
+      }
+    },
+    "type": {
+      "INFANTRY": "Infanterie",
+      "ARTILLERY": "Artillerie",
+      "CAVALRY": "Kavallerie",
+      "PLANE": "Flugzeug"
+    },
+    "dialog": {
+      "create": {
+        "title": "Einheit erstellen"
+      },
+      "edit": {
+        "title": "Einheit bearbeiten"
+      }
+    },
+    "message": {
+      "created": "Einheit erstellt",
+      "updated": "Einheit aktualisiert",
+      "deleted": "Einheit gelöscht",
+      "error": "Ein Fehler ist aufgetreten"
+    }
+  },
+  "session": {
+    "title": "Spielsitzungen",
+    "create": "Neue Sitzung",
+    "table": {
+      "name": "Name",
+      "host": "Gastgeber",
+      "game": "Spiel",
+      "participants": "Teilnehmer"
+    },
+    "form": {
+      "name": "Name",
+      "host": "Gastgeber",
+      "game": "Spiel",
+      "ruleSet": "Regelset",
+      "error": {
+        "name": "Name erforderlich"
+      },
+      "nation": "Nation",
+      "attacker": "Angreifer",
+      "attackerArmyCount": "Armee-Figuren Angreifer",
+      "defender": "Verteidiger",
+      "defenderArmyCount": "Armee-Figuren Verteidiger",
+      "player": "Spieler",
+      "attackUnit": "Angreifende Einheit",
+      "battleType": "Kampftyp",
+      "isWalled": "Befestigte Stadt"
+    },
+    "dialog": {
+      "create": {
+        "title": "Sitzung erstellen"
+      },
+      "assign": {
+        "title": "Spieler hinzufügen",
+        "empty": "Keine Spieler verfügbar"
+      },
+      "battle": {
+        "title": "Battle starten"
+      },
+      "unit": {
+        "title": "Einheit erstellen"
+      }
+    },
+    "message": {
+      "created": "Sitzung erstellt",
+      "deleted": "Sitzung gelöscht",
+      "error": "Ein Fehler ist aufgetreten",
+      "playerAssigned": "Spieler hinzugefügt",
+      "playerRevoked": "Spieler entfernt",
+      "battleStarted": "Battle gestartet",
+      "unitCreated": "Einheit erstellt"
+    },
+    "assignPlayer": "Spieler hinzufügen",
+    "action": {
+      "startBattle": "Battle starten"
+    },
+    "createUnit": "Einheit erstellen",
+    "battle": {
+      "active": "Battle läuft",
+      "activePlayer": "Aktiver Spieler",
+      "attacked": "Angriff ausgeführt",
+      "units": "Einheiten",
+      "fronts": "Fronten",
+      "front": "Front",
+      "noUnits": "Keine Einheiten",
+      "noFrontsYet": "Noch keine Fronten",
+      "onFront": "An Front",
+      "openFront": "Front eröffnen",
+      "attackFront": "Front angreifen",
+      "attack": "Angreifen",
+      "reserveUnits": "Reservetruppen",
+      "unitDestroyed": "Zerstört",
+      "log": "Kampfverlauf",
+      "logAction": {
+        "damageDealt": "{{unit}} fügt {{amount}} Schaden zu",
+        "damageTaken": "{{unit}} nimmt {{amount}} Schaden",
+        "unitDestroyed": "{{unit}} wurde zerstört"
+      },
+      "winner": "Sieger",
+      "draw": "Unentschieden",
+      "finishAction": "Gefecht beenden",
+      "status": {
+        "INIT": "Initialisierung",
+        "ONGOING": "Laufend",
+        "FINISHED": "Beendet"
+      },
+      "activity": {
+        "CREATE_FRONT": "Front eröffnet",
+        "ATTACK_FRONT": "Front angegriffen"
+      },
+      "type": {
+        "ARMY_VS_ARMY": "Armee vs. Armee",
+        "ARMY_VS_CITY": "Armee vs. Stadt",
+        "ARMY_VS_BARBARIANS": "Armee vs. Barbaren"
+      }
+    },
+    "unitPool": "Verfügbare Einheiten",
+    "nation": {
+      "AMERICA": "Amerika",
+      "CHINA": "China",
+      "EGYPT": "Ägypten",
+      "GERMANY": "Deutschland",
+      "ROME": "Rom",
+      "RUSSIA": "Russland",
+      "ARABS": "Araber",
+      "GREEKS": "Griechen",
+      "INDIANS": "Inder",
+      "SPANISH": "Spanier",
+      "AZTECS": "Azteken",
+      "ENGLISH": "Engländer",
+      "FRENCH": "Franzosen",
+      "JAPANESE": "Japaner",
+      "MONGOLS": "Mongolen",
+      "ZULU": "Zulu"
+    }
+  },
+  "rule-set": {
+    "title": "Regelsets",
+    "create": "Neues Regelset",
+    "table": {
+      "name": "Name",
+      "unitDefinitions": "Einheitendefinitionen"
+    },
+    "form": {
+      "name": "Name",
+      "error": {
+        "name": "Name ist erforderlich"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Regelset erstellen"
+      },
+      "edit": {
+        "title": "Regelset bearbeiten"
+      },
+      "assign": {
+        "title": "Einheit zuweisen",
+        "empty": "Keine Einheiten verfügbar"
+      }
+    },
+    "message": {
+      "created": "Regelset erstellt",
+      "updated": "Regelset aktualisiert",
+      "deleted": "Regelset gelöscht",
+      "error": "Ein Fehler ist aufgetreten",
+      "unitAssigned": "Einheit zugewiesen",
+      "unitRevoked": "Zuweisung aufgehoben"
+    },
+    "assignUnit": "Einheit zuweisen",
+    "revokeUnit": "Zuweisung aufheben"
+  }
+}

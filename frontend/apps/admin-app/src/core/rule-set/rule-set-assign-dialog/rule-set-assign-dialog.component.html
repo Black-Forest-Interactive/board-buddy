@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{ 'rule-set.dialog.assign.title' | translate }}</h2>
+
+<mat-dialog-content>
+  @if (available().length === 0) {
+    <p class="text-gray-500 py-4">{{ 'rule-set.dialog.assign.empty' | translate }}</p>
+  } @else {
+    <mat-action-list>
+      @for (unit of available(); track unit.id) {
+        <button mat-list-item (click)="assign(unit)">
+          <mat-icon matListItemIcon>military_tech</mat-icon>
+          <span matListItemTitle>{{ unit.name }}</span>
+          <span matListItemLine>{{ 'unit-definition.type.' + unit.unitType | translate }}</span>
+        </button>
+      }
+    </mat-action-list>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+</mat-dialog-actions>

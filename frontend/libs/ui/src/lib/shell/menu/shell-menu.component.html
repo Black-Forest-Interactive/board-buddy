@@ -1,0 +1,53 @@
+<div class="flex flex-col h-full transition-all duration-300">
+
+  <!-- Header -->
+  <div class="py-4 px-4 border-b border-gray-200 flex items-center"
+       [ngClass]="collapsed() ? 'justify-center' : 'justify-between'">
+    @if (!collapsed()) {
+      <h3 class="text-lg font-semibold text-gray-800">
+        {{ 'MENU.Title' | translate }}
+      </h3>
+    }
+    <button matIconButton (click)="collapsed.set(!collapsed())">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+
+  <div class="p-4 space-y-6">
+
+    @for (group of menuGroups(); track group.title) {
+      <div>
+        @if (!collapsed()) {
+          <h4 class="text-sm font-semibold text-gray-500 mb-2">{{ group.title | translate }}</h4>
+        }
+        <div class="flex flex-col gap-2">
+          @for (item of group.items; track item.routerLink) {
+
+            <a [routerLink]="item.routerLink" routerLinkActive="active-nav-link" class="menu-link">
+              <mat-icon>{{ item.icon }}</mat-icon>
+
+              @if (!collapsed()) {
+                <span>{{ item.text | translate }}</span>
+
+                @if (item.badges?.length) {
+                  <div class="flex-auto"></div>
+                  <div class="flex gap-1">
+                    @for (badge of item.badges; track badge.colorClass) {
+                      @if (badge.value() > 0) {
+                        <div class="text-xs font-medium px-2 py-1 rounded border {{ badge.colorClass }}">
+                          {{ badge.value() }}
+                        </div>
+                      }
+                    }
+                  </div>
+                }
+              }
+            </a>
+
+          }
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

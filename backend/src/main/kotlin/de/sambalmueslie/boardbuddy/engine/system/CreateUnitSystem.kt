@@ -3,15 +3,15 @@ package de.sambalmueslie.boardbuddy.engine.system
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
-import de.sambalmueslie.boardbuddy.engine.model.GameEntityModel
+import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
 
 @Singleton
 class CreateUnitSystem(
-    private val model: GameEntityModel,
-    private val componentModelService: GameComponentModelService,
+    private val model: GameEntityStorage,
+    componentModelService: GameComponentModelService,
 ) : GameSystem {
     companion object {
         private val logger = LoggerFactory.getLogger(CreateUnitSystem::class.java)
@@ -24,8 +24,8 @@ class CreateUnitSystem(
     private val counterTypeModel = componentModelService.get(CounterType::class)
 
 
-    fun createUnit(unitDefinition: UnitDefinition): GameEntity {
-        val entity = model.create()
+    fun create(unitDefinition: UnitDefinition): GameEntity {
+        val entity = model.create(GameEntityType.UNIT)
 
         val damage = Random.nextInt(unitDefinition.damagePoints.min, unitDefinition.damagePoints.max + 1)
         damageModel.create(entity) { Damage(damage) }

@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ 'session.dialog.create.title' | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.name' | translate }}</mat-label>
+      <input matInput formControlName="name"/>
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>{{ 'session.form.error.name' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.host' | translate }}</mat-label>
+      <mat-select formControlName="host">
+        @for (player of players(); track player.id) {
+          <mat-option [value]="player">{{ player.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
+      <mat-select formControlName="nation">
+        @for (n of nations; track n) {
+          <mat-option [value]="n">{{ 'session.nation.' + n | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.game' | translate }}</mat-label>
+      <mat-select formControlName="game">
+        @for (game of games(); track game.id) {
+          <mat-option [value]="game">{{ game.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.ruleSet' | translate }}</mat-label>
+      <mat-select formControlName="ruleSet">
+        @for (rs of ruleSets(); track rs.id) {
+          <mat-option [value]="rs">{{ rs.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">{{ 'action.save' | translate }}</button>
+</mat-dialog-actions>

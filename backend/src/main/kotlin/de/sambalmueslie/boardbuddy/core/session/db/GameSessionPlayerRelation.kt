@@ -9,4 +9,5 @@ import jakarta.persistence.Table
 data class GameSessionPlayerRelation(
     val gameSessionId: Long,
     val playerId: Long,
+    val entityId: Long,
 )

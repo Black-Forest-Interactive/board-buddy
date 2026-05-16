@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>{{ (player ? 'player.dialog.edit.title' : 'player.dialog.create.title') | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+    <mat-form-field>
+      <mat-label>{{ 'player.form.name' | translate }}</mat-label>
+      <input matInput formControlName="name"/>
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>{{ 'player.form.error.name' | translate }}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">{{ 'action.save' | translate }}</button>
+</mat-dialog-actions>

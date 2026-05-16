@@ -13,6 +13,8 @@ class GameComponentStorageService(
     healthRepository: ComponentHealthRepository,
     levelRepository: ComponentLevelRepository,
     typeRepository: ComponentTypeRepository,
+    governmentRepository: ComponentGovernmentRepository,
+    nationRepository: ComponentNationRepository,
     private val timeProvider: TimeProvider
 ) {
 
@@ -25,26 +27,26 @@ class GameComponentStorageService(
     private val healthStore = GameComponentStorageOperator(healthRepository) { e, t -> ComponentHealthData(e, t.amount, timeProvider.currentTime()) }
     private val levelStore = GameComponentStorageOperator(levelRepository) { e, t -> ComponentLevelData(e, t.value, timeProvider.currentTime()) }
     private val typeStore = GameComponentStorageOperator(typeRepository) { e, t -> ComponentTypeData(e, t.kind, timeProvider.currentTime()) }
+    private val governmentStore = GameComponentStorageOperator(governmentRepository) { e, t -> ComponentGovernmentData(e, t.type, timeProvider.currentTime()) }
+    private val nationStore = GameComponentStorageOperator(nationRepository) { e, t -> ComponentNationData(e, t.type, timeProvider.currentTime()) }
+
+    private val operator = mapOf(
+        CounterType::class to counterTypeStore,
+        Damage::class to damageStore,
+        Health::class to healthStore,
+        Level::class to levelStore,
+        Type::class to typeStore,
+        Government::class to governmentStore,
+        Nation::class to nationStore,
+    )
 
 
     @Suppress("UNCHECKED_CAST")
     fun <T : GameComponent> get(type: KClass<T>): GameComponentStorage<T> {
-        val storage = when (type) {
-            Damage::class -> damageStore
-            Health::class -> healthStore
-            Level::class -> levelStore
-            Type::class -> typeStore
-            CounterType::class -> counterTypeStore
-            else -> throw IllegalArgumentException("Unknown type: $type")
-        }
-        return storage as GameComponentStorage<T>
+        return operator[type] as? GameComponentStorage<T> ?: throw IllegalArgumentException("Unknown type: $type")
     }
 
     internal fun delete(entity: GameEntity) {
-        counterTypeStore.delete(entity)
-        damageStore.delete(entity)
-        healthStore.delete(entity)
-        levelStore.delete(entity)
-        typeStore.delete(entity)
+        operator.values.forEach { it.delete(entity) }
     }
 }

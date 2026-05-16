@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+mat-sidenav, mat-sidenav-container {
+  --mat-sidenav-container-shape: 0;
+  --mat-sidenav-content-background-color: var(--color-surface-low);
+  border-radius: 0 !important;
+}
+
+.active-nav-link {
+  background-color: var(--color-primary-container) !important;
+  color: var(--color-on-primary-container) !important;
+
+  mat-icon {
+    color: var(--color-on-primary-container) !important;
+  }
+}

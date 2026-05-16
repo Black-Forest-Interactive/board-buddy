@@ -20,7 +20,11 @@ class HeapGameComponentModel<T : GameComponent>(
         data[entity] = component
     }
 
-    override fun get(entity: GameEntity): T? = data[entity]
+    override fun get(entity: GameEntity): T? = data[entity] ?: load(entity)
+    override fun update(entity: GameEntity, component: T) {
+        data[entity] = component
+    }
+
     override fun all(): Map<GameEntity, T> = data
 
     internal fun persistAll() {

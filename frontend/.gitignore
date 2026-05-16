@@ -57,3 +57,7 @@ coverage/
 *.swp
 *.swo
 *.log
+
+.angular
+
+vitest.config.*.timestamp*

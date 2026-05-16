@@ -1,6 +1,10 @@
 package de.sambalmueslie.boardbuddy.workflow.api
 
 data class WorkflowBattleStartRequest(
-    val attackerId: Long,
-    val defenderId: Long,
+    val attacker: BattleParticipantRequest,
+    val defender: BattleParticipantRequest,
+    val type: BattleType,
+    val isWalled: Boolean
 )
+
+

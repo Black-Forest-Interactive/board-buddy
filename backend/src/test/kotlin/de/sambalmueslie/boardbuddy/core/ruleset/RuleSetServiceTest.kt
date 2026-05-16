@@ -5,7 +5,7 @@ import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetNameValidationFailed
-import de.sambalmueslie.boardbuddy.core.unit.UnitTypeService
+import de.sambalmueslie.boardbuddy.core.unit.UnitDefinitionService
 import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
@@ -25,7 +25,7 @@ class RuleSetServiceTest {
     lateinit var service: RuleSetService
 
     @Inject
-    lateinit var unitTypeService: UnitTypeService
+    lateinit var unitTypeService: UnitDefinitionService
 
     @Inject
     lateinit var eventService: EventService
@@ -106,7 +106,7 @@ class RuleSetServiceTest {
         val ruleSet = service.create(request)
         val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
 
-        val assigned = service.assignUnitType(ruleSet, unitType)
+        val assigned = service.assignUnitDefinition(ruleSet, unitType)
         Assertions.assertNotNull(assigned)
         assertEquals(listOf(unitType), assigned!!.unitDefinitions)
         verify { eventCollector.updated(assigned) }
@@ -115,7 +115,7 @@ class RuleSetServiceTest {
         Assertions.assertNotNull(response)
         assertEquals(assigned, response)
 
-        val revoked = service.revokeUnitType(ruleSet, unitType)
+        val revoked = service.revokeUnitDefinition(ruleSet, unitType)
         Assertions.assertNotNull(revoked)
         assertEquals(listOf<UnitDefinition>(), revoked!!.unitDefinitions)
         verify { eventCollector.updated(revoked) }
@@ -127,7 +127,7 @@ class RuleSetServiceTest {
         val ruleSet = service.create(request)
         val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
 
-        service.assignUnitType(ruleSet, unitType)
+        service.assignUnitDefinition(ruleSet, unitType)
 
         val response = service.get(ruleSet.id)
         Assertions.assertNotNull(response)
