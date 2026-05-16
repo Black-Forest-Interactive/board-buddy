@@ -10,7 +10,7 @@ class StartPlayerSystem : GameSystem {
     fun determine(attacker: GameSessionPlayer, defender: GameSessionPlayer, type: BattleType, isWalled: Boolean): GameSessionPlayer {
         return when (type) {
             BattleType.ARMY_VS_ARMY -> defender
-            BattleType.ARMY_VS_CITY ->  if (isWalled) attacker else defender
+            BattleType.ARMY_VS_CITY -> if (isWalled) attacker else defender
             BattleType.ARMY_VS_BARBARIANS -> defender
         }
     }

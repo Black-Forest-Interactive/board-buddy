@@ -13,85 +13,94 @@
     }
   </div>
 
-  <!-- No battle: participant cards with unit pool -->
+  <!-- No battle: participant sections with one card per unit type -->
   @if (!hasBattle()) {
-    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
       @for (info of participantsInfo(); track info.player.player.id) {
-        <mat-card appearance="outlined">
-          <div class="flex items-center gap-3 p-4 pb-2">
+        <div class="space-y-2">
+          <!-- Participant header -->
+          <div class="flex items-center gap-2">
             <mat-icon>person</mat-icon>
             <div>
               <div class="font-semibold">{{ info.player.player.name }}</div>
               <div class="text-sm text-on-surface/60">{{ info.units.length }} {{ 'session.battle.units' | translate }}</div>
             </div>
-          </div>
-          <div class="px-4 pb-2">
-            @if (info.units.length > 0) {
-              <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-1">{{ 'session.battle.units' | translate }}</p>
-              @for (unit of info.units; track unit.entity) {
-                <div class="flex items-center gap-3 py-2 border-b border-surface-high last:border-0">
-                  @let img = unitImagePath(unit.type?.kind);
-                  @if (img) {
-                    <img [src]="img" [alt]="unit.type?.kind ?? ''" class="w-[70px] h-[70px] rounded-lg object-cover flex-shrink-0">
-                  } @else {
-                    <div class="w-[70px] h-[70px] flex items-center justify-center rounded-lg bg-surface-low flex-shrink-0"><mat-icon>military_tech</mat-icon></div>
-                  }
-                  <div class="flex-1 min-w-0">
-                    <div class="text-sm font-semibold">{{ 'unit-definition.type.' + unit.type?.kind | translate }}</div>
-                    <div class="flex items-center gap-1 mt-0.5">
-                      <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-green-600">favorite</mat-icon>
-                      <div class="flex flex-wrap gap-0.5">
-                        @for (_ of range(unit.health?.amount); track $index) {
-                          <div class="w-3 h-3 rounded-sm bg-green-500"></div>
-                        }
-                      </div>
-                    </div>
-                    <div class="flex items-center gap-1 mt-0.5">
-                      <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-orange-500">bolt</mat-icon>
-                      <div class="flex flex-wrap gap-0.5">
-                        @for (_ of range(unit.damage?.amount); track $index) {
-                          <div class="w-3 h-3 rounded-sm bg-orange-500"></div>
-                        }
-                      </div>
-                    </div>
-                    @if (unit.counterType) {
-                      <div class="flex items-center gap-1 text-xs text-on-surface/40 mt-0.5">
-                        <mat-icon class="!text-sm !w-4 !h-4">gps_fixed</mat-icon>
-                        {{ 'unit-definition.type.' + unit.counterType.kind | translate }}
-                      </div>
-                    }
-                  </div>
-                </div>
-              }
-            }
-            @if (unitDefinitions().length > 0) {
-              <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mt-3 mb-1">{{ 'session.unitPool' | translate }}</p>
-              <div class="unit-pool-grid">
-                @for (def of unitDefinitions(); track def.id) {
-                  <div class="flex items-center gap-1 px-2 py-1 rounded border border-surface-high bg-surface-low text-xs">
-                    <div class="flex-1 min-w-0">
-                      <div class="font-medium truncate">{{ def.name }}</div>
-                      <div class="text-on-surface/50">HP {{ def.healthPoints.min }}-{{ def.healthPoints.max }} &nbsp; DMG {{ def.damagePoints.min }}-{{ def.damagePoints.max }} &nbsp; L{{ def.maxLevel }}</div>
-                    </div>
-                    <button matIconButton [matTooltip]="'session.createUnit' | translate" (click)="createUnit(info.player, def)">
-                      <mat-icon>add</mat-icon>
-                    </button>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-          <div class="px-4 pb-3 flex gap-2">
-            <button matButton (click)="revokePlayer(info.player)">
+            <button matButton class="ml-auto" (click)="revokePlayer(info.player)">
               <mat-icon>person_remove</mat-icon>{{ 'action.revoke' | translate }}
             </button>
           </div>
-        </mat-card>
+          <!-- One card per unit type -->
+          @for (def of unitDefinitions(); track def.id) {
+            <mat-card appearance="outlined">
+              <div class="flex gap-3 p-3">
+                <!-- Large image -->
+                @let defImg = unitImagePath(def.unitType);
+                @if (defImg) {
+                  <img [src]="defImg" [alt]="def.unitType" class="w-[150px] h-[150px] rounded-lg object-cover flex-shrink-0">
+                } @else {
+                  <div class="w-[150px] h-[150px] flex items-center justify-center rounded-lg bg-surface-low flex-shrink-0"><mat-icon>military_tech</mat-icon></div>
+                }
+                <!-- Definition info + unit instances -->
+                <div class="flex-1 min-w-0">
+                  <div class="font-semibold text-sm">{{ 'unit-definition.type.' + def.unitType | translate }}</div>
+                  <div class="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-xs text-on-surface/60">
+                    <span class="flex items-center gap-1">
+                      <mat-icon class="!text-xs !leading-none !w-3 !h-3 text-green-600">favorite</mat-icon>
+                      {{ def.healthPoints.min }}–{{ def.healthPoints.max }}
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <mat-icon class="!text-xs !leading-none !w-3 !h-3 text-orange-500">bolt</mat-icon>
+                      {{ def.damagePoints.min }}–{{ def.damagePoints.max }}
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <mat-icon class="!text-xs !leading-none !w-3 !h-3">trending_up</mat-icon>
+                      L{{ def.maxLevel }}
+                    </span>
+                    @if (def.counterType) {
+                      <span class="flex items-center gap-1">
+                        <mat-icon class="!text-xs !leading-none !w-3 !h-3">gps_fixed</mat-icon>
+                        {{ 'unit-definition.type.' + def.counterType | translate }}
+                      </span>
+                    }
+                  </div>
+                  <!-- Individual unit instances -->
+                  <div class="flex flex-wrap gap-1.5 mt-2">
+                    @for (unit of unitsOfType(info.units, def.unitType); track unit.entity) {
+                      <div class="flex flex-col gap-0.5 p-1 rounded border border-surface-high bg-surface-low w-16 shrink-0">
+                        <div class="flex items-center gap-0.5">
+                          <mat-icon class="!text-xs !leading-none !w-3 !h-3 shrink-0 text-green-600">favorite</mat-icon>
+                          <div class="flex flex-wrap gap-0.5">
+                            @for (_ of range(unit.health?.amount); track $index) {
+                              <div class="w-2 h-2 rounded-sm bg-green-500"></div>
+                            }
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-0.5">
+                          <mat-icon class="!text-xs !leading-none !w-3 !h-3 shrink-0 text-orange-500">bolt</mat-icon>
+                          <div class="flex flex-wrap gap-0.5">
+                            @for (_ of range(unit.damage?.amount); track $index) {
+                              <div class="w-2 h-2 rounded-sm bg-orange-500"></div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    <button class="flex items-center justify-center w-8 h-8 rounded border border-dashed border-surface-high text-on-surface/40 hover:text-on-surface/70 hover:border-on-surface/30 transition-colors"
+                            [matTooltip]="'session.createUnit' | translate"
+                            (click)="createUnit(info.player, def)">
+                      <mat-icon class="!text-base">add</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          }
+        </div>
       }
     </div>
   }
 
-  <!-- Battle active: 3-column board -->
+  <!-- Battle active -->
   @if (hasBattle() && battleInfo()) {
     <div class="p-4 space-y-4">
 
@@ -119,215 +128,241 @@
         </div>
       }
 
-      <!-- Attacker | Fronts | Defender -->
-      <div class="grid grid-cols-[1fr_2fr_1fr] gap-4 items-start">
+      <!-- Board (left) + Log (right) -->
+      <div class="grid grid-cols-[1fr_256px] gap-4 items-start">
 
-        <!-- Left: attacker (participant[0]) -->
-        @if (battleAttacker(); as attacker) {
-          <mat-card appearance="raised" [class.ring-2]="isActive(attacker)" [class.ring-primary]="isActive(attacker)">
-            <div class="flex items-center gap-2 p-4 pb-2">
-              <mat-icon>{{ isActive(attacker) ? 'sports_martial_arts' : 'person' }}</mat-icon>
-              <div class="font-semibold truncate">{{ attacker.player.player.name }}</div>
-              @if (isActive(attacker)) {
-                <mat-chip class="ml-auto !bg-primary !text-on-primary text-xs shrink-0">{{ 'session.battle.active' | translate }}</mat-chip>
-              }
-            </div>
-            <div class="px-4 pb-4">
-              <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-1">{{ 'session.battle.reserveUnits' | translate }}</p>
-              @if (reserveUnits(attacker).length === 0) {
-                <p class="text-sm text-on-surface/40 italic">{{ 'session.battle.noUnits' | translate }}</p>
-              }
-              @for (unit of reserveUnits(attacker); track unit.entity) {
-                <div class="flex items-center gap-2 py-2 border-b border-surface-high last:border-0">
-                  @let img0 = unitImagePath(unit.type?.kind);
-                  @if (img0) {
-                    <img [src]="img0" [alt]="unit.type?.kind ?? ''" class="w-[70px] h-[70px] rounded-lg object-cover flex-shrink-0">
-                  } @else {
-                    <div class="w-[70px] h-[70px] flex items-center justify-center rounded-lg bg-surface-low flex-shrink-0"><mat-icon>military_tech</mat-icon></div>
-                  }
-                  <div class="flex-1 min-w-0">
-                    <div class="text-sm font-semibold">{{ 'unit-definition.type.' + unit.type?.kind | translate }}</div>
-                    <div class="flex items-center gap-1 mt-0.5">
-                      <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-green-600">favorite</mat-icon>
-                      <div class="flex flex-wrap gap-0.5">
-                        @for (_ of range(unit.health?.amount); track $index) {
-                          <div class="w-3 h-3 rounded-sm bg-green-500"></div>
+        <!-- Left: Attacker | Fronts | Defender -->
+        <div class="grid grid-cols-[1fr_2fr_1fr] gap-4 items-start">
+
+          <!-- Attacker -->
+          @if (battleAttacker(); as attacker) {
+            <mat-card appearance="raised" [class.ring-2]="isActive(attacker)" [class.ring-primary]="isActive(attacker)">
+              <div class="flex items-center gap-2 p-4 pb-2">
+                <mat-icon>{{ isActive(attacker) ? 'sports_martial_arts' : 'person' }}</mat-icon>
+                <div class="font-semibold truncate">{{ attacker.player.player.name }}</div>
+                @if (isActive(attacker)) {
+                  <mat-chip class="ml-auto !bg-primary !text-on-primary text-xs shrink-0">{{ 'session.battle.active' | translate }}</mat-chip>
+                }
+              </div>
+              <div class="px-4 pb-4">
+                <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-1">{{ 'session.battle.reserveUnits' | translate }}</p>
+                @if (reserveUnits(attacker).length === 0) {
+                  <p class="text-sm text-on-surface/40 italic">{{ 'session.battle.noUnits' | translate }}</p>
+                }
+                @for (unit of reserveUnits(attacker); track unit.entity) {
+                  @let selected = isActive(attacker) && selectedUnit()?.entity === unit.entity;
+                  <div class="py-2 border-b border-surface-high last:border-0">
+                    <div class="flex items-center gap-2 rounded-lg px-1 transition-colors"
+                         [class.bg-primary-container]="selected"
+                         [class.cursor-pointer]="isActive(attacker)"
+                         (click)="isActive(attacker) ? selectUnit(unit) : null">
+                      @let img0 = unitImagePath(unit.type?.kind);
+                      @if (img0) {
+                        <img [src]="img0" [alt]="unit.type?.kind ?? ''" class="w-24 h-24 rounded-lg object-cover flex-shrink-0">
+                      } @else {
+                        <div class="w-24 h-24 flex items-center justify-center rounded-lg bg-surface-low flex-shrink-0"><mat-icon>military_tech</mat-icon></div>
+                      }
+                      <div class="flex-1 min-w-0">
+                        <div class="text-sm font-semibold">{{ 'unit-definition.type.' + unit.type?.kind | translate }}</div>
+                        <div class="flex items-center gap-1 mt-0.5">
+                          <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-green-600">favorite</mat-icon>
+                          <div class="flex flex-wrap gap-0.5">
+                            @for (_ of range(unit.health?.amount); track $index) {
+                              <div class="w-3 h-3 rounded-sm bg-green-500"></div>
+                            }
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-1 mt-0.5">
+                          <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-orange-500">bolt</mat-icon>
+                          <div class="flex flex-wrap gap-0.5">
+                            @for (_ of range(unit.damage?.amount); track $index) {
+                              <div class="w-3 h-3 rounded-sm bg-orange-500"></div>
+                            }
+                          </div>
+                        </div>
+                        @if (unit.counterType) {
+                          <div class="flex items-center gap-1 text-xs text-on-surface/40 mt-0.5">
+                            <mat-icon class="!text-sm !w-4 !h-4">gps_fixed</mat-icon>
+                            {{ 'unit-definition.type.' + unit.counterType.kind | translate }}
+                          </div>
                         }
                       </div>
                     </div>
-                    <div class="flex items-center gap-1 mt-0.5">
-                      <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-orange-500">bolt</mat-icon>
-                      <div class="flex flex-wrap gap-0.5">
-                        @for (_ of range(unit.damage?.amount); track $index) {
-                          <div class="w-3 h-3 rounded-sm bg-orange-500"></div>
-                        }
-                      </div>
-                    </div>
-                    @if (unit.counterType) {
-                      <div class="flex items-center gap-1 text-xs text-on-surface/40 mt-0.5">
-                        <mat-icon class="!text-sm !w-4 !h-4">gps_fixed</mat-icon>
-                        {{ 'unit-definition.type.' + unit.counterType.kind | translate }}
+                    @if (selected) {
+                      <div class="mt-2 pl-1">
+                        <button matButton="filled" (click)="createFront(attacker, unit)">
+                          <mat-icon>flag</mat-icon>
+                          {{ 'session.battle.openFront' | translate }}
+                        </button>
                       </div>
                     }
                   </div>
-                  @if (isActive(attacker)) {
-                    <button matIconButton class="shrink-0" (click)="createFront(attacker, unit)" [matTooltip]="'session.battle.openFront' | translate">
-                      <mat-icon>flag</mat-icon>
-                    </button>
-                  }
-                </div>
-              }
-            </div>
-          </mat-card>
-        }
-
-        <!-- Center: shared fronts -->
-        <div class="space-y-2">
-          @if (sharedFronts().length === 0) {
-            <div class="flex items-center justify-center py-12 text-on-surface/30 text-sm">
-              <mat-icon class="mr-2">flag</mat-icon>
-              {{ 'session.battle.noFrontsYet' | translate }}
-            </div>
-          }
-          @for (front of sharedFronts(); track front.index) {
-            <mat-card appearance="outlined">
-              <div class="px-4 py-3">
-                <span class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide">{{ 'session.battle.front' | translate }} #{{ front.index }}</span>
-                <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3 mt-2">
-                  @for (participant of battleInfo()!.participant; track participant.player.player.id; let last = $last) {
-                    @let fu = getFrontUnitForPlayer(front, participant);
-                    @if (fu) {
-                      <!-- Unit on this front -->
-                      <div class="flex gap-2 p-2 rounded border min-w-0"
-                           [class.border-surface-high]="fu.currentHealth > 0"
-                           [class.border-red-300]="fu.currentHealth <= 0"
-                           [class.opacity-50]="fu.currentHealth <= 0">
-                        @let fuImg = unitImagePath(fu.unit.type?.kind);
-                        <div class="relative flex-shrink-0">
-                          @if (fuImg) {
-                            <img [src]="fuImg" [alt]="fu.unit.type?.kind ?? ''" class="w-[70px] h-[70px] rounded-lg object-cover" [class.opacity-40]="fu.currentHealth <= 0">
-                            @if (fu.currentHealth <= 0) {
-                              <mat-icon class="absolute inset-0 m-auto text-red-500 !text-4xl !w-11 !h-11">cancel</mat-icon>
-                            }
-                          } @else {
-                            <mat-icon [class.text-red-500]="fu.currentHealth <= 0">{{ fu.currentHealth <= 0 ? 'cancel' : 'military_tech' }}</mat-icon>
-                          }
-                        </div>
-                        <div class="flex-1 min-w-0">
-                          <div class="text-xs text-on-surface/50">{{ participant.player.player.name }}</div>
-                          <div class="text-sm font-semibold" [class.line-through]="fu.currentHealth <= 0">{{ 'unit-definition.type.' + fu.unit.type?.kind | translate }}</div>
-                          @if (fu.currentHealth <= 0) {
-                            <div class="text-xs font-semibold text-red-500">{{ 'session.battle.unitDestroyed' | translate }}</div>
-                          } @else {
-                            <div class="flex items-center gap-1 mt-0.5">
-                              <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-green-600">favorite</mat-icon>
-                              <div class="flex flex-wrap gap-0.5">
-                                @for (healthy of hpBoxes(fu.currentHealth, fu.unit.health?.amount); track $index) {
-                                  <div class="w-3 h-3 rounded-sm" [class.bg-green-500]="healthy" [class.bg-gray-400]="!healthy"></div>
-                                }
-                              </div>
-                            </div>
-                            <div class="flex items-center gap-1 mt-0.5">
-                              <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-orange-500">bolt</mat-icon>
-                              <div class="flex flex-wrap gap-0.5">
-                                @for (_ of range(fu.unit.damage?.amount); track $index) {
-                                  <div class="w-3 h-3 rounded-sm bg-orange-500"></div>
-                                }
-                              </div>
-                            </div>
-                          }
-                          @if (fu.unit.counterType) {
-                            <div class="flex items-center gap-1 text-xs text-on-surface/40 mt-0.5">
-                              <mat-icon class="!text-sm !w-4 !h-4">gps_fixed</mat-icon>
-                              {{ 'unit-definition.type.' + fu.unit.counterType.kind | translate }}
-                            </div>
-                          }
-                        </div>
-                      </div>
-                    } @else if (isActive(participant) && attackableFronts().has(front.index)) {
-                      <!-- Active player can attack here -->
-                      <button matButton color="warn" (click)="openAttack(front.index)" [matTooltip]="'session.battle.attackFront' | translate">
-                        <mat-icon>gps_fixed</mat-icon>{{ 'session.battle.attack' | translate }}
-                      </button>
-                    } @else {
-                      <!-- Empty slot -->
-                      <div class="flex items-center justify-center p-3 rounded border border-dashed border-surface-high text-on-surface/20 text-sm">—</div>
-                    }
-                    @if (!last) {
-                      <mat-icon class="text-on-surface/30 justify-self-center">swords</mat-icon>
-                    }
-                  }
-                </div>
+                }
               </div>
             </mat-card>
           }
-        </div>
 
-        <!-- Right: defender (participant[1]) -->
-        @if (battleDefender(); as defender) {
-          <mat-card appearance="raised" [class.ring-2]="isActive(defender)" [class.ring-primary]="isActive(defender)">
-            <div class="flex items-center gap-2 p-4 pb-2">
-              <mat-icon>{{ isActive(defender) ? 'sports_martial_arts' : 'person' }}</mat-icon>
-              <div class="font-semibold truncate">{{ defender.player.player.name }}</div>
-              @if (isActive(defender)) {
-                <mat-chip class="ml-auto !bg-primary !text-on-primary text-xs shrink-0">{{ 'session.battle.active' | translate }}</mat-chip>
-              }
-            </div>
-            <div class="px-4 pb-4">
-              <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-1">{{ 'session.battle.reserveUnits' | translate }}</p>
-              @if (reserveUnits(defender).length === 0) {
-                <p class="text-sm text-on-surface/40 italic">{{ 'session.battle.noUnits' | translate }}</p>
-              }
-              @for (unit of reserveUnits(defender); track unit.entity) {
-                <div class="flex items-center gap-2 py-2 border-b border-surface-high last:border-0">
-                  @let img1 = unitImagePath(unit.type?.kind);
-                  @if (img1) {
-                    <img [src]="img1" [alt]="unit.type?.kind ?? ''" class="w-[70px] h-[70px] rounded-lg object-cover flex-shrink-0">
-                  } @else {
-                    <div class="w-[70px] h-[70px] flex items-center justify-center rounded-lg bg-surface-low flex-shrink-0"><mat-icon>military_tech</mat-icon></div>
-                  }
-                  <div class="flex-1 min-w-0">
-                    <div class="text-sm font-semibold">{{ 'unit-definition.type.' + unit.type?.kind | translate }}</div>
-                    <div class="flex items-center gap-1 mt-0.5">
-                      <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-green-600">favorite</mat-icon>
-                      <div class="flex flex-wrap gap-0.5">
-                        @for (_ of range(unit.health?.amount); track $index) {
-                          <div class="w-3 h-3 rounded-sm bg-green-500"></div>
+          <!-- Center: shared fronts -->
+          <div class="space-y-2">
+            @if (sharedFronts().length === 0) {
+              <div class="flex items-center justify-center py-12 text-on-surface/30 text-sm">
+                <mat-icon class="mr-2">flag</mat-icon>
+                {{ 'session.battle.noFrontsYet' | translate }}
+              </div>
+            }
+            @for (front of sharedFronts(); track front.index) {
+              <mat-card appearance="outlined">
+                <div class="px-4 py-3">
+                  <span class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide">{{ 'session.battle.front' | translate }} #{{ front.index }}</span>
+                  <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3 mt-2">
+                    @for (participant of battleInfo()!.participant; track participant.player.player.id; let last = $last) {
+                      @let fu = getFrontUnitForPlayer(front, participant);
+                      @if (fu) {
+                        <div class="flex gap-2 p-2 rounded border min-w-0"
+                             [class.border-surface-high]="fu.currentHealth > 0"
+                             [class.border-red-300]="fu.currentHealth <= 0"
+                             [class.opacity-50]="fu.currentHealth <= 0">
+                          @let fuImg = unitImagePath(fu.unit.type?.kind);
+                          <div class="relative flex-shrink-0">
+                            @if (fuImg) {
+                              <img [src]="fuImg" [alt]="fu.unit.type?.kind ?? ''" class="w-24 h-24 rounded-lg object-cover" [class.opacity-40]="fu.currentHealth <= 0">
+                              @if (fu.currentHealth <= 0) {
+                                <mat-icon class="absolute inset-0 m-auto text-red-500 !text-4xl !w-11 !h-11">cancel</mat-icon>
+                              }
+                            } @else {
+                              <mat-icon [class.text-red-500]="fu.currentHealth <= 0">{{ fu.currentHealth <= 0 ? 'cancel' : 'military_tech' }}</mat-icon>
+                            }
+                          </div>
+                          <div class="flex-1 min-w-0">
+                            <div class="text-xs text-on-surface/50">{{ participant.player.player.name }}</div>
+                            <div class="text-sm font-semibold" [class.line-through]="fu.currentHealth <= 0">{{ 'unit-definition.type.' + fu.unit.type?.kind | translate }}</div>
+                            @if (fu.currentHealth <= 0) {
+                              <div class="text-xs font-semibold text-red-500">{{ 'session.battle.unitDestroyed' | translate }}</div>
+                            } @else {
+                              <div class="flex items-center gap-1 mt-0.5">
+                                <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-green-600">favorite</mat-icon>
+                                <div class="flex flex-wrap gap-0.5">
+                                  @for (healthy of hpBoxes(fu.currentHealth, fu.unit.health?.amount); track $index) {
+                                    <div class="w-3 h-3 rounded-sm" [class.bg-green-500]="healthy" [class.bg-gray-400]="!healthy"></div>
+                                  }
+                                </div>
+                              </div>
+                              <div class="flex items-center gap-1 mt-0.5">
+                                <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-orange-500">bolt</mat-icon>
+                                <div class="flex flex-wrap gap-0.5">
+                                  @for (_ of range(fu.unit.damage?.amount); track $index) {
+                                    <div class="w-3 h-3 rounded-sm bg-orange-500"></div>
+                                  }
+                                </div>
+                              </div>
+                            }
+                            @if (fu.unit.counterType) {
+                              <div class="flex items-center gap-1 text-xs text-on-surface/40 mt-0.5">
+                                <mat-icon class="!text-sm !w-4 !h-4">gps_fixed</mat-icon>
+                                {{ 'unit-definition.type.' + fu.unit.counterType.kind | translate }}
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      } @else if (isActive(participant) && attackableFronts().has(front.index)) {
+                        @if (selectedUnit()) {
+                          <button matButton="filled" color="warn" (click)="attackFront(front.index)">
+                            <mat-icon>gps_fixed</mat-icon>{{ 'session.battle.attack' | translate }}
+                          </button>
+                        } @else {
+                          <div class="flex items-center justify-center p-3 rounded border border-dashed border-primary/40 text-on-surface/40 text-xs text-center">
+                            {{ 'session.battle.selectUnit' | translate }}
+                          </div>
+                        }
+                      } @else {
+                        <div class="flex items-center justify-center p-3 rounded border border-dashed border-surface-high text-on-surface/20 text-sm">—</div>
+                      }
+                      @if (!last) {
+                        <mat-icon class="text-on-surface/30 justify-self-center">swords</mat-icon>
+                      }
+                    }
+                  </div>
+                </div>
+              </mat-card>
+            }
+          </div>
+
+          <!-- Defender -->
+          @if (battleDefender(); as defender) {
+            <mat-card appearance="raised" [class.ring-2]="isActive(defender)" [class.ring-primary]="isActive(defender)">
+              <div class="flex items-center gap-2 p-4 pb-2">
+                <mat-icon>{{ isActive(defender) ? 'sports_martial_arts' : 'person' }}</mat-icon>
+                <div class="font-semibold truncate">{{ defender.player.player.name }}</div>
+                @if (isActive(defender)) {
+                  <mat-chip class="ml-auto !bg-primary !text-on-primary text-xs shrink-0">{{ 'session.battle.active' | translate }}</mat-chip>
+                }
+              </div>
+              <div class="px-4 pb-4">
+                <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-1">{{ 'session.battle.reserveUnits' | translate }}</p>
+                @if (reserveUnits(defender).length === 0) {
+                  <p class="text-sm text-on-surface/40 italic">{{ 'session.battle.noUnits' | translate }}</p>
+                }
+                @for (unit of reserveUnits(defender); track unit.entity) {
+                  @let selected = isActive(defender) && selectedUnit()?.entity === unit.entity;
+                  <div class="py-2 border-b border-surface-high last:border-0">
+                    <div class="flex items-center gap-2 rounded-lg px-1 transition-colors"
+                         [class.bg-primary-container]="selected"
+                         [class.cursor-pointer]="isActive(defender)"
+                         (click)="isActive(defender) ? selectUnit(unit) : null">
+                      @let img1 = unitImagePath(unit.type?.kind);
+                      @if (img1) {
+                        <img [src]="img1" [alt]="unit.type?.kind ?? ''" class="w-24 h-24 rounded-lg object-cover flex-shrink-0">
+                      } @else {
+                        <div class="w-24 h-24 flex items-center justify-center rounded-lg bg-surface-low flex-shrink-0"><mat-icon>military_tech</mat-icon></div>
+                      }
+                      <div class="flex-1 min-w-0">
+                        <div class="text-sm font-semibold">{{ 'unit-definition.type.' + unit.type?.kind | translate }}</div>
+                        <div class="flex items-center gap-1 mt-0.5">
+                          <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-green-600">favorite</mat-icon>
+                          <div class="flex flex-wrap gap-0.5">
+                            @for (_ of range(unit.health?.amount); track $index) {
+                              <div class="w-3 h-3 rounded-sm bg-green-500"></div>
+                            }
+                          </div>
+                        </div>
+                        <div class="flex items-center gap-1 mt-0.5">
+                          <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-orange-500">bolt</mat-icon>
+                          <div class="flex flex-wrap gap-0.5">
+                            @for (_ of range(unit.damage?.amount); track $index) {
+                              <div class="w-3 h-3 rounded-sm bg-orange-500"></div>
+                            }
+                          </div>
+                        </div>
+                        @if (unit.counterType) {
+                          <div class="flex items-center gap-1 text-xs text-on-surface/40 mt-0.5">
+                            <mat-icon class="!text-sm !w-4 !h-4">gps_fixed</mat-icon>
+                            {{ 'unit-definition.type.' + unit.counterType.kind | translate }}
+                          </div>
                         }
                       </div>
                     </div>
-                    <div class="flex items-center gap-1 mt-0.5">
-                      <mat-icon class="!text-sm !leading-none !w-4 !h-4 shrink-0 text-orange-500">bolt</mat-icon>
-                      <div class="flex flex-wrap gap-0.5">
-                        @for (_ of range(unit.damage?.amount); track $index) {
-                          <div class="w-3 h-3 rounded-sm bg-orange-500"></div>
-                        }
-                      </div>
-                    </div>
-                    @if (unit.counterType) {
-                      <div class="flex items-center gap-1 text-xs text-on-surface/40 mt-0.5">
-                        <mat-icon class="!text-sm !w-4 !h-4">gps_fixed</mat-icon>
-                        {{ 'unit-definition.type.' + unit.counterType.kind | translate }}
+                    @if (selected) {
+                      <div class="mt-2 pl-1">
+                        <button matButton="filled" (click)="createFront(defender, unit)">
+                          <mat-icon>flag</mat-icon>
+                          {{ 'session.battle.openFront' | translate }}
+                        </button>
                       </div>
                     }
                   </div>
-                  @if (isActive(defender)) {
-                    <button matIconButton class="shrink-0" (click)="createFront(defender, unit)" [matTooltip]="'session.battle.openFront' | translate">
-                      <mat-icon>flag</mat-icon>
-                    </button>
-                  }
-                </div>
-              }
-            </div>
-          </mat-card>
-        }
+                }
+              </div>
+            </mat-card>
+          }
 
-      </div>
+        </div>
 
-      <!-- Battle log -->
-      @if (logEntries().length > 0) {
+        <!-- Right: Battle log -->
         <div>
           <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-2">{{ 'session.battle.log' | translate }}</p>
+          @if (logEntries().length === 0) {
+            <p class="text-sm text-on-surface/30 italic">{{ 'session.battle.noLog' | translate }}</p>
+          }
           <div class="space-y-2">
             @for (entry of logEntries(); track $index) {
               <div class="rounded bg-surface-low overflow-hidden">
@@ -358,8 +393,8 @@
             }
           </div>
         </div>
-      }
 
+      </div>
     </div>
   }
 

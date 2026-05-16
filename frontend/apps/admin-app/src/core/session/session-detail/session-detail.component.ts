@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {Component, computed, inject, resource, signal} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute} from '@angular/router'
 import {map} from 'rxjs'
@@ -20,6 +20,7 @@ import {
   GameSessionPlayer,
   GameUnit,
   UnitDefinition,
+  WorkflowBattleAttackFrontRequest,
   WorkflowBattleCreateFrontRequest,
   WorkflowCreateUnitRequest,
   WorkflowParticipantInfo,
@@ -28,7 +29,6 @@ import {toPromise} from '@board-buddy/shared'
 import {MainContentComponent} from '@board-buddy/ui'
 import {SessionAssignDialogComponent} from '../session-assign-dialog/session-assign-dialog.component'
 import {SessionBattleStartDialogComponent} from '../session-battle-start-dialog/session-battle-start-dialog.component'
-import {SessionAttackDialogComponent} from '../session-attack-dialog/session-attack-dialog.component'
 
 @Component({
   selector: 'admin-session-detail',
@@ -85,6 +85,7 @@ export class SessionDetailComponent {
   readonly battleFinished = computed(() => this.battleInfo()?.status === 'FINISHED')
   readonly sharedFronts = computed(() => this.battleInfo()?.fronts ?? [])
   readonly logEntries = computed(() => this.battleInfo()?.logEntries ?? [])
+  readonly selectedUnit = signal<GameUnit | null>(null)
   readonly unitLookup = computed(() => {
     const battle = this.battleInfo()
     if (!battle) return new Map<number, GameUnit>()
@@ -152,30 +153,41 @@ export class SessionDetailComponent {
     }).afterClosed().subscribe(saved => {if (saved) this.battleInfoResource.reload()})
   }
 
+  selectUnit(unit: GameUnit) {
+    this.selectedUnit.set(this.selectedUnit()?.entity === unit.entity ? null : unit)
+  }
+
   createFront(participant: BattleParticipant, unit: GameUnit) {
     const key = this.sessionKey()
     if (!key) return
     this.workflowService.battleCreateFront(key, new WorkflowBattleCreateFrontRequest(participant.player.player.id, unit.entity))
       .subscribe({
-        next: (workflow) => this.battleInfoResource.set(workflow.activeBattle),
+        next: (workflow) => {
+          this.battleInfoResource.set(workflow.activeBattle)
+          this.selectedUnit.set(null)
+        },
         error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
       })
   }
 
-  openAttack(frontIndex: number) {
+  attackFront(frontIndex: number) {
     const key = this.sessionKey()
-    if (!key) return
+    const unit = this.selectedUnit()
+    if (!key || !unit) return
     const battle = this.battleInfo()
     if (!battle) return
     const attackerId = battle.activePlayer.player.id
     const defender = battle.participant.find(p => p.player.player.id !== attackerId)
     if (!defender) return
-    const attacker = battle.participant.find(p => p.player.player.id === attackerId)
-    const onFront = new Set(battle.fronts.flatMap(f => f.units.filter(fu => fu.player.player.id === attackerId).map(fu => fu.unit.entity)))
-    const availableUnits = attacker?.units.filter(u => !onFront.has(u.entity)) ?? []
-    this.dialog.open(SessionAttackDialogComponent, {
-      data: {sessionKey: key, attackerId, defenderId: defender.player.player.id, frontIndex, availableUnits}
-    }).afterClosed().subscribe((result: Battle | undefined) => {if (result) this.battleInfoResource.set(result)})
+    this.workflowService.battleAttackFront(key, new WorkflowBattleAttackFrontRequest(attackerId, defender.player.player.id, unit.entity, frontIndex))
+      .subscribe({
+        next: (result) => {
+          this.translate.get('session.battle.attacked').subscribe(t => this.toast.success(t))
+          this.battleInfoResource.set(result)
+          this.selectedUnit.set(null)
+        },
+        error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
+      })
   }
 
   isActive(participant: BattleParticipant): boolean {
@@ -185,6 +197,10 @@ export class SessionDetailComponent {
   getUnitName(entityId: number): string {
     const unit = this.unitLookup().get(entityId)
     return unit?.type?.kind ?? `#${entityId}`
+  }
+
+  unitsOfType(units: GameUnit[], unitType: string): GameUnit[] {
+    return units.filter(u => u.type?.kind === unitType)
   }
 
   hpBoxes(current: number, max: number | null | undefined): boolean[] {
@@ -198,7 +214,7 @@ export class SessionDetailComponent {
 
   unitImagePath(kind: string | null | undefined): string | null {
     if (!kind) return null
-    const map: Record<string, string> = {'INFANTRY': '/img/infantry.jpg', 'CAVALRY': '/img/cavalry.jpg', 'ARTILLERY': '/img/artillery.jpg', 'PLANE': '/img/plane.jpg'}
+    const map: Record<string, string> = {'INFANTRY': '/img/infantry2.jpg', 'CAVALRY': '/img/cavalry2.jpg', 'ARTILLERY': '/img/artillery2.jpg', 'PLANE': '/img/plane2.jpg'}
     return map[kind] ?? null
   }
 

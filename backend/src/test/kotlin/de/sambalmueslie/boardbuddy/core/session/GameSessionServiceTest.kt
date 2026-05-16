@@ -80,16 +80,16 @@ class GameSessionServiceTest {
 
         val request = GameSessionChangeRequest("session", host, hostEntity, game, ruleSet)
         var response = service.create(request)
-        var reference = GameSession(response.id, response.key, request.name, request.host, emptyList(), request.game, request.ruleSet, response.timestamp)
+        var reference = GameSession(response.id, response.key, request.name, request.host, listOf(GameSessionPlayer(host, hostEntity)), request.game, request.ruleSet, response.timestamp)
         assertEquals(reference, response)
 
         val playerEntity = engine.createPlayer(NationType.ARABS)
-        response = service.assignPlayer(response, player,playerEntity)!!
-        reference = GameSession(response.id, response.key, request.name, request.host, listOf(GameSessionPlayer(player, playerEntity)), request.game, request.ruleSet, response.timestamp)
+        response = service.assignPlayer(response, player, playerEntity)!!
+        reference = GameSession(response.id, response.key, request.name, request.host, listOf(GameSessionPlayer(host, hostEntity), GameSessionPlayer(player, playerEntity)), request.game, request.ruleSet, response.timestamp)
         assertEquals(reference, response)
 
         response = service.revokePlayer(response, player)!!
-        reference = GameSession(response.id, response.key, request.name, request.host, emptyList(), request.game, request.ruleSet, response.timestamp)
+        reference = GameSession(response.id, response.key, request.name, request.host, listOf(GameSessionPlayer(host, hostEntity)), request.game, request.ruleSet, response.timestamp)
         assertEquals(reference, response)
     }
 }

@@ -87,7 +87,8 @@ class WorkflowServiceTest {
         val battle = workflow.activeBattle
         assertNotNull(battle)
 
-        assertEquals(p1.id, battle!!.activePlayer.player.id)
+        // defender (p2) goes first for ARMY_VS_ARMY
+        assertEquals(p2.id, battle!!.activePlayer.player.id)
         assertEquals(emptyList<BattleFront>(), battle.fronts)
 
         val bp1 = battle.participant.find { it.player.player.id == p1.id }
@@ -118,18 +119,18 @@ class WorkflowServiceTest {
         val bp2u3 = bp2Units.find { it.type?.kind == art.unitType }!!
         assertEquals(GameUnit(bp2u3.entity, bp2u3.damage, bp2u3.health, Level(1), Type(art.unitType), CounterType(art.counterType)), bp2u3)
 
-        // create front with bp1u1 (infantry)
-        workflow = service.battleCreateFront(workflow.id, WorkflowBattleCreateFrontRequest(p1.id, bp1u1.entity))
+        // p2 (defender, active) creates front with infantry
+        workflow = service.battleCreateFront(workflow.id, WorkflowBattleCreateFrontRequest(p2.id, bp2u1.entity))
         val battleAfterFront = workflow.activeBattle!!
         val fronts = battleAfterFront.fronts
         assertEquals(1, fronts.size)
         assertEquals(1, fronts[0].index)
         assertEquals(1, fronts[0].units.size)
-        assertEquals(bp1u1.entity, fronts[0].units[0].unit.entity)
-        assertEquals(p2.id, battleAfterFront.activePlayer.player.id)
+        assertEquals(bp2u1.entity, fronts[0].units[0].unit.entity)
+        assertEquals(p1.id, battleAfterFront.activePlayer.player.id)
 
-        // p2 attacks front 1 with cavalry
-        val battleAfterAttack = service.battleAttackFront(workflow.id, WorkflowBattleAttackFrontRequest(p2.id, p1.id, bp2u2.entity, 1))
-        assertEquals(p1.id, battleAfterAttack.activePlayer.player.id)
+        // p1 (attacker, now active) attacks front 1 with cavalry
+        val battleAfterAttack = service.battleAttackFront(workflow.id, WorkflowBattleAttackFrontRequest(p1.id, p2.id, bp1u2.entity, 1))
+        assertEquals(p2.id, battleAfterAttack.activePlayer.player.id)
     }
 }
