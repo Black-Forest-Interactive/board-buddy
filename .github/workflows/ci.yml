@@ -14,6 +14,8 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
+    env:
+      JAVA_TOOL_OPTIONS: '-Xshare:off'
 
     steps:
       - name: Checkout code

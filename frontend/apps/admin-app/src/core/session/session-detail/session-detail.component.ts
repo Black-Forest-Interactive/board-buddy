@@ -187,6 +187,15 @@ export class SessionDetailComponent {
     return unit?.type?.kind ?? `#${entityId}`
   }
 
+  hpBoxes(current: number, max: number | null | undefined): boolean[] {
+    const total = max ?? 0
+    return Array.from({length: total}, (_, i) => i < current)
+  }
+
+  range(n: number | null | undefined): number[] {
+    return Array.from({length: n ?? 0}, (_, i) => i)
+  }
+
   unitImagePath(kind: string | null | undefined): string | null {
     if (!kind) return null
     const map: Record<string, string> = {'INFANTRY': '/img/infantry.jpg', 'CAVALRY': '/img/cavalry.jpg', 'ARTILLERY': '/img/artillery.jpg', 'PLANE': '/img/plane.jpg'}
