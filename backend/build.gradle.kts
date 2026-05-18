@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.allopen") version "2.3.21"
     kotlin("plugin.jpa") version "2.3.21"
     kotlin("plugin.serialization") version "2.3.21"
-    id("com.google.devtools.ksp") version "2.3.7"
+    id("com.google.devtools.ksp") version "2.3.8"
     id("org.sonarqube") version "7.3.0.8198"
     id("net.researchgate.release") version "3.1.0"
     id("com.google.cloud.tools.jib") version "3.5.3"
