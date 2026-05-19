@@ -133,8 +133,8 @@
     "type": {
       "INFANTRY": "Infantry",
       "ARTILLERY": "Artillery",
-      "CAVALRY": "Cavalry",
-      "PLANE": "Plane"
+      "MOUNTED": "Mounted",
+      "AIRCRAFT": "Aircraft"
     },
     "dialog": {
       "create": {
@@ -191,6 +191,9 @@
       },
       "unit": {
         "title": "Create Unit"
+      },
+      "research": {
+        "title": "Research Technology"
       }
     },
     "message": {
@@ -200,11 +203,13 @@
       "playerAssigned": "Player added",
       "playerRevoked": "Player removed",
       "battleStarted": "Battle started",
-      "unitCreated": "Unit created"
+      "unitCreated": "Unit created",
+      "technologyResearched": "Technology researched"
     },
     "assignPlayer": "Add Player",
     "action": {
-      "startBattle": "Start Battle"
+      "startBattle": "Start Battle",
+      "research": "Research"
     },
     "createUnit": "Create Unit",
     "battle": {
@@ -264,6 +269,51 @@
       "JAPANESE": "Japanese",
       "MONGOLS": "Mongols",
       "ZULU": "Zulu"
+    }
+  },
+  "technology": {
+    "tier": {
+      "1": "Tier I",
+      "2": "Tier II",
+      "3": "Tier III",
+      "4": "Tier IV",
+      "5": "Tier V"
+    },
+    "type": {
+      "ANIMAL_HUSBANDRY": "Animal Husbandry",
+      "POTTERY": "Pottery",
+      "MINING": "Mining",
+      "SAILING": "Sailing",
+      "PHILOSOPHY": "Philosophy",
+      "MASONRY": "Masonry",
+      "METAL_WORKING": "Metal Working",
+      "CODE_OF_LAWS": "Code of Laws",
+      "MYSTICISM": "Mysticism",
+      "HORSEBACK_RIDING": "Horseback Riding",
+      "AGRICULTURE": "Agriculture",
+      "CURRENCY": "Currency",
+      "CONSTRUCTION": "Construction",
+      "MATHEMATICS": "Mathematics",
+      "IRRIGATION": "Irrigation",
+      "IRON_WORKING": "Iron Working",
+      "THEOLOGY": "Theology",
+      "DRAMA_AND_POETRY": "Drama and Poetry",
+      "LITERATURE": "Literature",
+      "CIVIL_SERVICE": "Civil Service",
+      "EDUCATION": "Education",
+      "ENGINEERING": "Engineering",
+      "MACHINERY": "Machinery",
+      "CHIVALRY": "Chivalry",
+      "MILITARY_TRADITION": "Military Tradition",
+      "ACOUSTICS": "Acoustics",
+      "GUNPOWDER": "Gunpowder",
+      "NAVIGATION": "Navigation",
+      "PRINTING_PRESS": "Printing Press",
+      "FLIGHT": "Flight",
+      "DEMOCRACY": "Democracy",
+      "COMMUNISM": "Communism",
+      "FUNDAMENTALISM": "Fundamentalism",
+      "SPACE_FLIGHT": "Space Flight"
     }
   },
   "rule-set": {

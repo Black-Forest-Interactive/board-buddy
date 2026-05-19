@@ -50,8 +50,8 @@ class WorkflowServiceTest {
     fun testSimpleGame() {
         var ruleSet = ruleSetService.create(RuleSetChangeRequest("default"))
 
-        val inf = unitTypeService.create(UnitDefinitionChangeRequest("infantery", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
-        val cav = unitTypeService.create(UnitDefinitionChangeRequest("cavalery", UnitType.CAVALRY, UnitType.ARTILLERY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val inf = unitTypeService.create(UnitDefinitionChangeRequest("infantery", UnitType.INFANTRY, UnitType.MOUNTED, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val cav = unitTypeService.create(UnitDefinitionChangeRequest("cavalery", UnitType.MOUNTED, UnitType.ARTILLERY, PointsRange(1, 3), PointsRange(1, 3), 4))
         val art = unitTypeService.create(UnitDefinitionChangeRequest("artillery", UnitType.ARTILLERY, UnitType.INFANTRY, PointsRange(1, 3), PointsRange(1, 3), 4))
         ruleSet = ruleSetService.assignUnitDefinition(ruleSet, inf)!!
         ruleSet = ruleSetService.assignUnitDefinition(ruleSet, cav)!!

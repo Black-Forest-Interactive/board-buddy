@@ -133,8 +133,8 @@
     "type": {
       "INFANTRY": "Infanterie",
       "ARTILLERY": "Artillerie",
-      "CAVALRY": "Kavallerie",
-      "PLANE": "Flugzeug"
+      "MOUNTED": "Berittene",
+      "AIRCRAFT": "Flugzeug"
     },
     "dialog": {
       "create": {
@@ -191,6 +191,9 @@
       },
       "unit": {
         "title": "Einheit erstellen"
+      },
+      "research": {
+        "title": "Technologie erforschen"
       }
     },
     "message": {
@@ -200,11 +203,13 @@
       "playerAssigned": "Spieler hinzugefügt",
       "playerRevoked": "Spieler entfernt",
       "battleStarted": "Battle gestartet",
-      "unitCreated": "Einheit erstellt"
+      "unitCreated": "Einheit erstellt",
+      "technologyResearched": "Technologie erforscht"
     },
     "assignPlayer": "Spieler hinzufügen",
     "action": {
-      "startBattle": "Battle starten"
+      "startBattle": "Battle starten",
+      "research": "Forschen"
     },
     "createUnit": "Einheit erstellen",
     "battle": {
@@ -264,6 +269,51 @@
       "JAPANESE": "Japaner",
       "MONGOLS": "Mongolen",
       "ZULU": "Zulu"
+    }
+  },
+  "technology": {
+    "tier": {
+      "1": "Stufe I",
+      "2": "Stufe II",
+      "3": "Stufe III",
+      "4": "Stufe IV",
+      "5": "Stufe V"
+    },
+    "type": {
+      "ANIMAL_HUSBANDRY": "Viehzucht",
+      "POTTERY": "Töpferei",
+      "MINING": "Bergbau",
+      "SAILING": "Seefahrt",
+      "PHILOSOPHY": "Philosophie",
+      "MASONRY": "Maurerei",
+      "METAL_WORKING": "Metallverarbeitung",
+      "CODE_OF_LAWS": "Gesetzgebung",
+      "MYSTICISM": "Mystik",
+      "HORSEBACK_RIDING": "Reiterei",
+      "AGRICULTURE": "Landwirtschaft",
+      "CURRENCY": "Währung",
+      "CONSTRUCTION": "Bauwesen",
+      "MATHEMATICS": "Mathematik",
+      "IRRIGATION": "Bewässerung",
+      "IRON_WORKING": "Eisenverarbeitung",
+      "THEOLOGY": "Theologie",
+      "DRAMA_AND_POETRY": "Drama und Dichtung",
+      "LITERATURE": "Literatur",
+      "CIVIL_SERVICE": "Beamtenwesen",
+      "EDUCATION": "Bildung",
+      "ENGINEERING": "Ingenieurwesen",
+      "MACHINERY": "Maschinenbau",
+      "CHIVALRY": "Rittertum",
+      "MILITARY_TRADITION": "Militärtradition",
+      "ACOUSTICS": "Akustik",
+      "GUNPOWDER": "Schießpulver",
+      "NAVIGATION": "Navigation",
+      "PRINTING_PRESS": "Buchdruck",
+      "FLIGHT": "Luftfahrt",
+      "DEMOCRACY": "Demokratie",
+      "COMMUNISM": "Kommunismus",
+      "FUNDAMENTALISM": "Fundamentalismus",
+      "SPACE_FLIGHT": "Raumfahrt"
     }
   },
   "rule-set": {

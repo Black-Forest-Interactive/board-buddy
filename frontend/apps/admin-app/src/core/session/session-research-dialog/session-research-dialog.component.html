@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ 'session.dialog.research.title' | translate }} — {{ playerName() }}</h2>
+
+<mat-dialog-content>
+  <div class="space-y-4 pt-2 min-w-[480px]">
+    @for (tier of tiers; track tier) {
+      <div>
+        <div class="text-xs font-semibold uppercase tracking-wide text-on-surface/50 mb-2">{{ 'technology.tier.' + tier | translate }}</div>
+        <div class="flex flex-wrap gap-2">
+          @for (tech of techsByTier()[tier]; track tech) {
+            @if (isDiscovered(tech)) {
+              <div class="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm bg-surface-low text-on-surface/40 line-through">
+                <mat-icon class="!text-sm !w-4 !h-4 text-green-500">check_circle</mat-icon>
+                {{ 'technology.type.' + tech | translate }}
+              </div>
+            } @else if (isResearchable(tech)) {
+              <button class="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm bg-primary text-on-primary cursor-pointer hover:opacity-90 transition-opacity border-0"
+                      [matTooltip]="'session.action.research' | translate"
+                      (click)="research(tech)">
+                <mat-icon class="!text-sm !w-4 !h-4">science</mat-icon>
+                {{ 'technology.type.' + tech | translate }}
+              </button>
+            } @else {
+              <div class="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm bg-surface-low text-on-surface/20">
+                <mat-icon class="!text-sm !w-4 !h-4">lock</mat-icon>
+                {{ 'technology.type.' + tech | translate }}
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+</mat-dialog-actions>

@@ -25,9 +25,14 @@
               <div class="font-semibold">{{ info.player.player.name }}</div>
               <div class="text-sm text-on-surface/60">{{ info.units.length }} {{ 'session.battle.units' | translate }}</div>
             </div>
-            <button matButton class="ml-auto" (click)="revokePlayer(info.player)">
-              <mat-icon>person_remove</mat-icon>{{ 'action.revoke' | translate }}
-            </button>
+            <div class="ml-auto flex gap-1">
+              <button matButton (click)="openResearch(info)">
+                <mat-icon>science</mat-icon>{{ 'session.action.research' | translate }}
+              </button>
+              <button matButton (click)="revokePlayer(info.player)">
+                <mat-icon>person_remove</mat-icon>{{ 'action.revoke' | translate }}
+              </button>
+            </div>
           </div>
           <!-- One card per unit type -->
           @for (def of unitDefinitions(); track def.id) {

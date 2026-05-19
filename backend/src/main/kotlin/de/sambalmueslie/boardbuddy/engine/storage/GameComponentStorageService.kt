@@ -15,6 +15,7 @@ class GameComponentStorageService(
     typeRepository: ComponentTypeRepository,
     governmentRepository: ComponentGovernmentRepository,
     nationRepository: ComponentNationRepository,
+    technologyRepository: ComponentTechnologyRepository,
     private val timeProvider: TimeProvider
 ) {
 
@@ -29,6 +30,9 @@ class GameComponentStorageService(
     private val typeStore = GameComponentStorageOperator(typeRepository) { e, t -> ComponentTypeData(e, t.kind, timeProvider.currentTime()) }
     private val governmentStore = GameComponentStorageOperator(governmentRepository) { e, t -> ComponentGovernmentData(e, t.type, timeProvider.currentTime()) }
     private val nationStore = GameComponentStorageOperator(nationRepository) { e, t -> ComponentNationData(e, t.type, timeProvider.currentTime()) }
+    private val technologiesStore = GameComponentStorageOperator(technologyRepository) { e, t ->
+        ComponentTechnologyData(e, t.types.map { it.name }, timeProvider.currentTime())
+    }
 
     private val operator = mapOf(
         CounterType::class to counterTypeStore,
@@ -38,8 +42,8 @@ class GameComponentStorageService(
         Type::class to typeStore,
         Government::class to governmentStore,
         Nation::class to nationStore,
+        Technologies::class to technologiesStore,
     )
-
 
     @Suppress("UNCHECKED_CAST")
     fun <T : GameComponent> get(type: KClass<T>): GameComponentStorage<T> {

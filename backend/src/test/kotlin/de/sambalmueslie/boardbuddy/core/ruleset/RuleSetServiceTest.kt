@@ -104,7 +104,7 @@ class RuleSetServiceTest {
     @Test
     fun testUnitTypeRelations() {
         val ruleSet = service.create(request)
-        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.MOUNTED, PointsRange(1, 3), PointsRange(1, 3), 4))
 
         val assigned = service.assignUnitDefinition(ruleSet, unitType)
         Assertions.assertNotNull(assigned)
@@ -125,7 +125,7 @@ class RuleSetServiceTest {
     @Test
     fun testDeletionWithRelations() {
         val ruleSet = service.create(request)
-        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.MOUNTED, PointsRange(1, 3), PointsRange(1, 3), 4))
 
         service.assignUnitDefinition(ruleSet, unitType)
 

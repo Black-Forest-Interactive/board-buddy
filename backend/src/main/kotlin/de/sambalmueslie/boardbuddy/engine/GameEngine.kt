@@ -1,5 +1,6 @@
 package de.sambalmueslie.boardbuddy.engine
 
+import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import de.sambalmueslie.boardbuddy.engine.api.*
@@ -19,6 +20,8 @@ class GameEngine(
     private val combatSystem: CombatSystem,
     private val startPlayerSystem: StartPlayerSystem,
     private val battleHandSystem: BattleHandSystem,
+    private val researchSystem: ResearchSystem,
+    private val unitUpgradeSystem: UnitUpgradeSystem,
     private val componentModelService: GameComponentModelService,
 ) {
 
@@ -33,23 +36,8 @@ class GameEngine(
     private val counterTypeModel = componentModelService.get(CounterType::class)
     private val nationModel = componentModelService.get(Nation::class)
     private val governmentModel = componentModelService.get(Government::class)
+    private val technologyModel = componentModelService.get(Technologies::class)
 
-
-    fun createUnit(unitDefinition: UnitDefinition): GameEntity {
-        val entity = createUnitSystem.create(unitDefinition)
-        componentModelService.persist(entity)
-        return entity
-    }
-
-    fun createPlayer(nation: NationType): GameEntity {
-        val entity = createPlayerSystem.create(nation)
-        componentModelService.persist(entity)
-        return entity
-    }
-
-    fun combat(attackingUnit: CombatParticipant, defendingUnit: CombatParticipant): List<CombatAction> {
-        return combatSystem.combat(attackingUnit, defendingUnit)
-    }
 
     fun <T : GameComponent> getComponent(entity: GameEntity, type: KClass<T>): T? {
         return componentModelService.get(type).get(entity)
@@ -70,7 +58,40 @@ class GameEngine(
         val playerEntity = entityStorage.get(entity, GameEntityType.PLAYER) ?: throw WorkflowInvalidGameEntity(entity)
         val nation = nationModel.get(playerEntity)
         val government = governmentModel.get(playerEntity)
-        return GamePlayer(playerEntity, nation, government)
+        val technologies = technologyModel.get(playerEntity)?.types ?: emptySet()
+        return GamePlayer(playerEntity, nation, government, technologies)
+    }
+
+    fun exists(entity: GameEntity): Boolean {
+        return entityStorage.exists(entity)
+    }
+
+    fun delete(entity: GameEntity) {
+        entityStorage.delete(entity)
+    }
+
+    fun createUnit(player: GameSessionPlayer, unitDefinition: UnitDefinition): GameEntity {
+        val entity = createUnitSystem.create(unitDefinition)
+        unitUpgradeSystem.handleCreation(player, entity)
+        componentModelService.persist(entity)
+        return entity
+    }
+
+    fun createPlayer(nation: NationType): GameEntity {
+        val entity = createPlayerSystem.create(nation)
+        componentModelService.persist(entity)
+        return entity
+    }
+
+    fun combat(attackingUnit: CombatParticipant, defendingUnit: CombatParticipant): List<CombatAction> {
+        return combatSystem.combat(attackingUnit, defendingUnit)
+    }
+
+    fun research(session: GameSession, player: GameSessionPlayer, type: TechnologyType): List<TechnologyType> {
+        val changedTechnologies = researchSystem.research(player.entity, type)
+        unitUpgradeSystem.handleResearch(session, player, changedTechnologies)
+        componentModelService.persist(player.entity)
+        return changedTechnologies
     }
 
     fun determineStartPlayer(attacker: GameSessionPlayer, defender: GameSessionPlayer, type: BattleType, isWalled: Boolean): GameSessionPlayer {
@@ -87,14 +108,6 @@ class GameEngine(
 
     private fun determineBattleUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>, isAttacker: Boolean): List<GameEntity> {
         return battleHandSystem.determine(participant, armyCount, type, units, isAttacker)
-    }
-
-    fun exists(entity: GameEntity): Boolean {
-        return entityStorage.exists(entity)
-    }
-
-    fun delete(entity: GameEntity) {
-        entityStorage.delete(entity)
     }
 
 

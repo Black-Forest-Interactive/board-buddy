@@ -38,6 +38,9 @@ class WorkflowController(private val gateway: WorkflowGateway) {
     @Post("{id}/battle/finish")
     fun battleFinish(id: String) = gateway.battleFinish(id)
 
+    @Post("{id}/research")
+    fun research(id: String, @Body request: WorkflowResearchRequest) = gateway.research(id, request)
+
     @Get("{id}/participants")
     fun getParticipantsInfo(id: String) = gateway.getParticipantsInfo(id)
 

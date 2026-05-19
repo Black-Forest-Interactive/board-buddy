@@ -19,8 +19,10 @@ class WorkflowService(
     private val playerService: WorkflowPlayerService,
     private val gameService: GameService,
     private val ruleSetService: RuleSetService,
-    private val unitDefinitionService: WorkflowUnitDefinitionService,
+    private val unitService: WorkflowUnitService,
     private val battleService: WorkflowBattleService,
+    private val researchService: WorkflowResearchService,
+
     private val sessionService: GameSessionService,
     private val engine: GameEngine
 ) {
@@ -60,12 +62,7 @@ class WorkflowService(
 
     fun createUnit(id: String, request: WorkflowCreateUnitRequest): Workflow {
         val session = getSession(id)
-
-        val player = playerService.get(session, request.playerId)
-        val unitType = unitDefinitionService.get(session, request.unitTypeId)
-        val entity = engine.createUnit(unitType)
-
-        sessionService.assignEntity(session, player, entity)
+        unitService.createUnit(session, request)
         return get(id)
     }
 
@@ -91,6 +88,12 @@ class WorkflowService(
         battleService.finish(session)
     }
 
+    fun research(id: String, request: WorkflowResearchRequest): Workflow {
+        val session = getSession(id)
+        researchService.research(session, request)
+        return get(id)
+    }
+
     fun get(id: String): Workflow {
         val session = sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
         val battle = battleService.get(session)
@@ -111,7 +114,8 @@ class WorkflowService(
         return session.participants.map { player ->
             val entities = sessionService.getAssignedEntities(session, player)
             val units = entities.map { engine.getUnit(it) }
-            WorkflowParticipantInfo(player, units)
+            val technologies = engine.getPlayer(player.entity).technologies
+            WorkflowParticipantInfo(player, units, technologies)
         }
     }
 

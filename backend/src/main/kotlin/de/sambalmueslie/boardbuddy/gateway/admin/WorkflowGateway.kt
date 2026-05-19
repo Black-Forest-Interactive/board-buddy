@@ -16,6 +16,7 @@ class WorkflowGateway(private val service: WorkflowService) {
     fun battleCreateFront(id: String, request: WorkflowBattleCreateFrontRequest) = service.battleCreateFront(id, request)
     fun battleAttackFront(id: String, request: WorkflowBattleAttackFrontRequest) = service.battleAttackFront(id, request)
     fun battleFinish(id: String) = service.battleFinish(id)
+    fun research(id: String, request: WorkflowResearchRequest) = service.research(id, request)
     fun getParticipantsInfo(id: String) = service.getParticipantsInfo(id)
     fun getBattleInfo(id: String) = service.getBattleInfo(id)
 }

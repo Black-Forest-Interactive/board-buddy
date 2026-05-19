@@ -29,6 +29,7 @@ import {toPromise} from '@board-buddy/shared'
 import {MainContentComponent} from '@board-buddy/ui'
 import {SessionAssignDialogComponent} from '../session-assign-dialog/session-assign-dialog.component'
 import {SessionBattleStartDialogComponent} from '../session-battle-start-dialog/session-battle-start-dialog.component'
+import {SessionResearchDialogComponent} from '../session-research-dialog/session-research-dialog.component'
 
 @Component({
   selector: 'admin-session-detail',
@@ -214,7 +215,7 @@ export class SessionDetailComponent {
 
   unitImagePath(kind: string | null | undefined): string | null {
     if (!kind) return null
-    const map: Record<string, string> = {'INFANTRY': '/img/infantry2.jpg', 'CAVALRY': '/img/cavalry2.jpg', 'ARTILLERY': '/img/artillery2.jpg', 'PLANE': '/img/plane2.jpg'}
+    const map: Record<string, string> = {'INFANTRY': '/img/infantry2.jpg', 'MOUNTED': '/img/cavalry2.jpg', 'ARTILLERY': '/img/artillery2.jpg', 'AIRCRAFT': '/img/plane2.jpg'}
     return map[kind] ?? null
   }
 
@@ -225,6 +226,16 @@ export class SessionDetailComponent {
   reserveUnits(participant: BattleParticipant): GameUnit[] {
     const onFront = new Set(this.sharedFronts().flatMap(f => f.units.filter(fu => fu.player.player.id === participant.player.player.id).map(fu => fu.unit.entity)))
     return participant.units.filter(u => !onFront.has(u.entity))
+  }
+
+  openResearch(info: WorkflowParticipantInfo) {
+    const key = this.sessionKey()
+    if (!key) return
+    this.dialog.open(SessionResearchDialogComponent, {
+      data: {sessionKey: key, participantInfo: info}
+    }).afterClosed().subscribe(saved => {
+      if (saved) this.participantsInfoResource.reload()
+    })
   }
 
   revokePlayer(player: GameSessionPlayer) {

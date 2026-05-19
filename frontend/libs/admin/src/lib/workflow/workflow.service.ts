@@ -11,6 +11,7 @@ import {
   WorkflowBattleCreateFrontRequest,
   WorkflowBattleStartRequest,
   WorkflowCreateUnitRequest,
+  WorkflowResearchRequest,
 } from '@board-buddy/core'
 
 @Injectable({providedIn: 'root'})
@@ -55,5 +56,9 @@ export class WorkflowService extends BaseService {
 
   battleFinish(sessionKey: string): Observable<void> {
     return this.post<void>(`${sessionKey}/battle/finish`, {})
+  }
+
+  research(sessionKey: string, request: WorkflowResearchRequest): Observable<Workflow> {
+    return this.post<Workflow>(`${sessionKey}/research`, request)
   }
 }
