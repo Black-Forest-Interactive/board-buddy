@@ -4,7 +4,6 @@ import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.event.notifyCreate
 import de.sambalmueslie.boardbuddy.core.event.notifyDelete
 import de.sambalmueslie.boardbuddy.core.event.notifyUpdate
-import de.sambalmueslie.openevent.common.PageableSequence
 import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
 import kotlin.reflect.KClass
