@@ -5,7 +5,12 @@
     "delete": "Delete",
     "edit": "Edit",
     "create": "Create",
-    "logout": "Logout"
+    "logout": "Log out",
+    "reload": "Refresh",
+    "back": "Back"
+  },
+  "player": {
+    "title": "My Profile"
   },
   "lang": {
     "en": "English",
@@ -21,6 +26,189 @@
   },
   "MENU": {
     "Home": "Home",
-    "Title": "Navigation"
+    "Player": "Player",
+    "Session": "Session",
+    "Army": "Army",
+    "Research": "Research",
+    "group": {
+      "portal": "Portal",
+      "session": "Game Session"
+    }
+  },
+  "register": {
+    "title": "Welcome!",
+    "subtitle": "Enter your name to get started. No account needed.",
+    "form": {
+      "name": "Your name",
+      "namePlaceholder": "e.g. John Doe",
+      "error": {
+        "required": "Please enter a name.",
+        "minLength": "Name must be at least 2 characters."
+      }
+    },
+    "action": {
+      "start": "Get started"
+    },
+    "message": {
+      "error": "Could not create player."
+    }
+  },
+  "home": {
+    "welcome": "Welcome back,",
+    "mySessions": "My sessions",
+    "noSessions": "No active sessions.",
+    "action": {
+      "createSession": "Start session",
+      "createSessionHint": "Create a new game session and invite others.",
+      "joinSession": "Join session",
+      "joinSessionHint": "Join an existing session via key or QR code."
+    }
+  },
+  "session": {
+    "form": {
+      "name": "Session name",
+      "game": "Game",
+      "ruleSet": "Rule set",
+      "nation": "Nation",
+      "error": {
+        "required": "Required"
+      }
+    },
+    "create": {
+      "title": "Start session",
+      "action": "Create session"
+    },
+    "join": {
+      "title": "Join session",
+      "qr": "Join QR code",
+      "hint": "Other players can scan this code or enter the key.",
+      "form": {
+        "key": "Session key",
+        "keyPlaceholder": "e.g. ABC-123"
+      },
+      "action": "Join",
+      "message": {
+        "error": "Session not found."
+      }
+    },
+    "participants": "Participants",
+    "noParticipants": "No participants yet.",
+    "host": "Host",
+    "myArmy": "My army",
+    "myTechnologies": "My technologies",
+    "units": "units",
+    "action": {
+      "research": "Research",
+      "startBattle": "Start battle",
+      "showQr": "Show join QR",
+      "hideQr": "Hide join QR"
+    },
+    "message": {
+      "unitCreated": "Unit produced.",
+      "technologyResearched": "Technology researched.",
+      "battleStarted": "Battle started.",
+      "error": "Action failed."
+    },
+    "research": {
+      "tier": "Age"
+    },
+    "battle": {
+      "yourTurn": "It's your turn!",
+      "opponentTurn": "Active player",
+      "unitsInHand": "units in hand",
+      "armyCount": "army",
+      "fronts": "Battle fronts",
+      "front": "Front",
+      "noFrontsYet": "No fronts opened yet.",
+      "myReserve": "My reserve",
+      "noUnits": "No units in reserve.",
+      "me": "Me",
+      "opponent": "Opponent",
+      "deploy": "Deploy",
+      "attack": "Attack",
+      "selectUnitFirst": "Select a unit first",
+      "log": "Battle log",
+      "winner": "Winner",
+      "draw": "Draw",
+      "finishAction": "Finish battle",
+      "attacked": "Attack executed.",
+      "attacker": "Attacker",
+      "defender": "Defender",
+      "attackerArmy": "Army size (attacker)",
+      "defenderArmy": "Army size (defender)",
+      "type": "Battle type",
+      "isWalled": "City wall present",
+      "activity": {
+        "CREATE_FRONT": "opened a front",
+        "ATTACK_FRONT": "attacked a front"
+      },
+      "battleType": {
+        "ARMY_VS_ARMY": "Army vs. Army",
+        "ARMY_VS_CITY": "Army vs. City",
+        "ARMY_VS_BARBARIANS": "Army vs. Barbarians"
+      }
+    }
+  },
+  "unit-definition": {
+    "type": {
+      "INFANTRY": "Infantry",
+      "ARTILLERY": "Artillery",
+      "MOUNTED": "Cavalry",
+      "AIRCRAFT": "Aircraft"
+    }
+  },
+  "nation": {
+    "AMERICA": "America",
+    "CHINA": "China",
+    "EGYPT": "Egypt",
+    "GERMANY": "Germany",
+    "ROME": "Rome",
+    "RUSSIA": "Russia",
+    "ARABS": "Arabs",
+    "GREEKS": "Greeks",
+    "INDIANS": "Indians",
+    "SPANISH": "Spanish",
+    "AZTECS": "Aztecs",
+    "ENGLISH": "English",
+    "FRENCH": "French",
+    "JAPANESE": "Japanese",
+    "MONGOLS": "Mongols",
+    "ZULU": "Zulu"
+  },
+  "technology": {
+    "ANIMAL_HUSBANDRY": "Animal Husbandry",
+    "POTTERY": "Pottery",
+    "MINING": "Mining",
+    "SAILING": "Sailing",
+    "PHILOSOPHY": "Philosophy",
+    "MASONRY": "Masonry",
+    "METAL_WORKING": "Metal Working",
+    "CODE_OF_LAWS": "Code of Laws",
+    "MYSTICISM": "Mysticism",
+    "HORSEBACK_RIDING": "Horseback Riding",
+    "AGRICULTURE": "Agriculture",
+    "CURRENCY": "Currency",
+    "CONSTRUCTION": "Construction",
+    "MATHEMATICS": "Mathematics",
+    "IRRIGATION": "Irrigation",
+    "IRON_WORKING": "Iron Working",
+    "THEOLOGY": "Theology",
+    "DRAMA_AND_POETRY": "Drama and Poetry",
+    "LITERATURE": "Literature",
+    "CIVIL_SERVICE": "Civil Service",
+    "EDUCATION": "Education",
+    "ENGINEERING": "Engineering",
+    "MACHINERY": "Machinery",
+    "CHIVALRY": "Chivalry",
+    "MILITARY_TRADITION": "Military Tradition",
+    "ACOUSTICS": "Acoustics",
+    "GUNPOWDER": "Gunpowder",
+    "NAVIGATION": "Navigation",
+    "PRINTING_PRESS": "Printing Press",
+    "FLIGHT": "Flight",
+    "DEMOCRACY": "Democracy",
+    "COMMUNISM": "Communism",
+    "FUNDAMENTALISM": "Fundamentalism",
+    "SPACE_FLIGHT": "Space Flight"
   }
 }

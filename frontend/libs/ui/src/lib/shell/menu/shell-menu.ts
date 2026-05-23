@@ -9,6 +9,7 @@ export interface ShellMenuItem {
   routerLink: string,
   icon: string,
   text: string,
+  exact?: boolean,
   badges?: ShellMenuBadge[]
 }
 

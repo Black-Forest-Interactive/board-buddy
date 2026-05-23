@@ -124,5 +124,10 @@ class WorkflowService(
         return battleService.get(session)
     }
 
+    fun getSessionsByPlayer(playerId: Long): List<Workflow> {
+        return sessionService.findSessionsByPlayer(playerId).map { session ->
+            Workflow.create(session, battleService.get(session))
+        }
+    }
 
 }

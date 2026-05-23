@@ -12,5 +12,6 @@ interface GameSessionPlayerRelationRepository : GenericRepository<GameSessionPla
     fun deleteByGameSessionIdAndPlayerId(gameSessionId: Long, playerId: Long)
     fun deleteByGameSessionId(gameSessionId: Long)
     fun deleteByPlayerId(playerId: Long)
+    fun findByPlayerId(playerId: Long): List<GameSessionPlayerRelation>
 
 }

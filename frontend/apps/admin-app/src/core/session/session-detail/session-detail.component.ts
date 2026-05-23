@@ -200,8 +200,8 @@ export class SessionDetailComponent {
     return unit?.type?.kind ?? `#${entityId}`
   }
 
-  unitsOfType(units: GameUnit[], unitType: string): GameUnit[] {
-    return units.filter(u => u.type?.kind === unitType)
+  unitsOfType(units: GameUnit[] | undefined, unitType: string): GameUnit[] {
+    return (units ?? []).filter(u => u.type?.kind === unitType)
   }
 
   hpBoxes(current: number, max: number | null | undefined): boolean[] {

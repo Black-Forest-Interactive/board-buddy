@@ -23,6 +23,10 @@
           {
             "glob": "**/*",
             "input": "apps/portal-app/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/ui/src/assets"
           }
         ],
         "styles": [
@@ -35,8 +39,8 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "1mb",
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",

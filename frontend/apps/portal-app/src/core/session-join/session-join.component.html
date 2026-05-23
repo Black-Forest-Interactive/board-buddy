@@ -1,0 +1,29 @@
+<div class="p-4 flex flex-col gap-4 max-w-lg mx-auto">
+  <div class="flex items-center gap-2 mt-2">
+    <button matIconButton (click)="back()"><mat-icon>arrow_back</mat-icon></button>
+    <h2 class="text-xl font-bold">{{ 'session.join.title' | translate }}</h2>
+  </div>
+
+  <mat-card appearance="raised">
+    <div class="p-4 flex flex-col gap-3">
+      <mat-form-field class="w-full">
+        <mat-label>{{ 'session.join.form.key' | translate }}</mat-label>
+        <input matInput [formControl]="form.controls.key" autocomplete="off" (keyup.enter)="submit()" [placeholder]="'session.join.form.keyPlaceholder' | translate">
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
+        <mat-select [formControl]="form.controls.nation">
+          @for (nation of nations; track nation) {
+            <mat-option [value]="nation">{{ 'nation.' + nation | translate }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button matButton="filled" class="w-full mt-2" (click)="submit()" [disabled]="form.invalid">
+        <mat-icon>login</mat-icon>
+        {{ 'session.join.action' | translate }}
+      </button>
+    </div>
+  </mat-card>
+</div>

@@ -23,7 +23,7 @@
             <mat-icon>person</mat-icon>
             <div>
               <div class="font-semibold">{{ info.player.player.name }}</div>
-              <div class="text-sm text-on-surface/60">{{ info.units.length }} {{ 'session.battle.units' | translate }}</div>
+              <div class="text-sm text-on-surface/60">{{ (info.units ?? []).length }} {{ 'session.battle.units' | translate }}</div>
             </div>
             <div class="ml-auto flex gap-1">
               <button matButton (click)="openResearch(info)">

@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core'
+import { computed, inject, Injectable, signal } from '@angular/core'
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 import { TranslateService } from '@ngx-translate/core'
 import { toSignal } from '@angular/core/rxjs-interop'
@@ -15,17 +15,15 @@ export class ShellService {
   )
 
   readonly title = signal('')
+  readonly playerName = signal('')
+  readonly playerInitial = computed(() => this.playerName() ? this.playerName().charAt(0).toUpperCase() : '')
 
   readonly lang = toSignal(
     this.translateService.onLangChange.pipe(map(e => e.lang)),
     { initialValue: this.translateService.currentLang ?? 'en' }
   )
 
-  setTitle(title: string) {
-    this.title.set(title)
-  }
-
-  setLanguage(lang: string) {
-    this.translateService.use(lang)
-  }
+  setTitle(title: string) { this.title.set(title) }
+  setPlayerName(name: string) { this.playerName.set(name) }
+  setLanguage(lang: string) { this.translateService.use(lang) }
 }

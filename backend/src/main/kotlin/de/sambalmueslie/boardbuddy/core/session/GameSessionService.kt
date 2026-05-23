@@ -124,5 +124,10 @@ class GameSessionService(
         sessionEntityService.revokeAll(data)
     }
 
+    fun findSessionsByPlayer(playerId: Long): List<GameSession> {
+        val ids = sessionPlayerService.getSessionIdsByPlayer(playerId).toSet()
+        if (ids.isEmpty()) return emptyList()
+        return repository.findByIdIn(ids).map { convert(it) }
+    }
 
 }

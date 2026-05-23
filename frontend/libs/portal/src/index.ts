@@ -1,1 +1,6 @@
-export * from './lib/portal/portal';
+export * from './lib/player/player.api'
+export * from './lib/player/player.service'
+export * from './lib/session/session.api'
+export * from './lib/session/session.service'
+export * from './lib/workflow/workflow.api'
+export * from './lib/workflow/workflow.service'

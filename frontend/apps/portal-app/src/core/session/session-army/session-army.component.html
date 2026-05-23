@@ -1,0 +1,45 @@
+<div class="p-4 flex flex-col gap-4 pb-8">
+  <h2 class="text-xl font-bold mt-2">{{ 'session.myArmy' | translate }}</h2>
+
+  <div class="flex flex-col gap-3">
+    @for (def of unitDefinitions(); track def.id) {
+      <mat-card appearance="outlined">
+        <div class="flex gap-3 p-3">
+          @let defImg = unitImagePath(def.unitType);
+          @if (defImg) {
+            <img [src]="defImg" [alt]="def.unitType" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">
+          } @else {
+            <div class="w-20 h-20 flex items-center justify-center rounded-lg bg-surface-low flex-shrink-0"><mat-icon>military_tech</mat-icon></div>
+          }
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-semibold text-sm">{{ 'unit-definition.type.' + def.unitType | translate }}</span>
+              <span class="text-xs text-on-surface/50 ml-auto">{{ unitsOfType(def.unitType).length }} {{ 'session.units' | translate }}</span>
+            </div>
+            <div class="flex flex-wrap gap-x-3 text-xs text-on-surface/60 mb-2">
+              <span class="flex items-center gap-0.5"><mat-icon class="!text-xs !w-3 !h-3 text-green-600">favorite</mat-icon>{{ def.healthPoints.min }}-{{ def.healthPoints.max }}</span>
+              <span class="flex items-center gap-0.5"><mat-icon class="!text-xs !w-3 !h-3 text-orange-500">bolt</mat-icon>{{ def.damagePoints.min }}-{{ def.damagePoints.max }}</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              @for (unit of unitsOfType(def.unitType); track unit.entity) {
+                <div class="flex flex-col gap-0.5 p-1 rounded border border-surface-high bg-surface-low w-14 shrink-0">
+                  <div class="flex items-center gap-0.5">
+                    <mat-icon class="!text-xs !w-3 !h-3 shrink-0 text-green-600">favorite</mat-icon>
+                    <div class="flex flex-wrap gap-0.5">@for (_ of range(unit.health?.amount); track $index) { <div class="w-1.5 h-1.5 rounded-sm bg-green-500"></div> }</div>
+                  </div>
+                  <div class="flex items-center gap-0.5">
+                    <mat-icon class="!text-xs !w-3 !h-3 shrink-0 text-orange-500">bolt</mat-icon>
+                    <div class="flex flex-wrap gap-0.5">@for (_ of range(unit.damage?.amount); track $index) { <div class="w-1.5 h-1.5 rounded-sm bg-orange-500"></div> }</div>
+                  </div>
+                </div>
+              }
+              <button class="flex items-center justify-center w-8 h-8 rounded border border-dashed border-surface-high text-on-surface/40 hover:text-on-surface hover:border-on-surface/30 transition-colors" (click)="createUnit(def)">
+                <mat-icon class="!text-base">add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    }
+  </div>
+</div>

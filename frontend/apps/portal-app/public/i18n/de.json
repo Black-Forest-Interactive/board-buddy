@@ -5,7 +5,12 @@
     "delete": "Löschen",
     "edit": "Bearbeiten",
     "create": "Erstellen",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "reload": "Aktualisieren",
+    "back": "Zurück"
+  },
+  "player": {
+    "title": "Mein Profil"
   },
   "lang": {
     "en": "Englisch",
@@ -21,6 +26,189 @@
   },
   "MENU": {
     "Home": "Startseite",
-    "Title": "Navigation"
+    "Player": "Spieler",
+    "Session": "Sitzung",
+    "Army": "Armee",
+    "Research": "Forschung",
+    "group": {
+      "portal": "Portal",
+      "session": "Spielsitzung"
+    }
+  },
+  "register": {
+    "title": "Willkommen!",
+    "subtitle": "Gib deinen Namen ein, um zu beginnen. Kein Account nötig.",
+    "form": {
+      "name": "Dein Name",
+      "namePlaceholder": "z.B. Max Mustermann",
+      "error": {
+        "required": "Bitte gib einen Namen ein.",
+        "minLength": "Name muss mindestens 2 Zeichen lang sein."
+      }
+    },
+    "action": {
+      "start": "Loslegen"
+    },
+    "message": {
+      "error": "Spieler konnte nicht erstellt werden."
+    }
+  },
+  "home": {
+    "welcome": "Willkommen zurück,",
+    "mySessions": "Meine Sitzungen",
+    "noSessions": "Keine aktiven Sitzungen.",
+    "action": {
+      "createSession": "Session starten",
+      "createSessionHint": "Neue Spielsitzung erstellen und andere einladen.",
+      "joinSession": "Session beitreten",
+      "joinSessionHint": "Einer bestehenden Sitzung per Key oder QR-Code beitreten."
+    }
+  },
+  "session": {
+    "form": {
+      "name": "Session-Name",
+      "game": "Spiel",
+      "ruleSet": "Regelwerk",
+      "nation": "Nation",
+      "error": {
+        "required": "Pflichtfeld"
+      }
+    },
+    "create": {
+      "title": "Session starten",
+      "action": "Session erstellen"
+    },
+    "join": {
+      "title": "Session beitreten",
+      "qr": "Beitritts-QR-Code",
+      "hint": "Andere Spieler können diesen Code scannen oder den Key eingeben.",
+      "form": {
+        "key": "Session-Key",
+        "keyPlaceholder": "z.B. ABC-123"
+      },
+      "action": "Beitreten",
+      "message": {
+        "error": "Session konnte nicht gefunden werden."
+      }
+    },
+    "participants": "Teilnehmer",
+    "noParticipants": "Noch keine Teilnehmer.",
+    "host": "Gastgeber",
+    "myArmy": "Meine Armee",
+    "myTechnologies": "Meine Technologien",
+    "units": "Einh.",
+    "action": {
+      "research": "Forschen",
+      "startBattle": "Gefecht starten",
+      "showQr": "Beitritts-QR anzeigen",
+      "hideQr": "Beitritts-QR ausblenden"
+    },
+    "message": {
+      "unitCreated": "Einheit produziert.",
+      "technologyResearched": "Technologie erforscht.",
+      "battleStarted": "Gefecht gestartet.",
+      "error": "Aktion fehlgeschlagen."
+    },
+    "research": {
+      "tier": "Zeitalter"
+    },
+    "battle": {
+      "yourTurn": "Du bist dran!",
+      "opponentTurn": "Am Zug",
+      "unitsInHand": "Einh. auf Hand",
+      "armyCount": "Armee",
+      "fronts": "Gefechtslinien",
+      "front": "Front",
+      "noFrontsYet": "Noch keine Fronten eröffnet.",
+      "myReserve": "Meine Reserve",
+      "noUnits": "Keine Einheiten in Reserve.",
+      "me": "Ich",
+      "opponent": "Gegner",
+      "deploy": "Einsetzen",
+      "attack": "Angreifen",
+      "selectUnitFirst": "Erst Einheit auswählen",
+      "log": "Kampflog",
+      "winner": "Sieger",
+      "draw": "Unentschieden",
+      "finishAction": "Gefecht beenden",
+      "attacked": "Angriff ausgeführt.",
+      "attacker": "Angreifer",
+      "defender": "Verteidiger",
+      "attackerArmy": "Armee-Größe (Angreifer)",
+      "defenderArmy": "Armee-Größe (Verteidiger)",
+      "type": "Gefechtstyp",
+      "isWalled": "Stadtmauer vorhanden",
+      "activity": {
+        "CREATE_FRONT": "Front eröffnet",
+        "ATTACK_FRONT": "Front angegriffen"
+      },
+      "battleType": {
+        "ARMY_VS_ARMY": "Armee vs. Armee",
+        "ARMY_VS_CITY": "Armee vs. Stadt",
+        "ARMY_VS_BARBARIANS": "Armee vs. Barbaren"
+      }
+    }
+  },
+  "unit-definition": {
+    "type": {
+      "INFANTRY": "Infanterie",
+      "ARTILLERY": "Artillerie",
+      "MOUNTED": "Kavallerie",
+      "AIRCRAFT": "Luftwaffe"
+    }
+  },
+  "nation": {
+    "AMERICA": "Amerika",
+    "CHINA": "China",
+    "EGYPT": "Ägypten",
+    "GERMANY": "Deutschland",
+    "ROME": "Rom",
+    "RUSSIA": "Russland",
+    "ARABS": "Araber",
+    "GREEKS": "Griechen",
+    "INDIANS": "Inder",
+    "SPANISH": "Spanier",
+    "AZTECS": "Azteken",
+    "ENGLISH": "Engländer",
+    "FRENCH": "Franzosen",
+    "JAPANESE": "Japaner",
+    "MONGOLS": "Mongolen",
+    "ZULU": "Zulu"
+  },
+  "technology": {
+    "ANIMAL_HUSBANDRY": "Tierzucht",
+    "POTTERY": "Töpferei",
+    "MINING": "Bergbau",
+    "SAILING": "Schifffahrt",
+    "PHILOSOPHY": "Philosophie",
+    "MASONRY": "Mauerwerk",
+    "METAL_WORKING": "Metallbearbeitung",
+    "CODE_OF_LAWS": "Gesetzeskodex",
+    "MYSTICISM": "Mystik",
+    "HORSEBACK_RIDING": "Reitkunst",
+    "AGRICULTURE": "Landwirtschaft",
+    "CURRENCY": "Währung",
+    "CONSTRUCTION": "Konstruktion",
+    "MATHEMATICS": "Mathematik",
+    "IRRIGATION": "Bewässerung",
+    "IRON_WORKING": "Eisenbearbeitung",
+    "THEOLOGY": "Theologie",
+    "DRAMA_AND_POETRY": "Drama & Dichtung",
+    "LITERATURE": "Literatur",
+    "CIVIL_SERVICE": "Staatsdienst",
+    "EDUCATION": "Bildung",
+    "ENGINEERING": "Ingenieurswesen",
+    "MACHINERY": "Maschinenbau",
+    "CHIVALRY": "Ritterlichkeit",
+    "MILITARY_TRADITION": "Militärtradition",
+    "ACOUSTICS": "Akustik",
+    "GUNPOWDER": "Schießpulver",
+    "NAVIGATION": "Navigation",
+    "PRINTING_PRESS": "Buchdruck",
+    "FLIGHT": "Flugkunst",
+    "DEMOCRACY": "Demokratie",
+    "COMMUNISM": "Kommunismus",
+    "FUNDAMENTALISM": "Fundamentalismus",
+    "SPACE_FLIGHT": "Raumfahrt"
   }
 }
