@@ -1,10 +1,12 @@
-import {BattleFront, BattleLogEntry, BattleParticipant, BattleStatus, GameSessionPlayer, GameUnit, TechnologyType} from '@board-buddy/core'
+import {BattleFront, BattleLogEntry, BattleParticipant, BattleStatus, GameSessionPlayer, GameUnit} from '@board-buddy/core'
 import {NationType} from '@board-buddy/core'
+import {Technology} from '@board-buddy/core'
 
 export interface PortalParticipantInfo {
   player: GameSessionPlayer
   units: GameUnit[]
-  technologies: TechnologyType[]
+  technologies: Technology[]
+  availableTechnologies: Technology[]
 }
 
 export interface PortalBattleOpponent {

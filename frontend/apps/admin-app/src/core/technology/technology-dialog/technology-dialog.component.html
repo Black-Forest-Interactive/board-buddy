@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{ (tech ? 'technology.dialog.edit.title' : 'technology.dialog.create.title') | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2 min-w-[400px]">
+
+    <mat-form-field>
+      <mat-label>{{ 'technology.form.name' | translate }}</mat-label>
+      <input matInput formControlName="name"/>
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>{{ 'technology.form.error.name' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'technology.form.description' | translate }}</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+      @if (form.controls.description.hasError('required')) {
+        <mat-error>{{ 'technology.form.error.description' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'technology.form.imageUrl' | translate }}</mat-label>
+      <input matInput formControlName="imageUrl"/>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'technology.form.tier' | translate }}</mat-label>
+      <input matInput type="number" formControlName="tier" min="1" max="5"/>
+      @if (form.controls.tier.hasError('required') || form.controls.tier.hasError('min') || form.controls.tier.hasError('max')) {
+        <mat-error>{{ 'technology.form.error.tier' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">{{ 'action.save' | translate }}</button>
+</mat-dialog-actions>

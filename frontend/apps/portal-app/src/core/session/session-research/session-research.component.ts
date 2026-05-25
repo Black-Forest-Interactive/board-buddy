@@ -9,12 +9,11 @@ import {MatChipsModule} from '@angular/material/chips'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {TECHNOLOGY_TIER, TechnologyType, WorkflowResearchRequest} from '@board-buddy/core'
+import {Technology, WorkflowResearchRequest} from '@board-buddy/core'
 import {PlayerService, PortalWorkflowService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 const TIERS = [1, 2, 3, 4, 5]
-const ALL_TECHS = Object.keys(TECHNOLOGY_TIER) as TechnologyType[]
 
 @Component({
   selector: 'portal-session-research',
@@ -29,7 +28,6 @@ export class SessionResearchComponent {
   private route = inject(ActivatedRoute)
 
   private sessionKey = toSignal(this.route.paramMap.pipe(map(p => p.get('key') ?? '')))
-  private playerId = computed(() => this.playerService.getPlayerId())
 
   private myInfoResource = resource({
     params: this.sessionKey,
@@ -37,40 +35,39 @@ export class SessionResearchComponent {
   })
 
   private myInfo = computed(() => this.myInfoResource.value())
-  readonly myTechnologies = computed(() => this.myInfo()?.technologies ?? [])
-  private discovered = computed(() => new Set(this.myTechnologies()))
+  private allTechs = computed(() => this.myInfo()?.availableTechnologies ?? [])
+  private discoveredIds = computed(() => new Set((this.myInfo()?.technologies ?? []).map(t => t.id)))
 
   readonly tiers = TIERS
   readonly techsByTier = computed(() => TIERS.reduce((acc, tier) => {
-    acc[tier] = ALL_TECHS.filter(t => TECHNOLOGY_TIER[t] === tier)
+    acc[tier] = this.allTechs().filter(t => t.tier === tier)
     return acc
-  }, {} as Record<number, TechnologyType[]>))
+  }, {} as Record<number, Technology[]>))
 
   readonly researchable = computed(() => {
-    const disc = this.discovered()
-    const result = new Set<TechnologyType>()
-    for (const tech of ALL_TECHS) {
-      if (!disc.has(tech) && this.canResearch(tech, disc)) result.add(tech)
+    const disc = this.discoveredIds()
+    const result = new Set<number>()
+    for (const tech of this.allTechs()) {
+      if (!disc.has(tech.id) && this.canResearch(tech, disc)) result.add(tech.id)
     }
     return result
   })
 
-  private canResearch(tech: TechnologyType, disc: Set<TechnologyType>): boolean {
-    const tier = TECHNOLOGY_TIER[tech]
-    if (tier === 1) return true
-    const prevCount = ALL_TECHS.filter(t => TECHNOLOGY_TIER[t] === tier - 1 && disc.has(t)).length
-    const sameCount = ALL_TECHS.filter(t => TECHNOLOGY_TIER[t] === tier && disc.has(t)).length
+  private canResearch(tech: Technology, disc: Set<number>): boolean {
+    if (tech.tier === 1) return true
+    const prevCount = this.allTechs().filter(t => t.tier === tech.tier - 1 && disc.has(t.id)).length
+    const sameCount = this.allTechs().filter(t => t.tier === tech.tier && disc.has(t.id)).length
     return sameCount < prevCount - 1
   }
 
-  isDiscovered(tech: TechnologyType): boolean { return this.discovered().has(tech) }
-  isResearchable(tech: TechnologyType): boolean { return this.researchable().has(tech) }
+  isDiscovered(tech: Technology): boolean { return this.discoveredIds().has(tech.id) }
+  isResearchable(tech: Technology): boolean { return this.researchable().has(tech.id) }
 
-  research(tech: TechnologyType) {
+  research(tech: Technology) {
     const key = this.sessionKey()
     const info = this.myInfo()
     if (!key || !info) return
-    this.workflowService.research(key, new WorkflowResearchRequest(info.player.player.id, tech)).subscribe({
+    this.workflowService.research(key, new WorkflowResearchRequest(info.player.player.id, tech.id)).subscribe({
       next: () => {
         this.translate.get('session.message.technologyResearched').subscribe(t => this.toast.success(t))
         this.myInfoResource.reload()

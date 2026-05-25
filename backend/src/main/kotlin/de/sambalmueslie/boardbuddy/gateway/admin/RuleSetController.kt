@@ -31,4 +31,12 @@ class RuleSetController(private val gateway: RuleSetGateway) {
     @Delete("{id}/unit-definition/{unitDefinitionId}")
     fun revokeUnitDefinition(id: Long, unitDefinitionId: Long) =
         gateway.revokeUnitDefinition(id, unitDefinitionId)
+
+    @Post("{id}/technology/{technologyId}")
+    fun assignTechnology(id: Long, technologyId: Long) =
+        gateway.assignTechnology(id, technologyId)
+
+    @Delete("{id}/technology/{technologyId}")
+    fun revokeTechnology(id: Long, technologyId: Long) =
+        gateway.revokeTechnology(id, technologyId)
 }

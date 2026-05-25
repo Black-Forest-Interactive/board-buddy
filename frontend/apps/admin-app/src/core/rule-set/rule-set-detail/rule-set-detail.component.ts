@@ -10,15 +10,15 @@ import {MatDialog} from '@angular/material/dialog'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {RuleSetService} from '@board-buddy/admin'
-import {UnitDefinition} from '@board-buddy/core'
+import {Technology, UnitDefinition} from '@board-buddy/core'
 import {toPromise} from '@board-buddy/shared'
 import {MainContentComponent} from '@board-buddy/ui'
 import {RuleSetAssignDialogComponent} from '../rule-set-assign-dialog/rule-set-assign-dialog.component'
-import {MatTooltip} from "@angular/material/tooltip"
+import {RuleSetAssignTechnologyDialogComponent} from '../rule-set-assign-technology-dialog/rule-set-assign-technology-dialog.component'
 
 @Component({
   selector: 'admin-rule-set-detail',
-  imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe, MatTooltip],
+  imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './rule-set-detail.component.html',
 })
 export class RuleSetDetailComponent {
@@ -38,23 +38,46 @@ export class RuleSetDetailComponent {
   readonly ruleSet = computed(() => this.ruleSetResource.value())
   readonly name = computed(() => this.ruleSet()?.name ?? '')
   readonly unitDefinitions = computed(() => this.ruleSet()?.unitDefinitions ?? [])
-  readonly columns = ['name', 'unitType', 'counterType', 'maxLevel', 'actions']
+  readonly technologies = computed(() => this.ruleSet()?.technologies ?? [])
 
-  openAssign() {
+  readonly unitColumns = ['name', 'unitType', 'counterType', 'maxLevel', 'actions']
+  readonly technologyColumns = ['name', 'description', 'tier', 'actions']
+
+  openAssignUnit() {
     const id = this.id()
     if (!id) return
     this.dialog.open(RuleSetAssignDialogComponent, {
       data: {ruleSetId: id, assigned: this.unitDefinitions()}
-    }).afterClosed().subscribe(saved => {if (saved) this.ruleSetResource.reload()})
+    }).afterClosed().subscribe(saved => { if (saved) this.ruleSetResource.reload() })
   }
 
-  revoke(unit: UnitDefinition) {
+  openAssignTechnology() {
+    const id = this.id()
+    if (!id) return
+    this.dialog.open(RuleSetAssignTechnologyDialogComponent, {
+      data: {ruleSetId: id, assigned: this.technologies()}
+    }).afterClosed().subscribe(saved => { if (saved) this.ruleSetResource.reload() })
+  }
+
+  revokeUnit(unit: UnitDefinition) {
     const id = this.id()
     if (!id) return
     this.service.revokeUnitDefinition(id, unit.id).subscribe({
       next: (updated) => {
         this.ruleSetResource.set(updated)
         this.translate.get('rule-set.message.unitRevoked').subscribe(t => this.toast.success(t))
+      },
+      error: () => this.translate.get('rule-set.message.error').subscribe(t => this.toast.error(t))
+    })
+  }
+
+  revokeTechnology(tech: Technology) {
+    const id = this.id()
+    if (!id) return
+    this.service.revokeTechnology(id, tech.id).subscribe({
+      next: (updated) => {
+        this.ruleSetResource.set(updated)
+        this.translate.get('rule-set.message.technologyRevoked').subscribe(t => this.toast.success(t))
       },
       error: () => this.translate.get('rule-set.message.error').subscribe(t => this.toast.error(t))
     })

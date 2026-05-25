@@ -111,11 +111,12 @@ class WorkflowService(
 
     fun getParticipantsInfo(id: String): List<WorkflowParticipantInfo> {
         val session = sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
+        val available = session.ruleSet.technologies
         return session.participants.map { player ->
             val entities = sessionService.getAssignedEntities(session, player)
             val units = entities.map { engine.getUnit(it) }
-            val technologies = engine.getPlayer(player.entity).technologies.map { it.id }.toSet()
-            WorkflowParticipantInfo(player, units, technologies)
+            val technologies = engine.getPlayer(player.entity).technologies
+            WorkflowParticipantInfo(player, units, technologies, available)
         }
     }
 

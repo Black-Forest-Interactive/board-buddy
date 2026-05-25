@@ -2,44 +2,7 @@ import {Player} from '../player/player.api'
 import {Game} from '../game/game.api'
 import {RuleSet} from '../rule-set/rule-set.api'
 import {UnitType} from '../unit/unit.api'
-
-export const TechnologyType = {
-  ANIMAL_HUSBANDRY: 'ANIMAL_HUSBANDRY',
-  POTTERY: 'POTTERY',
-  MINING: 'MINING',
-  SAILING: 'SAILING',
-  PHILOSOPHY: 'PHILOSOPHY',
-  MASONRY: 'MASONRY',
-  METAL_WORKING: 'METAL_WORKING',
-  CODE_OF_LAWS: 'CODE_OF_LAWS',
-  MYSTICISM: 'MYSTICISM',
-  HORSEBACK_RIDING: 'HORSEBACK_RIDING',
-  AGRICULTURE: 'AGRICULTURE',
-  CURRENCY: 'CURRENCY',
-  CONSTRUCTION: 'CONSTRUCTION',
-  MATHEMATICS: 'MATHEMATICS',
-  IRRIGATION: 'IRRIGATION',
-  IRON_WORKING: 'IRON_WORKING',
-  THEOLOGY: 'THEOLOGY',
-  DRAMA_AND_POETRY: 'DRAMA_AND_POETRY',
-  LITERATURE: 'LITERATURE',
-  CIVIL_SERVICE: 'CIVIL_SERVICE',
-  EDUCATION: 'EDUCATION',
-  ENGINEERING: 'ENGINEERING',
-  MACHINERY: 'MACHINERY',
-  CHIVALRY: 'CHIVALRY',
-  MILITARY_TRADITION: 'MILITARY_TRADITION',
-  ACOUSTICS: 'ACOUSTICS',
-  GUNPOWDER: 'GUNPOWDER',
-  NAVIGATION: 'NAVIGATION',
-  PRINTING_PRESS: 'PRINTING_PRESS',
-  FLIGHT: 'FLIGHT',
-  DEMOCRACY: 'DEMOCRACY',
-  COMMUNISM: 'COMMUNISM',
-  FUNDAMENTALISM: 'FUNDAMENTALISM',
-  SPACE_FLIGHT: 'SPACE_FLIGHT',
-} as const
-export type TechnologyType = typeof TechnologyType[keyof typeof TechnologyType]
+import {Technology} from '../technology/technology.api'
 
 export const NationType = {
   AMERICA: 'AMERICA',
@@ -154,7 +117,8 @@ export interface Workflow {
 export interface WorkflowParticipantInfo {
   player: GameSessionPlayer
   units: GameUnit[]
-  technologies: TechnologyType[]
+  technologies: Technology[]
+  availableTechnologies: Technology[]
 }
 
 export class WorkflowAssignPlayerRequest {
@@ -223,15 +187,6 @@ export class WorkflowBattleAttackFrontRequest {
 export class WorkflowResearchRequest {
   constructor(
     public playerId: number,
-    public technology: TechnologyType,
+    public technologyId: number,
   ) {}
-}
-
-export const TECHNOLOGY_TIER: Record<TechnologyType, number> = {
-  ANIMAL_HUSBANDRY: 1, POTTERY: 1, MINING: 1, SAILING: 1, PHILOSOPHY: 1,
-  MASONRY: 1, METAL_WORKING: 1, CODE_OF_LAWS: 1, MYSTICISM: 1, HORSEBACK_RIDING: 1, AGRICULTURE: 1,
-  CURRENCY: 2, CONSTRUCTION: 2, MATHEMATICS: 2, IRRIGATION: 2, IRON_WORKING: 2, THEOLOGY: 2, DRAMA_AND_POETRY: 2, LITERATURE: 2,
-  CIVIL_SERVICE: 3, EDUCATION: 3, ENGINEERING: 3, MACHINERY: 3, CHIVALRY: 3, MILITARY_TRADITION: 3, ACOUSTICS: 3,
-  GUNPOWDER: 4, NAVIGATION: 4, PRINTING_PRESS: 4, FLIGHT: 4, DEMOCRACY: 4, COMMUNISM: 4, FUNDAMENTALISM: 4,
-  SPACE_FLIGHT: 5,
 }

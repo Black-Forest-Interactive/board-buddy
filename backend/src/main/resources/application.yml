@@ -32,6 +32,7 @@ micronaut:
         mapping: /swagger-ui/**
 
 
+
 datasources:
   default:
     url: jdbc:postgresql://localhost:5432/postgres
@@ -41,6 +42,9 @@ datasources:
     schema-generate: NONE
     dialect: POSTGRES
     schema: board_buddy
+
+jackson:
+  serialization-inclusion: ALWAYS
 
 flyway:
   datasources:

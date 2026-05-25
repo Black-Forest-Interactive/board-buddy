@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{ 'rule-set.dialog.assignTechnology.title' | translate }}</h2>
+
+<mat-dialog-content>
+  @if (available().length === 0) {
+    <p class="text-gray-500 py-4">{{ 'rule-set.dialog.assignTechnology.empty' | translate }}</p>
+  } @else {
+    <mat-action-list>
+      @for (tech of available(); track tech.id) {
+        <button mat-list-item (click)="assign(tech)">
+          <mat-icon matListItemIcon>science</mat-icon>
+          <span matListItemTitle>{{ tech.name }}</span>
+          <span matListItemLine>{{ 'technology.tier.' + tech.tier | translate }}</span>
+        </button>
+      }
+    </mat-action-list>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+</mat-dialog-actions>

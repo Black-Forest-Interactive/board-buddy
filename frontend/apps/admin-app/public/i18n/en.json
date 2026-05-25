@@ -40,7 +40,8 @@
       "unit-definition": "Manage unit definitions",
       "game": "Manage games",
       "player": "Manage players",
-      "session": "Manage game sessions"
+      "session": "Manage game sessions",
+      "technology": "Manage technologies"
     }
   },
   "game": {
@@ -272,6 +273,62 @@
     }
   },
   "technology": {
+    "title": "Technologies",
+    "create": "New Technology",
+    "table": {
+      "name": "Name",
+      "description": "Description",
+      "tier": "Tier"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Description",
+      "imageUrl": "Image URL",
+      "tier": "Tier",
+      "error": {
+        "name": "Name required",
+        "description": "Description required",
+        "tier": "Tier required"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Create Technology"
+      },
+      "edit": {
+        "title": "Edit Technology"
+      }
+    },
+    "message": {
+      "created": "Technology created",
+      "updated": "Technology updated",
+      "deleted": "Technology deleted",
+      "error": "An error occurred"
+    },
+    "effect": {
+      "title": "Effects",
+      "add": "Add Effect",
+      "table": {
+        "unitType": "Unit Type",
+        "unitLevel": "Level"
+      },
+      "form": {
+        "unitType": "Unit Type",
+        "unitLevel": "Level",
+        "error": {
+          "unitType": "Unit type required",
+          "unitLevel": "Level required"
+        }
+      },
+      "dialog": {
+        "title": "Add Effect"
+      },
+      "message": {
+        "added": "Effect added",
+        "removed": "Effect removed",
+        "error": "An error occurred"
+      }
+    },
     "tier": {
       "1": "Tier I",
       "2": "Tier II",
@@ -339,6 +396,10 @@
       "assign": {
         "title": "Assign Unit Definition",
         "empty": "No unit definitions available"
+      },
+      "assignTechnology": {
+        "title": "Assign Technology",
+        "empty": "No technologies available"
       }
     },
     "message": {
@@ -347,9 +408,13 @@
       "deleted": "Rule set deleted",
       "error": "An error occurred",
       "unitAssigned": "Unit assigned",
-      "unitRevoked": "Assignment revoked"
+      "unitRevoked": "Assignment revoked",
+      "technologyAssigned": "Technology assigned",
+      "technologyRevoked": "Assignment revoked"
     },
     "assignUnit": "Assign Unit",
-    "revokeUnit": "Revoke Assignment"
+    "revokeUnit": "Revoke Assignment",
+    "assignTechnology": "Assign Technology",
+    "revokeTechnology": "Revoke Assignment"
   }
 }

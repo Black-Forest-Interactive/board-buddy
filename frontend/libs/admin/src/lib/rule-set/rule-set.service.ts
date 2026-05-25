@@ -34,4 +34,12 @@ export class RuleSetService extends BaseService {
   revokeUnitDefinition(ruleSetId: number, unitDefinitionId: number): Observable<RuleSet> {
     return this.delete<RuleSet>(`${ruleSetId}/unit-definition/${unitDefinitionId}`)
   }
+
+  assignTechnology(ruleSetId: number, technologyId: number): Observable<RuleSet> {
+    return this.post<RuleSet>(`${ruleSetId}/technology/${technologyId}`, {})
+  }
+
+  revokeTechnology(ruleSetId: number, technologyId: number): Observable<RuleSet> {
+    return this.delete<RuleSet>(`${ruleSetId}/technology/${technologyId}`)
+  }
 }

@@ -5,16 +5,12 @@
       <div>
         <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-2">{{ 'session.research.tier' | translate }} {{ tier }}</p>
         <div class="flex flex-wrap gap-2">
-          @for (tech of techsByTier()[tier]; track tech) {
-            <button matButton
-                    [disabled]="!isResearchable(tech)"
-                    [class.!bg-primary-container]="isDiscovered(tech)"
-                    [class.!text-on-primary-container]="isDiscovered(tech)"
-                    (click)="!isDiscovered(tech) && isResearchable(tech) ? research(tech) : null">
+          @for (tech of techsByTier()[tier]; track tech.id) {
+            <button matButton [disabled]="!isResearchable(tech)" [class.!bg-primary-container]="isDiscovered(tech)" [class.!text-on-primary-container]="isDiscovered(tech)" (click)="!isDiscovered(tech) && isResearchable(tech) ? research(tech) : null">
               @if (isDiscovered(tech)) {
                 <mat-icon class="!text-sm">check_circle</mat-icon>
               }
-              {{ 'technology.' + tech | translate }}
+              {{ tech.name }}
             </button>
           }
         </div>

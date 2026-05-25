@@ -40,7 +40,8 @@
       "unit-definition": "Einheitendefinitionen verwalten",
       "game": "Spiele verwalten",
       "player": "Spieler verwalten",
-      "session": "Spielsitzungen verwalten"
+      "session": "Spielsitzungen verwalten",
+      "technology": "Technologien verwalten"
     }
   },
   "game": {
@@ -272,6 +273,62 @@
     }
   },
   "technology": {
+    "title": "Technologien",
+    "create": "Neue Technologie",
+    "table": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "tier": "Stufe"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "imageUrl": "Bild-URL",
+      "tier": "Stufe",
+      "error": {
+        "name": "Name erforderlich",
+        "description": "Beschreibung erforderlich",
+        "tier": "Stufe erforderlich"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Technologie erstellen"
+      },
+      "edit": {
+        "title": "Technologie bearbeiten"
+      }
+    },
+    "message": {
+      "created": "Technologie erstellt",
+      "updated": "Technologie aktualisiert",
+      "deleted": "Technologie gelöscht",
+      "error": "Ein Fehler ist aufgetreten"
+    },
+    "effect": {
+      "title": "Effekte",
+      "add": "Effekt hinzufügen",
+      "table": {
+        "unitType": "Einheitstyp",
+        "unitLevel": "Level"
+      },
+      "form": {
+        "unitType": "Einheitstyp",
+        "unitLevel": "Level",
+        "error": {
+          "unitType": "Einheitstyp erforderlich",
+          "unitLevel": "Level erforderlich"
+        }
+      },
+      "dialog": {
+        "title": "Effekt hinzufügen"
+      },
+      "message": {
+        "added": "Effekt hinzugefügt",
+        "removed": "Effekt entfernt",
+        "error": "Ein Fehler ist aufgetreten"
+      }
+    },
     "tier": {
       "1": "Stufe I",
       "2": "Stufe II",
@@ -339,6 +396,10 @@
       "assign": {
         "title": "Einheit zuweisen",
         "empty": "Keine Einheiten verfügbar"
+      },
+      "assignTechnology": {
+        "title": "Technologie zuweisen",
+        "empty": "Keine Technologien verfügbar"
       }
     },
     "message": {
@@ -347,9 +408,13 @@
       "deleted": "Regelset gelöscht",
       "error": "Ein Fehler ist aufgetreten",
       "unitAssigned": "Einheit zugewiesen",
-      "unitRevoked": "Zuweisung aufgehoben"
+      "unitRevoked": "Zuweisung aufgehoben",
+      "technologyAssigned": "Technologie zugewiesen",
+      "technologyRevoked": "Zuweisung aufgehoben"
     },
     "assignUnit": "Einheit zuweisen",
-    "revokeUnit": "Zuweisung aufheben"
+    "revokeUnit": "Zuweisung aufheben",
+    "assignTechnology": "Technologie zuweisen",
+    "revokeTechnology": "Zuweisung aufheben"
   }
 }
