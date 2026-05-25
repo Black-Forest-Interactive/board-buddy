@@ -16,6 +16,32 @@ CREATE TABLE unit_definition
     updated           TIMESTAMP WITHOUT TIME ZONE
 );
 
+-- technology
+CREATE SEQUENCE technology_seq;
+CREATE TABLE technology
+(
+    id          BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('technology_seq'::regclass),
+    name        VARCHAR(255) NOT NULL,
+    description TEXT         NOT NULL,
+    image_url   VARCHAR(255) NOT NULL,
+    tier        INT          NOT NULL,
+
+    created     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated     TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE SEQUENCE technology_effect_unit_unlock_seq;
+CREATE TABLE technology_effect_unit_unlock
+(
+    id            BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('technology_effect_unit_unlock_seq'::regclass),
+    technology_id BIGINT       NOT NULL REFERENCES technology (id),
+    unit_type     VARCHAR(255) NOT NULL,
+    unit_level    INT          NOT NULL,
+
+    created       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated       TIMESTAMP WITHOUT TIME ZONE
+);
+
 -- rule set
 CREATE SEQUENCE rule_set_seq;
 CREATE TABLE rule_set
@@ -32,6 +58,13 @@ CREATE TABLE rule_set_unit_definition
     rule_set_id        BIGINT REFERENCES rule_set (id),
     unit_definition_id BIGINT REFERENCES unit_definition (id),
     PRIMARY KEY (rule_set_id, unit_definition_id)
+);
+
+CREATE TABLE rule_set_technology
+(
+    rule_set_id   BIGINT REFERENCES rule_set (id),
+    technology_id BIGINT REFERENCES technology (id),
+    PRIMARY KEY (rule_set_id, technology_id)
 );
 
 -- game

@@ -3,8 +3,10 @@ package de.sambalmueslie.boardbuddy.engine.system
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
+import de.sambalmueslie.boardbuddy.core.technology.TechnologyService
+import de.sambalmueslie.boardbuddy.core.technology.api.Technology
+import de.sambalmueslie.boardbuddy.core.technology.api.TechnologyEffect
 import de.sambalmueslie.boardbuddy.engine.api.*
-import de.sambalmueslie.boardbuddy.engine.api.TechnologyType.*
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
 import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import jakarta.inject.Singleton
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory
 class UnitUpgradeSystem(
     private val model: GameEntityStorage,
     private val sessionService: GameSessionService,
+    private val technologyService: TechnologyService,
     componentModelService: GameComponentModelService,
 ) : GameSystem {
 
@@ -28,33 +31,20 @@ class UnitUpgradeSystem(
     private val technologyModel = componentModelService.get(Technologies::class)
 
 
-    private val unitRankUnlocks: Map<TechnologyType, Pair<UnitType, Int>> = mapOf(
-        DEMOCRACY to (UnitType.INFANTRY to 2),
-        CHIVALRY to (UnitType.MOUNTED to 2),
-        MATHEMATICS to (UnitType.ARTILLERY to 2),
-        GUNPOWDER to (UnitType.INFANTRY to 3),
-        RAILROAD to (UnitType.MOUNTED to 3),
-        METAL_CASTING to (UnitType.ARTILLERY to 3),
-        REPLACEABLE_PARTS to (UnitType.INFANTRY to 4),
-        COMBUSTION to (UnitType.MOUNTED to 4),
-        BALLISTICS to (UnitType.ARTILLERY to 4),
-        FLIGHT to (UnitType.AIRCRAFT to 1),
-    )
-
     fun handleCreation(player: GameSessionPlayer, unit: GameEntity) {
         val technologies = technologyModel.get(player.entity) ?: return
-        val unitRelatedTechnologies = getUnitRelatedTechnologies(technologies)
+        val unitRelatedTechnologies = getUnitRelatedTechnologies(technologies.ids)
         if (unitRelatedTechnologies.isEmpty()) return
 
         upgradeUnit(unit, unitRelatedTechnologies)
     }
 
-    fun handleResearch(session: GameSession, player: GameSessionPlayer, changedTechnologies: List<TechnologyType>) {
-        val unitUpgradeRequired = changedTechnologies.any { unitRankUnlocks.containsKey(it) }
+    fun handleResearch(session: GameSession, player: GameSessionPlayer, changedTechnologies: List<Technology>) {
+        val unitUpgradeRequired = changedTechnologies.any { tech -> tech.effect.any { it is TechnologyEffect.UnitUnlock } }
         if (!unitUpgradeRequired) return
 
         val technologies = technologyModel.get(player.entity) ?: return
-        val unitRelatedTechnologies = getUnitRelatedTechnologies(technologies)
+        val unitRelatedTechnologies = getUnitRelatedTechnologies(technologies.ids)
         if (unitRelatedTechnologies.isEmpty()) return
 
         val units = sessionService.getAssignedEntities(session, player)
@@ -63,11 +53,11 @@ class UnitUpgradeSystem(
         }
     }
 
-    private fun getUnitRelatedTechnologies(technologies: Technologies): Map<UnitType, Int> {
-        val unitRelatedTechnologies = technologies.types.mapNotNull { unitRankUnlocks[it] }
-            .groupBy { it.first }
-            .mapValues { it.value.maxBy { v -> v.second }.second }
-        return unitRelatedTechnologies
+    private fun getUnitRelatedTechnologies(technologyIds: Set<Long>): Map<UnitType, Int> {
+        return technologyService.getByIds(technologyIds)
+            .flatMap { tech -> tech.effect.filterIsInstance<TechnologyEffect.UnitUnlock>() }
+            .groupBy { it.unitType }
+            .mapValues { (_, unlocks) -> unlocks.maxOf { it.unitLevel } }
     }
 
     private fun upgradeUnit(unit: GameEntity, unitRelatedTechnologies: Map<UnitType, Int>) {

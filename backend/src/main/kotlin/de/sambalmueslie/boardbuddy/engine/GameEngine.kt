@@ -2,6 +2,7 @@ package de.sambalmueslie.boardbuddy.engine
 
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
+import de.sambalmueslie.boardbuddy.core.technology.api.Technology
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
@@ -58,7 +59,7 @@ class GameEngine(
         val playerEntity = entityStorage.get(entity, GameEntityType.PLAYER) ?: throw WorkflowInvalidGameEntity(entity)
         val nation = nationModel.get(playerEntity)
         val government = governmentModel.get(playerEntity)
-        val technologies = technologyModel.get(playerEntity)?.types ?: emptySet()
+        val technologies = researchSystem.getTechnologies(playerEntity)
         return GamePlayer(playerEntity, nation, government, technologies)
     }
 
@@ -87,8 +88,8 @@ class GameEngine(
         return combatSystem.combat(attackingUnit, defendingUnit)
     }
 
-    fun research(session: GameSession, player: GameSessionPlayer, type: TechnologyType): List<TechnologyType> {
-        val changedTechnologies = researchSystem.research(player.entity, type)
+    fun research(session: GameSession, player: GameSessionPlayer, technology: Technology): List<Technology> {
+        val changedTechnologies = researchSystem.research(player.entity, technology)
         unitUpgradeSystem.handleResearch(session, player, changedTechnologies)
         componentModelService.persist(player.entity)
         return changedTechnologies

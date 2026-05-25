@@ -31,7 +31,7 @@ class GameComponentStorageService(
     private val governmentStore = GameComponentStorageOperator(governmentRepository) { e, t -> ComponentGovernmentData(e, t.type, timeProvider.currentTime()) }
     private val nationStore = GameComponentStorageOperator(nationRepository) { e, t -> ComponentNationData(e, t.type, timeProvider.currentTime()) }
     private val technologiesStore = GameComponentStorageOperator(technologyRepository) { e, t ->
-        ComponentTechnologyData(e, t.types.map { it.name }, timeProvider.currentTime())
+        ComponentTechnologyData(e, t.ids.map { it.toString() }, timeProvider.currentTime())
     }
 
     private val operator = mapOf(

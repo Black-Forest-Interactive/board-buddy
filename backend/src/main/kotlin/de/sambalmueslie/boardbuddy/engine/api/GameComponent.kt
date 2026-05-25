@@ -10,4 +10,4 @@ data class Type(val kind: UnitType) : GameComponent
 data class CounterType(val kind: UnitType) : GameComponent
 data class Government(val type: GovernmentType) : GameComponent
 data class Nation(val type: NationType) : GameComponent
-data class Technologies(val types: Set<TechnologyType> = emptySet()) : GameComponent
+data class Technologies(val ids: Set<Long> = emptySet()) : GameComponent

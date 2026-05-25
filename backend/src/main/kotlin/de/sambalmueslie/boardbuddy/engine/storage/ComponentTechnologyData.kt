@@ -1,7 +1,6 @@
 package de.sambalmueslie.boardbuddy.engine.storage
 
 import de.sambalmueslie.boardbuddy.engine.api.Technologies
-import de.sambalmueslie.boardbuddy.engine.api.TechnologyType
 import io.micronaut.data.annotation.MappedProperty
 import io.micronaut.data.model.DataType
 import jakarta.persistence.Entity
@@ -21,7 +20,7 @@ data class ComponentTechnologyData(
     var updated: LocalDateTime? = null
 ) : GameComponentData<Technologies, ComponentTechnologyData> {
 
-    override fun convert() = Technologies(technologies.map { TechnologyType.valueOf(it) }.toSet())
+    override fun convert() = Technologies(technologies.map { it.toLong() }.toSet())
 
     override fun update(value: ComponentTechnologyData): ComponentTechnologyData {
         technologies = value.technologies

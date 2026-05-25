@@ -114,7 +114,7 @@ class WorkflowService(
         return session.participants.map { player ->
             val entities = sessionService.getAssignedEntities(session, player)
             val units = entities.map { engine.getUnit(it) }
-            val technologies = engine.getPlayer(player.entity).technologies
+            val technologies = engine.getPlayer(player.entity).technologies.map { it.id }.toSet()
             WorkflowParticipantInfo(player, units, technologies)
         }
     }

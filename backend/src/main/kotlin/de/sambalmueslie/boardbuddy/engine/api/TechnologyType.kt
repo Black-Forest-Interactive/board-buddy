@@ -1,5 +1,6 @@
 package de.sambalmueslie.boardbuddy.engine.api
 
+@Deprecated("use Technology instead")
 enum class TechnologyType(val tier: Int) {
 
     // Tier I

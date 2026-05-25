@@ -9,6 +9,7 @@ import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetNameValidationFailed
 import de.sambalmueslie.boardbuddy.core.ruleset.db.RuleSetData
 import de.sambalmueslie.boardbuddy.core.ruleset.db.RuleSetRepository
+import de.sambalmueslie.boardbuddy.core.technology.api.Technology
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory
 class RuleSetService(
     private val repository: RuleSetRepository,
     private val unitDefinitionService: RuleSetUnitDefinitionService,
+    private val technologyService: RuleSetTechnologyService,
     eventService: EventService,
     private val timeProvider: TimeProvider
 ) : BaseEntityService<RuleSet, RuleSetChangeRequest, RuleSetData>(repository, eventService, RuleSet::class) {
@@ -50,8 +52,34 @@ class RuleSetService(
         return result
     }
 
+
+    fun assignTechnology(ruleSet: RuleSet, technology: Technology): RuleSet? {
+        return assignTechnology(ruleSet.id, technology)
+    }
+
+    fun assignTechnology(ruleSetId: Long, technology: Technology): RuleSet? {
+        val data = repository.findByIdOrNull(ruleSetId) ?: return null
+        technologyService.assign(data, technology)
+        val result = convert(data)
+        notifyUpdate(result)
+        return result
+    }
+
+    fun revokeTechnology(ruleSet: RuleSet, technology: Technology): RuleSet? {
+        return revokeTechnology(ruleSet.id, technology)
+    }
+
+    fun revokeTechnology(ruleSetId: Long, technology: Technology): RuleSet? {
+        val data = repository.findByIdOrNull(ruleSetId) ?: return null
+        technologyService.revoke(data, technology)
+        val result = convert(data)
+        notifyUpdate(result)
+        return result
+    }
+
+
     override fun convert(data: RuleSetData): RuleSet {
-        return data.convert(unitDefinitionService.getAssignedUnitDefinitions(data))
+        return data.convert(unitDefinitionService.getAssignedUnitDefinitions(data), technologyService.getAssignedTechnologys(data))
     }
 
     override fun createData(request: RuleSetChangeRequest): RuleSetData {
