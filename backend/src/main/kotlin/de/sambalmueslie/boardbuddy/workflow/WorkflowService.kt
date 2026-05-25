@@ -1,14 +1,13 @@
 package de.sambalmueslie.boardbuddy.workflow
 
 import de.sambalmueslie.boardbuddy.core.game.GameService
-import de.sambalmueslie.boardbuddy.core.player.api.Player
+import de.sambalmueslie.boardbuddy.core.nation.api.Nation
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
 import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.engine.api.GameUnit
-import de.sambalmueslie.boardbuddy.engine.api.NationType
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import de.sambalmueslie.boardbuddy.workflow.battle.WorkflowBattleService
 import jakarta.inject.Singleton
@@ -22,6 +21,7 @@ class WorkflowService(
     private val unitService: WorkflowUnitService,
     private val battleService: WorkflowBattleService,
     private val researchService: WorkflowResearchService,
+    private val nationService: WorkflowNationService,
 
     private val sessionService: GameSessionService,
     private val engine: GameEngine
@@ -32,32 +32,24 @@ class WorkflowService(
 
 
     fun create(request: WorkflowCreateRequest): Workflow {
-        val host = playerService.getHost(request.hostId)
+        val host = playerService.createHost(request.hostId, request.nationId)
         val game = gameService.get(request.gameId) ?: throw WorkflowInvalidGame(request.gameId)
         val ruleSet = ruleSetService.get(request.ruleSetId) ?: throw WorkflowInvalidRuleSet(request.ruleSetId)
-        val hostEntity = engine.createPlayer(request.nation)
-        val session = sessionService.create(GameSessionChangeRequest(request.name, host, hostEntity, game, ruleSet))
+        val session = sessionService.create(GameSessionChangeRequest(request.name, host.player, host.entity, game, ruleSet))
 
         return Workflow.create(session, null)
     }
 
     fun join(id: String, request: WorkflowPlayerJoinRequest): Workflow {
         val session = getSession(id)
-        val playerEntity = engine.createPlayer(request.nation)
-        playerService.join(session, request, playerEntity)
+        playerService.join(session, request)
         return get(id)
     }
 
-    fun join(id: String, player: Player, nation: NationType): Workflow {
+    fun assign(id: String, request: WorkflowAssignPlayerRequest): Workflow {
         val session = getSession(id)
-        val playerEntity = engine.createPlayer(nation)
-        playerService.join(session, player, playerEntity)
+        playerService.assign(session, request)
         return get(id)
-    }
-
-    fun assignPlayer(id: String, request: WorkflowAssignPlayerRequest): Workflow {
-        val player = playerService.getHost(request.playerId)
-        return join(id, player, request.nation)
     }
 
     fun createUnit(id: String, request: WorkflowCreateUnitRequest): Workflow {
@@ -100,6 +92,17 @@ class WorkflowService(
         engine
         return Workflow.create(session, battle)
     }
+
+    fun getAvailableNations(id: String): Set<Nation> {
+        val session = getSession(id)
+        return nationService.getAvailableNations(session)
+    }
+
+    fun getTechnologyStatus(id: String, playerId: Long): TechnologyStatus {
+        val session = getSession(id)
+        return researchService.getTechnologyStatus(session, playerId)
+    }
+
 
     private fun getSession(id: String): GameSession {
         return sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)

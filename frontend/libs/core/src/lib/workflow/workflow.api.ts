@@ -4,26 +4,6 @@ import {RuleSet} from '../rule-set/rule-set.api'
 import {UnitType} from '../unit/unit.api'
 import {Technology} from '../technology/technology.api'
 
-export const NationType = {
-  AMERICA: 'AMERICA',
-  CHINA: 'CHINA',
-  EGYPT: 'EGYPT',
-  GERMANY: 'GERMANY',
-  ROME: 'ROME',
-  RUSSIA: 'RUSSIA',
-  ARABS: 'ARABS',
-  GREEKS: 'GREEKS',
-  INDIANS: 'INDIANS',
-  SPANISH: 'SPANISH',
-  AZTECS: 'AZTECS',
-  ENGLISH: 'ENGLISH',
-  FRENCH: 'FRENCH',
-  JAPANESE: 'JAPANESE',
-  MONGOLS: 'MONGOLS',
-  ZULU: 'ZULU',
-} as const
-export type NationType = typeof NationType[keyof typeof NationType]
-
 export const BattleType = {
   ARMY_VS_ARMY: 'ARMY_VS_ARMY',
   ARMY_VS_CITY: 'ARMY_VS_CITY',
@@ -121,10 +101,16 @@ export interface WorkflowParticipantInfo {
   availableTechnologies: Technology[]
 }
 
+export interface TechnologyStatus {
+  researched: Technology[]
+  available: Technology[]
+  blocked: Technology[]
+}
+
 export class WorkflowAssignPlayerRequest {
   constructor(
     public playerId: number,
-    public nation: NationType,
+    public nationId: number,
   ) {}
 }
 
@@ -134,14 +120,14 @@ export class WorkflowCreateRequest {
     public hostId: number,
     public gameId: number,
     public ruleSetId: number,
-    public nation: NationType,
+    public nationId: number,
   ) {}
 }
 
 export class WorkflowPlayerJoinRequest {
   constructor(
     public name: string,
-    public nation: NationType,
+    public nationId: number,
   ) {}
 }
 

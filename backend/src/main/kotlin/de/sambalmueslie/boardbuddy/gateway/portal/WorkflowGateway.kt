@@ -16,6 +16,8 @@ class WorkflowGateway(
     }
 
     fun get(id: String) = service.get(id)
+    fun getAvailableNations(id: String) = service.getAvailableNations(id)
+    fun getTechnologyStatus(id: String, playerId: Long) = service.getTechnologyStatus(id, playerId)
     fun create(request: WorkflowCreateRequest) = service.create(request)
     fun join(id: String, request: WorkflowPlayerJoinRequest) = service.join(id, request)
     fun createUnit(id: String, request: WorkflowCreateUnitRequest) = service.createUnit(id, request)

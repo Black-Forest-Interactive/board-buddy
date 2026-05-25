@@ -1,5 +1,6 @@
 package de.sambalmueslie.boardbuddy.engine
 
+import de.sambalmueslie.boardbuddy.core.nation.api.Nation
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.core.technology.api.Technology
@@ -9,6 +10,7 @@ import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
 import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import de.sambalmueslie.boardbuddy.engine.system.*
 import de.sambalmueslie.boardbuddy.workflow.api.BattleType
+import de.sambalmueslie.boardbuddy.workflow.api.TechnologyStatus
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
@@ -35,7 +37,7 @@ class GameEngine(
     private val levelModel = componentModelService.get(Level::class)
     private val typeModel = componentModelService.get(Type::class)
     private val counterTypeModel = componentModelService.get(CounterType::class)
-    private val nationModel = componentModelService.get(Nation::class)
+    private val nationModel = componentModelService.get(NationReference::class)
     private val governmentModel = componentModelService.get(Government::class)
     private val technologyModel = componentModelService.get(Technologies::class)
 
@@ -78,7 +80,7 @@ class GameEngine(
         return entity
     }
 
-    fun createPlayer(nation: NationType): GameEntity {
+    fun createPlayer(nation: Nation): GameEntity {
         val entity = createPlayerSystem.create(nation)
         componentModelService.persist(entity)
         return entity
@@ -93,6 +95,10 @@ class GameEngine(
         unitUpgradeSystem.handleResearch(session, player, changedTechnologies)
         componentModelService.persist(player.entity)
         return changedTechnologies
+    }
+
+    fun getTechnologyStatus(player: GameSessionPlayer, technologies: List<Technology>): TechnologyStatus {
+        return researchSystem.getTechnologyStatus(player.entity, technologies)
     }
 
     fun determineStartPlayer(attacker: GameSessionPlayer, defender: GameSessionPlayer, type: BattleType, isWalled: Boolean): GameSessionPlayer {

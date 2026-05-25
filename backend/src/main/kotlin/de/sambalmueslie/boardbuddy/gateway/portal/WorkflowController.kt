@@ -11,6 +11,12 @@ class WorkflowController(private val gateway: WorkflowGateway) {
     @Get("{id}")
     fun get(id: String) = gateway.get(id)
 
+    @Get("{id}/nations")
+    fun getAvailableNations(id: String) = gateway.getAvailableNations(id)
+
+    @Get("{id}/technology-status")
+    fun getTechnologyStatus(@CookieValue("player-id") playerId: Long, id: String) = gateway.getTechnologyStatus(id, playerId)
+
     @Post
     fun create(@Body request: WorkflowCreateRequest) = gateway.create(request)
 

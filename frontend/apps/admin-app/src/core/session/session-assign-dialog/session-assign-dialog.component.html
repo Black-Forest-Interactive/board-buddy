@@ -5,8 +5,8 @@
     <mat-form-field class="w-full">
       <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
       <mat-select [value]="selectedNation()" (selectionChange)="selectedNation.set($event.value)">
-        @for (n of nations; track n) {
-          <mat-option [value]="n">{{ 'session.nation.' + n | translate }}</mat-option>
+        @for (n of nations(); track n.id) {
+          <mat-option [value]="n.id">{{ n.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

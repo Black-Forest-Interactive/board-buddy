@@ -1,7 +1,5 @@
-import {NationType} from '@board-buddy/core'
-
 export class PortalJoinSessionRequest {
-  constructor(public nation: NationType) {}
+  constructor(public nationId: number) {}
 }
 
 export class PortalCreateSessionRequest {
@@ -9,6 +7,6 @@ export class PortalCreateSessionRequest {
     public name: string,
     public gameId: number,
     public ruleSetId: number,
-    public nation: NationType,
+    public nationId: number,
   ) {}
 }

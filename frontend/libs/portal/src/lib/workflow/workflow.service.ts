@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core'
 import {Observable} from 'rxjs'
 import {BaseService} from '@board-buddy/shared'
-import {Workflow, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowBattleStartRequest, WorkflowCreateUnitRequest, WorkflowResearchRequest} from '@board-buddy/core'
+import {Nation, TechnologyStatus, Workflow, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowBattleStartRequest, WorkflowCreateUnitRequest, WorkflowResearchRequest} from '@board-buddy/core'
 import {PortalBattle, PortalParticipantInfo} from './workflow.api'
 
 @Injectable({providedIn: 'root'})
@@ -10,6 +10,14 @@ export class PortalWorkflowService extends BaseService {
 
   getWorkflow(key: string): Observable<Workflow> {
     return this.get<Workflow>(key)
+  }
+
+  getAvailableNations(key: string): Observable<Nation[]> {
+    return this.getAll<Nation>(`${key}/nations`)
+  }
+
+  getTechnologyStatus(key: string): Observable<TechnologyStatus> {
+    return this.get<TechnologyStatus>(`${key}/technology-status`)
   }
 
   getMyInfo(key: string): Observable<PortalParticipantInfo> {

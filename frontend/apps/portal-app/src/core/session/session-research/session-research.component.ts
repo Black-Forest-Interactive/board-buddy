@@ -10,7 +10,7 @@ import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {Technology, WorkflowResearchRequest} from '@board-buddy/core'
-import {PlayerService, PortalWorkflowService} from '@board-buddy/portal'
+import {PortalWorkflowService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 const TIERS = [1, 2, 3, 4, 5]
@@ -22,7 +22,6 @@ const TIERS = [1, 2, 3, 4, 5]
 })
 export class SessionResearchComponent {
   private workflowService = inject(PortalWorkflowService)
-  private playerService = inject(PlayerService)
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)
   private route = inject(ActivatedRoute)
@@ -34,9 +33,22 @@ export class SessionResearchComponent {
     loader: (p) => p.params ? toPromise(this.workflowService.getMyInfo(p.params), p.abortSignal) : Promise.resolve(undefined)
   })
 
+  private technologyStatusResource = resource({
+    params: this.sessionKey,
+    loader: (p) => p.params ? toPromise(this.workflowService.getTechnologyStatus(p.params), p.abortSignal) : Promise.resolve(undefined)
+  })
+
   private myInfo = computed(() => this.myInfoResource.value())
-  private allTechs = computed(() => this.myInfo()?.availableTechnologies ?? [])
-  private discoveredIds = computed(() => new Set((this.myInfo()?.technologies ?? []).map(t => t.id)))
+  private technologyStatus = computed(() => this.technologyStatusResource.value())
+
+  private allTechs = computed(() => {
+    const status = this.technologyStatus()
+    if (!status) return []
+    return [...status.researched, ...status.available, ...status.blocked]
+  })
+
+  private researchedIds = computed(() => new Set((this.technologyStatus()?.researched ?? []).map(t => t.id)))
+  private availableIds = computed(() => new Set((this.technologyStatus()?.available ?? []).map(t => t.id)))
 
   readonly tiers = TIERS
   readonly techsByTier = computed(() => TIERS.reduce((acc, tier) => {
@@ -44,24 +56,8 @@ export class SessionResearchComponent {
     return acc
   }, {} as Record<number, Technology[]>))
 
-  readonly researchable = computed(() => {
-    const disc = this.discoveredIds()
-    const result = new Set<number>()
-    for (const tech of this.allTechs()) {
-      if (!disc.has(tech.id) && this.canResearch(tech, disc)) result.add(tech.id)
-    }
-    return result
-  })
-
-  private canResearch(tech: Technology, disc: Set<number>): boolean {
-    if (tech.tier === 1) return true
-    const prevCount = this.allTechs().filter(t => t.tier === tech.tier - 1 && disc.has(t.id)).length
-    const sameCount = this.allTechs().filter(t => t.tier === tech.tier && disc.has(t.id)).length
-    return sameCount < prevCount - 1
-  }
-
-  isDiscovered(tech: Technology): boolean { return this.discoveredIds().has(tech.id) }
-  isResearchable(tech: Technology): boolean { return this.researchable().has(tech.id) }
+  isDiscovered(tech: Technology): boolean { return this.researchedIds().has(tech.id) }
+  isResearchable(tech: Technology): boolean { return this.availableIds().has(tech.id) }
 
   research(tech: Technology) {
     const key = this.sessionKey()
@@ -71,6 +67,7 @@ export class SessionResearchComponent {
       next: () => {
         this.translate.get('session.message.technologyResearched').subscribe(t => this.toast.success(t))
         this.myInfoResource.reload()
+        this.technologyStatusResource.reload()
       },
       error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
     })

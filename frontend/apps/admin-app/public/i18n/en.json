@@ -41,7 +41,8 @@
       "game": "Manage games",
       "player": "Manage players",
       "session": "Manage game sessions",
-      "technology": "Manage technologies"
+      "technology": "Manage technologies",
+      "nation": "Manage nations"
     }
   },
   "game": {
@@ -400,6 +401,10 @@
       "assignTechnology": {
         "title": "Assign Technology",
         "empty": "No technologies available"
+      },
+      "assignNation": {
+        "title": "Assign Nation",
+        "empty": "No nations available"
       }
     },
     "message": {
@@ -410,11 +415,78 @@
       "unitAssigned": "Unit assigned",
       "unitRevoked": "Assignment revoked",
       "technologyAssigned": "Technology assigned",
-      "technologyRevoked": "Assignment revoked"
+      "technologyRevoked": "Assignment revoked",
+      "nationAssigned": "Nation assigned",
+      "nationRevoked": "Assignment revoked"
     },
     "assignUnit": "Assign Unit",
     "revokeUnit": "Revoke Assignment",
     "assignTechnology": "Assign Technology",
-    "revokeTechnology": "Revoke Assignment"
+    "revokeTechnology": "Revoke Assignment",
+    "assignNation": "Assign Nation",
+    "revokeNation": "Revoke Assignment"
+  },
+  "government": {
+    "type": {
+      "DESPOTISM": "Despotism",
+      "ANARCHY": "Anarchy",
+      "REPUBLIC": "Republic",
+      "FEUDALISM": "Feudalism",
+      "COMMUNISM": "Communism",
+      "FUNDAMENTALISM": "Fundamentalism",
+      "DEMOCRACY": "Democracy"
+    }
+  },
+  "nation": {
+    "title": "Nations",
+    "create": "New Nation",
+    "table": {
+      "name": "Name",
+      "description": "Description"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Description",
+      "imageUrl": "Image URL",
+      "error": {
+        "name": "Name required",
+        "description": "Description required"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Create Nation"
+      },
+      "edit": {
+        "title": "Edit Nation"
+      }
+    },
+    "message": {
+      "created": "Nation created",
+      "updated": "Nation updated",
+      "deleted": "Nation deleted",
+      "error": "An error occurred"
+    },
+    "effect": {
+      "title": "Effects",
+      "add": "Add Effect",
+      "table": {
+        "governmentType": "Initial Government"
+      },
+      "form": {
+        "governmentType": "Government Type",
+        "error": {
+          "type": "Government type required"
+        }
+      },
+      "dialog": {
+        "title": "Add Effect"
+      },
+      "message": {
+        "added": "Effect added",
+        "removed": "Effect removed",
+        "error": "An error occurred"
+      }
+    }
   }
 }

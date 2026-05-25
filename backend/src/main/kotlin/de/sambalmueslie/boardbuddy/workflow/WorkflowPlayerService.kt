@@ -1,11 +1,13 @@
 package de.sambalmueslie.boardbuddy.workflow
 
+import de.sambalmueslie.boardbuddy.core.nation.api.Nation
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
-import de.sambalmueslie.boardbuddy.engine.api.GameEntity
+import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
+import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -13,14 +15,19 @@ import org.slf4j.LoggerFactory
 @Singleton
 class WorkflowPlayerService(
     private val playerService: PlayerService,
-    private val sessionService: GameSessionService
+    private val sessionService: GameSessionService,
+    private val nationService: WorkflowNationService,
+    private val engine: GameEngine
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(WorkflowPlayerService::class.java)
     }
 
-    fun getHost(hostId: Long): Player {
-        return playerService.get(hostId) ?: throw WorkflowInvalidHost(hostId)
+    fun createHost(hostId: Long, nationId: Long): GameSessionPlayer {
+        val player = playerService.get(hostId) ?: throw WorkflowInvalidHost(hostId)
+        val nation = nationService.getNation(nationId) ?: throw WorkflowInvalidHost(hostId)
+        val entity = engine.createPlayer(nation)
+        return GameSessionPlayer(player, entity)
     }
 
     fun get(session: GameSession, playerId: Long): Player {
@@ -29,16 +36,26 @@ class WorkflowPlayerService(
         return player
     }
 
-    fun join(session: GameSession, request: WorkflowPlayerJoinRequest, playerEntity: GameEntity): Player {
+    fun join(session: GameSession, request: WorkflowPlayerJoinRequest): GameSessionPlayer {
         if (session.participants.any { it.player.name == request.name }) throw WorkflowPlayerJoinError()
         val player = playerService.create(PlayerChangeRequest(request.name))
-        sessionService.assignPlayer(session, player, playerEntity)
-        return player
+        return assign(session, player, request.nationId)
     }
 
-    fun join(session: GameSession, player: Player, playerEntity: GameEntity): Player {
+    fun assign(session: GameSession, request: WorkflowAssignPlayerRequest): GameSessionPlayer {
+        val player = playerService.get(request.playerId) ?: throw WorkflowPlayerJoinError()
+        return assign(session, player, request.nationId)
+    }
+
+    private fun assign(session: GameSession, player: Player, nationId: Long): GameSessionPlayer {
+        val nation = nationService.getAvailableNations(session).find { it.id == nationId } ?: throw WorkflowPlayerJoinError()
+        return assign(session, player, nation)
+    }
+
+    private fun assign(session: GameSession, player: Player, nation: Nation): GameSessionPlayer {
         if (session.participants.any { it.player.id == player.id }) throw WorkflowPlayerJoinError()
+        val playerEntity = engine.createPlayer(nation)
         sessionService.assignPlayer(session, player, playerEntity)
-        return player
+        return GameSessionPlayer(player, playerEntity)
     }
 }

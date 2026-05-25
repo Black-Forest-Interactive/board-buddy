@@ -1,5 +1,7 @@
 package de.sambalmueslie.boardbuddy.engine.system
 
+import de.sambalmueslie.boardbuddy.core.nation.api.Nation
+import de.sambalmueslie.boardbuddy.core.nation.api.NationEffect
 import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
 import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
@@ -10,24 +12,21 @@ class CreatePlayerSystem(
     private val model: GameEntityStorage,
     componentModelService: GameComponentModelService,
 ) : GameSystem {
-    private val nationModel = componentModelService.get(Nation::class)
+    private val nationModel = componentModelService.get(NationReference::class)
     private val governmentModel = componentModelService.get(Government::class)
 
-    fun create(nation: NationType): GameEntity {
+    fun create(nation: Nation): GameEntity {
         val entity = model.create(GameEntityType.PLAYER)
 
-        val nation = nationModel.create(entity) { Nation(nation) }
+        nationModel.create(entity) { NationReference(nation.id) }
         governmentModel.create(entity) { Government(getStartingGovernment(nation)) }
 
         return entity
     }
 
     private fun getStartingGovernment(nation: Nation): GovernmentType {
-        return when (nation.type) {
-            NationType.ROME -> GovernmentType.REPUBLIC
-            NationType.RUSSIA -> GovernmentType.COMMUNISM
-            NationType.JAPANESE -> GovernmentType.FUNDAMENTALISM
-            else -> GovernmentType.DESPOTISM
-        }
+        return nation.effect
+            .filterIsInstance<NationEffect.InitialGovernment>()
+            .firstOrNull()?.type ?: GovernmentType.DESPOTISM
     }
 }

@@ -42,6 +42,30 @@ CREATE TABLE technology_effect_unit_unlock
     updated       TIMESTAMP WITHOUT TIME ZONE
 );
 
+-- nation
+CREATE SEQUENCE nation_seq;
+CREATE TABLE nation
+(
+    id          BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('nation_seq'::regclass),
+    name        VARCHAR(255) NOT NULL,
+    description TEXT         NOT NULL,
+    image_url   VARCHAR(255) NOT NULL,
+
+    created     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated     TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE SEQUENCE nation_effect_initial_government_seq;
+CREATE TABLE nation_effect_initial_government
+(
+    id        BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('nation_effect_initial_government_seq'::regclass),
+    nation_id BIGINT       NOT NULL REFERENCES nation (id),
+    type      VARCHAR(255) NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
 -- rule set
 CREATE SEQUENCE rule_set_seq;
 CREATE TABLE rule_set
@@ -66,6 +90,14 @@ CREATE TABLE rule_set_technology
     technology_id BIGINT REFERENCES technology (id),
     PRIMARY KEY (rule_set_id, technology_id)
 );
+
+CREATE TABLE rule_set_nation
+(
+    rule_set_id   BIGINT REFERENCES rule_set (id),
+    nation_id BIGINT REFERENCES nation (id),
+    PRIMARY KEY (rule_set_id, nation_id)
+);
+
 
 -- game
 CREATE SEQUENCE game_seq;
@@ -174,9 +206,9 @@ CREATE TABLE component_government
 
 CREATE TABLE component_nation
 (
-    entity_id BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
+    entity_id BIGINT NOT NULL PRIMARY KEY references game_entity (id),
 
-    type      VARCHAR(50) NOT NULL,
+    nation_id BIGINT NOT NULL REFERENCES nation (id),
 
     created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated   TIMESTAMP WITHOUT TIME ZONE

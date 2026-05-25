@@ -97,9 +97,9 @@ dependencies {
 
     // test
     testImplementation("io.micronaut:micronaut-http-client")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:postgresql")
-    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:testcontainers:2.0.5")
+    testImplementation("org.testcontainers:testcontainers-jdbc:2.0.5")
+    testImplementation("org.testcontainers:testcontainers-postgresql:2.0.5")
     testImplementation("org.opensearch:opensearch-testcontainers:4.1.0")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testImplementation("io.fusionauth:fusionauth-jwt:6.0.0")

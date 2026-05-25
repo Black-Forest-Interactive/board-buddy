@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>{{ 'nation.effect.dialog.title' | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2 min-w-[360px]">
+
+    <mat-form-field>
+      <mat-label>{{ 'nation.effect.form.governmentType' | translate }}</mat-label>
+      <mat-select formControlName="type">
+        @for (type of governmentTypes; track type) {
+          <mat-option [value]="type">{{ 'government.type.' + type | translate }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.type.hasError('required')) {
+        <mat-error>{{ 'nation.effect.form.error.type' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">{{ 'action.save' | translate }}</button>
+</mat-dialog-actions>

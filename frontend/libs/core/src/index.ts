@@ -1,3 +1,4 @@
+export * from './lib/nation/nation.api'
 export * from './lib/game/game.api'
 export * from './lib/technology/technology.api'
 export * from './lib/player/player.api'

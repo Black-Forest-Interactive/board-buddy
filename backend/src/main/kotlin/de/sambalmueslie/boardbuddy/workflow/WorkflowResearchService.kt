@@ -5,6 +5,7 @@ import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.core.technology.TechnologyService
 import de.sambalmueslie.boardbuddy.engine.GameEngine
+import de.sambalmueslie.boardbuddy.workflow.api.TechnologyStatus
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowInvalidPlayer
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowResearchRequest
 import jakarta.inject.Singleton
@@ -27,5 +28,12 @@ class WorkflowResearchService(
         val player = playerService.get(playerId) ?: throw WorkflowInvalidPlayer(playerId)
         val participant = session.participants.find { it.player.id == player.id } ?: throw WorkflowInvalidPlayer(player.id)
         return participant
+    }
+
+
+    fun getTechnologyStatus(session: GameSession, playerId: Long): TechnologyStatus {
+        val player = getAndValidatePlayer(session, playerId)
+        val technologies = session.ruleSet.technologies
+        return engine.getTechnologyStatus(player, technologies)
     }
 }

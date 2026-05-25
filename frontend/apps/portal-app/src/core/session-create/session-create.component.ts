@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {Component, computed, effect, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {Router} from '@angular/router'
@@ -10,7 +10,7 @@ import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {NationType, RuleSet} from '@board-buddy/core'
+import {Nation, RuleSet} from '@board-buddy/core'
 import {PlayerService, PortalCreateSessionRequest, PortalSessionService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
@@ -29,29 +29,55 @@ export class SessionCreateComponent {
   private gamesResource = resource({loader: (p) => toPromise(this.sessionService.getGames(), p.abortSignal)})
 
   readonly games = computed(() => this.gamesResource.value() ?? [])
-  readonly nations = Object.values(NationType)
 
   readonly form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
     gameId: new FormControl<number | null>(null, Validators.required),
-    ruleSetId: new FormControl<number | null>(null, Validators.required),
-    nation: new FormControl<NationType | null>(null, Validators.required),
+    ruleSetId: new FormControl<number | null>({value: null, disabled: true}, Validators.required),
+    nationId: new FormControl<number | null>({value: null, disabled: true}, Validators.required),
   })
 
   private selectedGameId = toSignal(this.form.controls.gameId.valueChanges, {initialValue: null})
+  private selectedRuleSetId = toSignal(this.form.controls.ruleSetId.valueChanges, {initialValue: null})
 
   readonly ruleSets = computed<RuleSet[]>(() => {
     const id = this.selectedGameId()
-    const game = this.games().find(g => g.id === id)
-    return game?.ruleSets ?? []
+    return this.games().find(g => g.id === id)?.ruleSets ?? []
   })
+
+  readonly nations = computed<Nation[]>(() => {
+    const id = this.selectedRuleSetId()
+    return this.ruleSets().find(rs => rs.id === id)?.nations ?? []
+  })
+
+  constructor() {
+    effect(() => {
+      const ruleSets = this.ruleSets()
+      this.form.controls.ruleSetId.reset(null)
+      if (ruleSets.length > 0) {
+        this.form.controls.ruleSetId.enable()
+      } else {
+        this.form.controls.ruleSetId.disable()
+      }
+    })
+
+    effect(() => {
+      const nations = this.nations()
+      this.form.controls.nationId.reset(null)
+      if (nations.length > 0) {
+        this.form.controls.nationId.enable()
+      } else {
+        this.form.controls.nationId.disable()
+      }
+    })
+  }
 
   submit() {
     if (this.form.invalid) return
-    const v = this.form.value
+    const v = this.form.getRawValue()
     const playerId = this.playerService.getPlayerId()
     if (!playerId) { this.router.navigate(['/register']); return }
-    const request = new PortalCreateSessionRequest(v.name!, v.gameId!, v.ruleSetId!, v.nation!)
+    const request = new PortalCreateSessionRequest(v.name!, v.gameId!, v.ruleSetId!, v.nationId!)
     this.sessionService.createSession(request).subscribe({
       next: (workflow) => this.router.navigate(['/session', workflow.id]),
       error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))

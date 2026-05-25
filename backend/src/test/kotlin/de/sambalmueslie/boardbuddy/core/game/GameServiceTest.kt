@@ -16,10 +16,8 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest()
-@Testcontainers
 class GameServiceTest {
 
     @Inject

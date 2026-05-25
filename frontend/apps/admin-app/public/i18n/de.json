@@ -41,7 +41,8 @@
       "game": "Spiele verwalten",
       "player": "Spieler verwalten",
       "session": "Spielsitzungen verwalten",
-      "technology": "Technologien verwalten"
+      "technology": "Technologien verwalten",
+      "nation": "Nationen verwalten"
     }
   },
   "game": {
@@ -400,6 +401,10 @@
       "assignTechnology": {
         "title": "Technologie zuweisen",
         "empty": "Keine Technologien verfügbar"
+      },
+      "assignNation": {
+        "title": "Nation zuweisen",
+        "empty": "Keine Nationen verfügbar"
       }
     },
     "message": {
@@ -410,11 +415,78 @@
       "unitAssigned": "Einheit zugewiesen",
       "unitRevoked": "Zuweisung aufgehoben",
       "technologyAssigned": "Technologie zugewiesen",
-      "technologyRevoked": "Zuweisung aufgehoben"
+      "technologyRevoked": "Zuweisung aufgehoben",
+      "nationAssigned": "Nation zugewiesen",
+      "nationRevoked": "Zuweisung aufgehoben"
     },
     "assignUnit": "Einheit zuweisen",
     "revokeUnit": "Zuweisung aufheben",
     "assignTechnology": "Technologie zuweisen",
-    "revokeTechnology": "Zuweisung aufheben"
+    "revokeTechnology": "Zuweisung aufheben",
+    "assignNation": "Nation zuweisen",
+    "revokeNation": "Zuweisung aufheben"
+  },
+  "government": {
+    "type": {
+      "DESPOTISM": "Despotismus",
+      "ANARCHY": "Anarchie",
+      "REPUBLIC": "Republik",
+      "FEUDALISM": "Feudalismus",
+      "COMMUNISM": "Kommunismus",
+      "FUNDAMENTALISM": "Fundamentalismus",
+      "DEMOCRACY": "Demokratie"
+    }
+  },
+  "nation": {
+    "title": "Nationen",
+    "create": "Neue Nation",
+    "table": {
+      "name": "Name",
+      "description": "Beschreibung"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "imageUrl": "Bild-URL",
+      "error": {
+        "name": "Name erforderlich",
+        "description": "Beschreibung erforderlich"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Nation erstellen"
+      },
+      "edit": {
+        "title": "Nation bearbeiten"
+      }
+    },
+    "message": {
+      "created": "Nation erstellt",
+      "updated": "Nation aktualisiert",
+      "deleted": "Nation gelöscht",
+      "error": "Ein Fehler ist aufgetreten"
+    },
+    "effect": {
+      "title": "Effekte",
+      "add": "Effekt hinzufügen",
+      "table": {
+        "governmentType": "Startregierung"
+      },
+      "form": {
+        "governmentType": "Regierungsform",
+        "error": {
+          "type": "Regierungsform erforderlich"
+        }
+      },
+      "dialog": {
+        "title": "Effekt hinzufügen"
+      },
+      "message": {
+        "added": "Effekt hinzugefügt",
+        "removed": "Effekt entfernt",
+        "error": "Ein Fehler ist aufgetreten"
+      }
+    }
   }
 }

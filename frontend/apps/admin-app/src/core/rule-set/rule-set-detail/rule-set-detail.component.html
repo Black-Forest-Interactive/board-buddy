@@ -1,10 +1,9 @@
 <ui-main-content [title]="name()">
 
-  <div class="flex flex-col gap-8">
+  <mat-tab-group>
 
-    <div>
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-base font-semibold">{{ 'unit-definition.title' | translate }}</h3>
+    <mat-tab [label]="'unit-definition.title' | translate">
+      <div class="flex justify-end py-3">
         <button matButton (click)="openAssignUnit()">
           <mat-icon>add</mat-icon>
           {{ 'rule-set.assignUnit' | translate }}
@@ -46,11 +45,10 @@
         <mat-row *matRowDef="let row; columns: unitColumns"></mat-row>
 
       </mat-table>
-    </div>
+    </mat-tab>
 
-    <div>
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-base font-semibold">{{ 'technology.title' | translate }}</h3>
+    <mat-tab [label]="'technology.title' | translate">
+      <div class="flex justify-end py-3">
         <button matButton (click)="openAssignTechnology()">
           <mat-icon>add</mat-icon>
           {{ 'rule-set.assignTechnology' | translate }}
@@ -87,8 +85,43 @@
         <mat-row *matRowDef="let row; columns: technologyColumns"></mat-row>
 
       </mat-table>
-    </div>
+    </mat-tab>
 
-  </div>
+    <mat-tab [label]="'nation.title' | translate">
+      <div class="flex justify-end py-3">
+        <button matButton (click)="openAssignNation()">
+          <mat-icon>add</mat-icon>
+          {{ 'rule-set.assignNation' | translate }}
+        </button>
+      </div>
+
+      <mat-table [dataSource]="nations()">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>{{ 'nation.table.name' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef>{{ 'nation.table.description' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.description }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button matIconButton (click)="revokeNation(row)" [matTooltip]="'rule-set.revokeNation' | translate">
+              <mat-icon>link_off</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="nationColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: nationColumns"></mat-row>
+
+      </mat-table>
+    </mat-tab>
+
+  </mat-tab-group>
 
 </ui-main-content>

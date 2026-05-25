@@ -10,10 +10,8 @@ import io.mockk.*
 import jakarta.inject.Inject
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest
-@Testcontainers
 class UnitDefinitionServiceTest {
     @Inject
     lateinit var service: UnitDefinitionService

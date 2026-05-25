@@ -24,8 +24,8 @@ class TechnologyGateway(
     fun delete(id: Long) = service.delete(id)
 
     fun assignUnitUnlock(id: Long, request: TechnologyEffectUnitUnlockRequest) =
-        service.assignTechnology(id, TechnologyEffect.UnitUnlock(request.unitType, request.unitLevel))
+        service.assignTechnologyEffect(id, TechnologyEffect.UnitUnlock(request.unitType, request.unitLevel))
 
     fun revokeUnitUnlock(id: Long, unitType: UnitType, unitLevel: Int) =
-        service.revokeTechnology(id, TechnologyEffect.UnitUnlock(unitType, unitLevel))
+        service.revokeTechnologyEffect(id, TechnologyEffect.UnitUnlock(unitType, unitLevel))
 }

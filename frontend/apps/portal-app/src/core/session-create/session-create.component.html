@@ -25,7 +25,7 @@
 
       <mat-form-field class="w-full">
         <mat-label>{{ 'session.form.ruleSet' | translate }}</mat-label>
-        <mat-select [formControl]="form.controls.ruleSetId" [disabled]="ruleSets().length === 0">
+        <mat-select [formControl]="form.controls.ruleSetId">
           @for (rs of ruleSets(); track rs.id) {
             <mat-option [value]="rs.id">{{ rs.name }}</mat-option>
           }
@@ -34,9 +34,9 @@
 
       <mat-form-field class="w-full">
         <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
-        <mat-select [formControl]="form.controls.nation">
-          @for (nation of nations; track nation) {
-            <mat-option [value]="nation">{{ 'nation.' + nation | translate }}</mat-option>
+        <mat-select [formControl]="form.controls.nationId">
+          @for (nation of nations(); track nation.id) {
+            <mat-option [value]="nation.id">{{ nation.name }}</mat-option>
           }
         </mat-select>
       </mat-form-field>

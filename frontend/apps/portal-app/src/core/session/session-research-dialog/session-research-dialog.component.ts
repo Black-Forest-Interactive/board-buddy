@@ -1,4 +1,4 @@
-import {Component, computed, inject, signal} from '@angular/core'
+import {Component, computed, inject, resource} from '@angular/core'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
@@ -8,6 +8,7 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {PortalWorkflowService, PortalParticipantInfo} from '@board-buddy/portal'
 import {Technology, WorkflowResearchRequest} from '@board-buddy/core'
+import {toPromise} from '@board-buddy/shared'
 
 const TIERS = [1, 2, 3, 4, 5]
 
@@ -24,39 +25,31 @@ export class SessionResearchDialogComponent {
 
   readonly data: {sessionKey: string, participantInfo: PortalParticipantInfo} = inject(MAT_DIALOG_DATA)
 
+  private technologyStatusResource = resource({
+    loader: () => toPromise(this.workflowService.getTechnologyStatus(this.data.sessionKey))
+  })
+
+  private technologyStatus = computed(() => this.technologyStatusResource.value())
+
+  private allTechs = computed(() => {
+    const status = this.technologyStatus()
+    if (!status) return []
+    return [...status.researched, ...status.available, ...status.blocked]
+  })
+
+  private researchedIds = computed(() => new Set((this.technologyStatus()?.researched ?? []).map(t => t.id)))
+  private availableIds = computed(() => new Set((this.technologyStatus()?.available ?? []).map(t => t.id)))
+
   readonly tiers = TIERS
-
-  private discoveredIds = computed(() => new Set(this.data.participantInfo.technologies.map(t => t.id)))
-
   readonly techsByTier = computed(() =>
     TIERS.reduce((acc, tier) => {
-      acc[tier] = this.data.participantInfo.availableTechnologies.filter(t => t.tier === tier)
+      acc[tier] = this.allTechs().filter(t => t.tier === tier)
       return acc
     }, {} as Record<number, Technology[]>)
   )
 
-  readonly researchable = signal<Set<number>>(new Set())
-
-  constructor() {
-    const disc = this.discoveredIds()
-    const available = this.data.participantInfo.availableTechnologies
-    const researchable = new Set<number>()
-    for (const tech of available) {
-      if (!disc.has(tech.id) && this.canResearch(tech, disc)) researchable.add(tech.id)
-    }
-    this.researchable.set(researchable)
-  }
-
-  private canResearch(tech: Technology, disc: Set<number>): boolean {
-    if (tech.tier === 1) return true
-    const available = this.data.participantInfo.availableTechnologies
-    const prevTierCount = available.filter(t => t.tier === tech.tier - 1 && disc.has(t.id)).length
-    const sameTierCount = available.filter(t => t.tier === tech.tier && disc.has(t.id)).length
-    return sameTierCount < prevTierCount - 1
-  }
-
-  isDiscovered(tech: Technology): boolean { return this.discoveredIds().has(tech.id) }
-  isResearchable(tech: Technology): boolean { return this.researchable().has(tech.id) }
+  isDiscovered(tech: Technology): boolean { return this.researchedIds().has(tech.id) }
+  isResearchable(tech: Technology): boolean { return this.availableIds().has(tech.id) }
 
   research(tech: Technology) {
     const request = new WorkflowResearchRequest(this.data.participantInfo.player.player.id, tech.id)

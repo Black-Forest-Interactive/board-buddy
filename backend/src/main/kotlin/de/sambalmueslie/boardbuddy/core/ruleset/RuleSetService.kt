@@ -4,6 +4,7 @@ import de.sambalmueslie.boardbuddy.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.common.findByIdOrNull
 import de.sambalmueslie.boardbuddy.core.event.EventService
+import de.sambalmueslie.boardbuddy.core.nation.api.Nation
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetNameValidationFailed
@@ -19,6 +20,7 @@ class RuleSetService(
     private val repository: RuleSetRepository,
     private val unitDefinitionService: RuleSetUnitDefinitionService,
     private val technologyService: RuleSetTechnologyService,
+    private val nationService: RuleSetNationService,
     eventService: EventService,
     private val timeProvider: TimeProvider
 ) : BaseEntityService<RuleSet, RuleSetChangeRequest, RuleSetData>(repository, eventService, RuleSet::class) {
@@ -78,8 +80,37 @@ class RuleSetService(
     }
 
 
+    fun assignNation(ruleSet: RuleSet, nation: Nation): RuleSet? {
+        return assignNation(ruleSet.id, nation)
+    }
+
+    fun assignNation(ruleSetId: Long, nation: Nation): RuleSet? {
+        val data = repository.findByIdOrNull(ruleSetId) ?: return null
+        nationService.assign(data, nation)
+        val result = convert(data)
+        notifyUpdate(result)
+        return result
+    }
+
+    fun revokeNation(ruleSet: RuleSet, nation: Nation): RuleSet? {
+        return revokeNation(ruleSet.id, nation)
+    }
+
+    fun revokeNation(ruleSetId: Long, nation: Nation): RuleSet? {
+        val data = repository.findByIdOrNull(ruleSetId) ?: return null
+        nationService.revoke(data, nation)
+        val result = convert(data)
+        notifyUpdate(result)
+        return result
+    }
+
+
     override fun convert(data: RuleSetData): RuleSet {
-        return data.convert(unitDefinitionService.getAssignedUnitDefinitions(data), technologyService.getAssignedTechnologys(data))
+        return data.convert(
+            unitDefinitionService.getAssignedUnitDefinitions(data),
+            technologyService.getAssignedTechnologys(data),
+            nationService.getAssignedNations(data)
+        )
     }
 
     override fun createData(request: RuleSetChangeRequest): RuleSetData {

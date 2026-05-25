@@ -11,8 +11,9 @@ import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
+import de.sambalmueslie.boardbuddy.core.nation.NationService
+import de.sambalmueslie.boardbuddy.core.nation.api.NationChangeRequest
 import de.sambalmueslie.boardbuddy.engine.GameEngine
-import de.sambalmueslie.boardbuddy.engine.api.NationType
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.Runs
 import io.mockk.every
@@ -23,10 +24,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest()
-@Testcontainers
 class GameSessionServiceTest {
     @Inject
     lateinit var service: GameSessionService
@@ -42,6 +41,9 @@ class GameSessionServiceTest {
 
     @Inject
     lateinit var eventService: EventService
+
+    @Inject
+    lateinit var nationService: NationService
 
     @Inject
     lateinit var engine: GameEngine
@@ -66,6 +68,7 @@ class GameSessionServiceTest {
         gameService.deleteAll()
         playerService.deleteAll()
         ruleSetService.deleteAll()
+        nationService.deleteAll()
     }
 
     @Test
@@ -76,14 +79,16 @@ class GameSessionServiceTest {
 
         val host = playerService.create(PlayerChangeRequest("host"))
         val player = playerService.create(PlayerChangeRequest("player"))
-        val hostEntity = engine.createPlayer(NationType.GERMANY)
+        val hostNation = nationService.create(NationChangeRequest("host-nation", "desc", ""))
+        val hostEntity = engine.createPlayer(hostNation)
 
         val request = GameSessionChangeRequest("session", host, hostEntity, game, ruleSet)
         var response = service.create(request)
         var reference = GameSession(response.id, response.key, request.name, request.host, listOf(GameSessionPlayer(host, hostEntity)), request.game, request.ruleSet, response.timestamp)
         assertEquals(reference, response)
 
-        val playerEntity = engine.createPlayer(NationType.ARABS)
+        val playerNation = nationService.create(NationChangeRequest("player-nation", "desc", ""))
+        val playerEntity = engine.createPlayer(playerNation)
         response = service.assignPlayer(response, player, playerEntity)!!
         reference = GameSession(response.id, response.key, request.name, request.host, listOf(GameSessionPlayer(host, hostEntity), GameSessionPlayer(player, playerEntity)), request.game, request.ruleSet, response.timestamp)
         assertEquals(reference, response)

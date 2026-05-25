@@ -1,5 +1,6 @@
 package de.sambalmueslie.boardbuddy.engine.api
 
+@Deprecated("use Nation instead")
 enum class NationType {
     // Core Game
     AMERICA,

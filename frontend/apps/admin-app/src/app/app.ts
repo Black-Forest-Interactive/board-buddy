@@ -21,6 +21,7 @@ export class App {
         {routerLink: '/rule-set', icon: 'rule', text: 'rule-set.title'},
         {routerLink: '/unit-definition', icon: 'military_tech', text: 'unit-definition.title'},
         {routerLink: '/technology', icon: 'science', text: 'technology.title'},
+        {routerLink: '/nation', icon: 'public', text: 'nation.title'},
         {routerLink: '/game', icon: 'sports_esports', text: 'game.title'},
       ]
     },

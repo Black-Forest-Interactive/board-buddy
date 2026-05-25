@@ -1,6 +1,7 @@
 package de.sambalmueslie.boardbuddy.core.ruleset.db
 
 import de.sambalmueslie.boardbuddy.common.EntityData
+import de.sambalmueslie.boardbuddy.core.nation.api.Nation
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.technology.api.Technology
@@ -20,7 +21,7 @@ data class RuleSetData(
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert(unitDefinitions: List<UnitDefinition>, technologies: List<Technology>) = RuleSet(id, name, unitDefinitions, technologies)
+    fun convert(unitDefinitions: List<UnitDefinition>, technologies: List<Technology>, nations: List<Nation>) = RuleSet(id, name, unitDefinitions, technologies, nations)
     fun update(request: RuleSetChangeRequest, currentTime: LocalDateTime): RuleSetData {
         name = request.name
         updated = currentTime

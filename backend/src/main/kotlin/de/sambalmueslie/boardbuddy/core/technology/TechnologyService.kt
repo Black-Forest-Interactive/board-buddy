@@ -23,11 +23,11 @@ class TechnologyService(
         private val logger = LoggerFactory.getLogger(TechnologyService::class.java)
     }
 
-    fun assignTechnology(technology: Technology, effect: TechnologyEffect): Technology? {
-        return assignTechnology(technology.id, effect)
+    fun assignTechnologyEffect(technology: Technology, effect: TechnologyEffect): Technology? {
+        return assignTechnologyEffect(technology.id, effect)
     }
 
-    fun assignTechnology(technologyId: Long, effect: TechnologyEffect): Technology? {
+    fun assignTechnologyEffect(technologyId: Long, effect: TechnologyEffect): Technology? {
         val data = repository.findByIdOrNull(technologyId) ?: return null
         effectService.assign(data, effect)
         val result = convert(data)
@@ -35,11 +35,11 @@ class TechnologyService(
         return result
     }
 
-    fun revokeTechnology(technology: Technology, effect: TechnologyEffect): Technology? {
-        return revokeTechnology(technology.id, effect)
+    fun revokeTechnologyEffect(technology: Technology, effect: TechnologyEffect): Technology? {
+        return revokeTechnologyEffect(technology.id, effect)
     }
 
-    fun revokeTechnology(technologyId: Long, effect: TechnologyEffect): Technology? {
+    fun revokeTechnologyEffect(technologyId: Long, effect: TechnologyEffect): Technology? {
         val data = repository.findByIdOrNull(technologyId) ?: return null
         effectService.revoke(data, effect)
         val result = convert(data)

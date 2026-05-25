@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{ 'rule-set.dialog.assignNation.title' | translate }}</h2>
+
+<mat-dialog-content>
+  @if (available().length === 0) {
+    <p class="text-gray-500 py-4">{{ 'rule-set.dialog.assignNation.empty' | translate }}</p>
+  } @else {
+    <mat-action-list>
+      @for (nation of available(); track nation.id) {
+        <button mat-list-item (click)="assign(nation)">
+          <mat-icon matListItemIcon>public</mat-icon>
+          <span matListItemTitle>{{ nation.name }}</span>
+          <span matListItemLine>{{ nation.description }}</span>
+        </button>
+      }
+    </mat-action-list>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+</mat-dialog-actions>

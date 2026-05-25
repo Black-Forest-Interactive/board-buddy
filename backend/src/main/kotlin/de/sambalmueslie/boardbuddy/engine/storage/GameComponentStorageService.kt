@@ -29,7 +29,7 @@ class GameComponentStorageService(
     private val levelStore = GameComponentStorageOperator(levelRepository) { e, t -> ComponentLevelData(e, t.value, timeProvider.currentTime()) }
     private val typeStore = GameComponentStorageOperator(typeRepository) { e, t -> ComponentTypeData(e, t.kind, timeProvider.currentTime()) }
     private val governmentStore = GameComponentStorageOperator(governmentRepository) { e, t -> ComponentGovernmentData(e, t.type, timeProvider.currentTime()) }
-    private val nationStore = GameComponentStorageOperator(nationRepository) { e, t -> ComponentNationData(e, t.type, timeProvider.currentTime()) }
+    private val nationStore = GameComponentStorageOperator(nationRepository) { e, t -> ComponentNationData(e, t.id, timeProvider.currentTime()) }
     private val technologiesStore = GameComponentStorageOperator(technologyRepository) { e, t ->
         ComponentTechnologyData(e, t.ids.map { it.toString() }, timeProvider.currentTime())
     }
@@ -41,7 +41,7 @@ class GameComponentStorageService(
         Level::class to levelStore,
         Type::class to typeStore,
         Government::class to governmentStore,
-        Nation::class to nationStore,
+        NationReference::class to nationStore,
         Technologies::class to technologiesStore,
     )
 
