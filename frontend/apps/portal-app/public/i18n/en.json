@@ -210,5 +210,16 @@
     "COMMUNISM": "Communism",
     "FUNDAMENTALISM": "Fundamentalism",
     "SPACE_FLIGHT": "Space Flight"
+  },
+  "government": {
+    "type": {
+      "DESPOTISM": "Despotism",
+      "ANARCHY": "Anarchy",
+      "REPUBLIC": "Republic",
+      "FEUDALISM": "Feudalism",
+      "COMMUNISM": "Communism",
+      "FUNDAMENTALISM": "Fundamentalism",
+      "DEMOCRACY": "Democracy"
+    }
   }
 }

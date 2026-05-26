@@ -11,7 +11,7 @@ import {MatDividerModule} from '@angular/material/divider'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {GameSessionPlayer, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, BattleFront, BattleFrontUnit, GameUnit} from '@board-buddy/core'
+import {GameSessionPlayer, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowParticipantInfo, BattleFront, BattleFrontUnit, GameUnit, Nation} from '@board-buddy/core'
 import {PlayerService, PortalWorkflowService} from '@board-buddy/portal'
 import {PortalBattle} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
@@ -40,6 +40,11 @@ export class SessionComponent {
     loader: (p) => p.params ? toPromise(this.workflowService.getWorkflow(p.params), p.abortSignal) : Promise.resolve(undefined)
   })
 
+  private participantsInfoResource = resource({
+    params: this.sessionKey,
+    loader: (p) => p.params ? toPromise(this.workflowService.getParticipantsInfo(p.params), p.abortSignal) : Promise.resolve([] as WorkflowParticipantInfo[])
+  })
+
   private battleResource = resource({
     params: computed(() => ({key: this.sessionKey(), hasBattle: !!this.workflowResource.value()?.activeBattle})),
     loader: (p) => p.params.key && p.params.hasBattle
@@ -53,6 +58,15 @@ export class SessionComponent {
   readonly hostId = computed(() => this.workflow()?.host.id ?? null)
   readonly participants = computed(() => this.workflow()?.participants ?? [])
   readonly myParticipant = computed(() => this.participants().find(p => p.player.id === this.playerId()))
+
+  private participantsInfo = computed(() => this.participantsInfoResource.value() ?? [])
+  private nationById = computed(() => new Map<number, Nation>((this.workflow()?.ruleSet.nations ?? []).map(n => [n.id, n])))
+  private infoByPlayerId = computed(() => new Map<number, WorkflowParticipantInfo>(this.participantsInfo().map(i => [i.player.id, i])))
+  readonly participantsEnriched = computed(() => this.participants().map(p => ({
+    participant: p,
+    nation: this.nationById().get(this.infoByPlayerId().get(p.player.id)?.nation?.id ?? -1) ?? null,
+    government: this.infoByPlayerId().get(p.player.id)?.government ?? null
+  })))
   readonly isHost = computed(() => this.workflow()?.host.id === this.playerId())
   readonly hasBattle = computed(() => !!this.workflow()?.activeBattle)
   readonly battle = computed(() => this.battleResource.value() ?? null)
@@ -111,6 +125,7 @@ export class SessionComponent {
 
   reload() {
     this.workflowResource.reload()
+    this.participantsInfoResource.reload()
     if (this.hasBattle()) this.battleResource.reload()
   }
 

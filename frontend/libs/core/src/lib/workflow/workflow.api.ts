@@ -3,6 +3,7 @@ import {Game} from '../game/game.api'
 import {RuleSet} from '../rule-set/rule-set.api'
 import {UnitType} from '../unit/unit.api'
 import {Technology} from '../technology/technology.api'
+import {GovernmentType} from '../nation/nation.api'
 
 export const BattleType = {
   ARMY_VS_ARMY: 'ARMY_VS_ARMY',
@@ -95,7 +96,9 @@ export interface Workflow {
 }
 
 export interface WorkflowParticipantInfo {
-  player: GameSessionPlayer
+  player: Player
+  nation: {id: number} | null
+  government: {type: GovernmentType} | null
   units: GameUnit[]
   technologies: Technology[]
   availableTechnologies: Technology[]

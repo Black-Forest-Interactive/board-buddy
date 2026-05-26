@@ -25,7 +25,7 @@ export class SessionResearchDialogComponent {
   readonly data: {sessionKey: string, participantInfo: WorkflowParticipantInfo} = inject(MAT_DIALOG_DATA)
 
   private technologyStatusResource = resource({
-    loader: () => toPromise(this.workflowService.getTechnologyStatus(this.data.sessionKey, this.data.participantInfo.player.player.id))
+    loader: () => toPromise(this.workflowService.getTechnologyStatus(this.data.sessionKey, this.data.participantInfo.player.id))
   })
 
   private technologyStatus = computed(() => this.technologyStatusResource.value())
@@ -40,7 +40,7 @@ export class SessionResearchDialogComponent {
   private availableIds = computed(() => new Set((this.technologyStatus()?.available ?? []).map(t => t.id)))
 
   readonly tiers = TIERS
-  readonly playerName = computed(() => this.data.participantInfo.player.player.name)
+  readonly playerName = computed(() => this.data.participantInfo.player.name)
 
   readonly techsByTier = computed(() =>
     TIERS.reduce((acc, tier) => {
@@ -53,7 +53,7 @@ export class SessionResearchDialogComponent {
   isResearchable(tech: Technology): boolean { return this.availableIds().has(tech.id) }
 
   research(tech: Technology) {
-    const request = new WorkflowResearchRequest(this.data.participantInfo.player.player.id, tech.id)
+    const request = new WorkflowResearchRequest(this.data.participantInfo.player.id, tech.id)
     this.workflowService.research(this.data.sessionKey, request).subscribe({
       next: () => {
         this.translate.get('session.message.technologyResearched').subscribe(t => this.toast.success(t))

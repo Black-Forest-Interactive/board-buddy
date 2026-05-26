@@ -63,7 +63,7 @@ export class SessionResearchComponent {
     const key = this.sessionKey()
     const info = this.myInfo()
     if (!key || !info) return
-    this.workflowService.research(key, new WorkflowResearchRequest(info.player.player.id, tech.id)).subscribe({
+    this.workflowService.research(key, new WorkflowResearchRequest(info.player.id, tech.id)).subscribe({
       next: () => {
         this.translate.get('session.message.technologyResearched').subscribe(t => this.toast.success(t))
         this.myInfoResource.reload()

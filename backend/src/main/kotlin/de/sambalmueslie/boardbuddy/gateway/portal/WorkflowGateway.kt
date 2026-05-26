@@ -27,7 +27,7 @@ class WorkflowGateway(
     fun getParticipantsInfo(id: String) = service.getParticipantsInfo(id)
 
     fun getMyInfo(id: String, playerId: Long) =
-        service.getParticipantsInfo(id).find { it.player.player.id == playerId }
+        service.getParticipantsInfo(id).find { it.player.id == playerId }
 
     fun getPortalBattle(id: String, playerId: Long): PortalBattle? {
         val battle = service.getBattleInfo(id) ?: return null

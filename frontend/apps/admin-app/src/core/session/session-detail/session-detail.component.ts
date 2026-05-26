@@ -17,8 +17,8 @@ import {
   BattleFront,
   BattleFrontUnit,
   BattleParticipant,
-  GameSessionPlayer,
   GameUnit,
+  Player,
   UnitDefinition,
   WorkflowBattleAttackFrontRequest,
   WorkflowBattleCreateFrontRequest,
@@ -133,10 +133,10 @@ export class SessionDetailComponent {
     })
   }
 
-  createUnit(player: GameSessionPlayer, unitDef: UnitDefinition) {
+  createUnit(player: Player, unitDef: UnitDefinition) {
     const key = this.sessionKey()
     if (!key) return
-    const request = new WorkflowCreateUnitRequest(player.player.id, unitDef.id)
+    const request = new WorkflowCreateUnitRequest(player.id, unitDef.id)
     this.workflowService.createUnit(key, request).subscribe({
       next: () => {
         this.translate.get('session.message.unitCreated').subscribe(t => this.toast.success(t))
@@ -238,10 +238,10 @@ export class SessionDetailComponent {
     })
   }
 
-  revokePlayer(player: GameSessionPlayer) {
+  revokePlayer(player: Player) {
     const id = this.id()
     if (!id) return
-    this.sessionService.revokePlayer(id, player.player.id).subscribe({
+    this.sessionService.revokePlayer(id, player.id).subscribe({
       next: (updated) => {
         this.sessionResource.set(updated)
         this.translate.get('session.message.playerRevoked').subscribe(t => this.toast.success(t))
