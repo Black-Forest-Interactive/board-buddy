@@ -36,6 +36,7 @@ export class NationDetailComponent {
 
   readonly nation = computed(() => this.nationResource.value())
   readonly name = computed(() => this.nation()?.name ?? '')
+  readonly imageUrl = computed(() => this.nation()?.imageUrl ?? '')
   readonly effects = computed(() => this.nation()?.effect ?? [])
 
   readonly effectColumns = ['governmentType', 'actions']

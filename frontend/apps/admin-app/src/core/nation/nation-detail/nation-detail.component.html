@@ -1,5 +1,9 @@
 <ui-main-content [title]="name()">
 
+  @if (imageUrl()) {
+    <img [src]="imageUrl()" [alt]="name()" class="w-32 h-32 rounded-lg object-cover mb-4">
+  }
+
   <div class="flex items-center justify-between mb-3">
     <h3 class="text-base font-semibold">{{ 'nation.effect.title' | translate }}</h3>
     <button matButton (click)="openAddEffect()">

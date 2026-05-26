@@ -7,7 +7,11 @@
     <mat-action-list>
       @for (nation of available(); track nation.id) {
         <button mat-list-item (click)="assign(nation)">
-          <mat-icon matListItemIcon>public</mat-icon>
+          @if (nation.imageUrl) {
+            <img matListItemAvatar [src]="nation.imageUrl" [alt]="nation.name" class="rounded object-cover">
+          } @else {
+            <mat-icon matListItemIcon>public</mat-icon>
+          }
           <span matListItemTitle>{{ nation.name }}</span>
           <span matListItemLine>{{ nation.description }}</span>
         </button>

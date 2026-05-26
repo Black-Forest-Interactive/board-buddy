@@ -1,41 +1,41 @@
 id,name,description,image_url,tier
-1,Animal Husbandry,Domestication of animals for food and labor.,,1
-2,Agriculture,Cultivation of crops to sustain growing civilizations.,,1
-3,Code of Laws,A written legal framework establishing order and governance.,,1
-4,Horseback Riding,Taming and riding horses for transport and warfare.,,1
-5,Masonry,Construction using cut stone to build durable structures.,,1
-6,Metal Working,Smelting and forging metals for tools and weapons.,,1
-7,Navigation,Techniques for sailing and determining position at sea.,,1
-8,Philosophy,Systematic inquiry into knowledge ethics and existence.,,1
-9,Pottery,Shaping and firing clay to create containers and vessels.,,1
-10,Writing,Recording language in symbols to preserve and share knowledge.,,1
-11,Civil Service,A professional administrative bureaucracy for effective governance.,,2
-12,Chivalry,A code of mounted combat and honor elevating cavalry forces.,,2
-13,Construction,Advanced building techniques enabling large-scale infrastructure.,,2
-14,Democracy,A system of government granting citizens a voice in power.,,2okay
-15,Engineering,Applied science enabling the design of machines and structures.,,2
-16,Irrigation,Channeling water to farmland to sustain agriculture in dry regions.,,2
-17,Mathematics,The study of numbers and patterns enabling advanced planning.,,2
-18,Monarchy,Centralized rule under a hereditary sovereign.,,2
-19,Mysticism,Spiritual practices and rituals inspiring devotion and unity.,,2
-20,Printing Press,Mass reproduction of text spreading knowledge and ideas rapidly.,,2
-21,Sailing,Harnessing wind power to navigate open waters.,,2
-22,Banking,Financial institutions enabling trade credit and economic growth.,,3
-23,Biology,Scientific study of living organisms and their systems.,,3
-24,Communism,Collective ownership of production and resources by the state.,,3
-25,Ecology,Understanding of natural systems and sustainable resource use.,,3
-26,Gunpowder,Explosive chemical compound revolutionizing ranged warfare.,,3
-27,Metal Casting,Pouring molten metal into molds to produce precision components.,,3
-28,Military Science,Systematic doctrine for organizing and deploying armed forces.,,3
-29,Railroad,Steam-powered rail networks enabling rapid movement of troops and goods.,,3
-30,Steam Power,Harnessing steam to drive engines and machinery.,,3
-31,Theology,Formal study of religious doctrine shaping culture and authority.,,3
-32,Atomic Theory,Understanding of atomic structure enabling new materials and energy.,,4
-33,Ballistics,Science of projectile motion optimizing artillery accuracy and range.,,4
-34,Combustion,Internal combustion engines powering vehicles and machinery.,,4
-35,Computers,Electronic computation enabling complex logistics and coordination.,,4
-36,Flight,Controlled powered flight opening air superiority and rapid transport.,,4
-37,Mass Media,Broadcast communication shaping public opinion and morale.,,4
-38,Plastics,Synthetic polymers enabling lightweight durable materials.,,4
-39,Replaceable Parts,Standardized interchangeable components enabling mass production.,,4
-40,Space Flight,Rockets and spacecraft projecting power beyond Earth.,,5
+1,Animal Husbandry,Domestication of animals for food and labor.,img/technology/animalhusbandry.jpg,1
+2,Agriculture,Cultivation of crops to sustain growing civilizations.,img/technology/agriculture.jpg,1
+3,Code of Laws,A written legal framework establishing order and governance.,img/technology/codeoflaws.jpg,1
+4,Horseback Riding,Taming and riding horses for transport and warfare.,img/technology/horsebackriding.jpg,1
+5,Masonry,Construction using cut stone to build durable structures.,img/technology/masonry.jpg,1
+6,Metal Working,Smelting and forging metals for tools and weapons.,img/technology/metalworking.jpg,1
+7,Navigation,Techniques for sailing and determining position at sea.,img/technology/navigation.jpg,1
+8,Philosophy,Systematic inquiry into knowledge ethics and existence.,img/technology/philosophy.jpg,1
+9,Pottery,Shaping and firing clay to create containers and vessels.,img/technology/pottery.jpg,1
+10,Writing,Recording language in symbols to preserve and share knowledge.,img/technology/writing.jpg,1
+11,Civil Service,A professional administrative bureaucracy for effective governance.,img/technology/civilservice.jpg,2
+12,Chivalry,A code of mounted combat and honor elevating cavalry forces.,img/technology/chivalry.jpg,2
+13,Construction,Advanced building techniques enabling large-scale infrastructure.,img/technology/construction.jpg,2
+14,Democracy,A system of government granting citizens a voice in power.,img/technology/democracy.jpg,2
+15,Engineering,Applied science enabling the design of machines and structures.,img/technology/engineering.jpg,2
+16,Irrigation,Channeling water to farmland to sustain agriculture in dry regions.,img/technology/irrigation.jpg,2
+17,Mathematics,The study of numbers and patterns enabling advanced planning.,img/technology/mathematics.jpg,2
+18,Monarchy,Centralized rule under a hereditary sovereign.,img/technology/monarchy.jpg,2
+19,Mysticism,Spiritual practices and rituals inspiring devotion and unity.,img/technology/mysticism.jpg,2
+20,Printing Press,Mass reproduction of text spreading knowledge and ideas rapidly.,img/technology/printingpress.jpg,2
+21,Sailing,Harnessing wind power to navigate open waters.,img/technology/sailing.jpg,2
+22,Banking,Financial institutions enabling trade credit and economic growth.,img/technology/banking.jpg,3
+23,Biology,Scientific study of living organisms and their systems.,img/technology/biology.jpg,3
+24,Communism,Collective ownership of production and resources by the state.,img/technology/communism.jpg,3
+25,Ecology,Understanding of natural systems and sustainable resource use.,img/technology/ecology.jpg,3
+26,Gunpowder,Explosive chemical compound revolutionizing ranged warfare.,img/technology/gunpowder.jpg,3
+27,Metal Casting,Pouring molten metal into molds to produce precision components.,img/technology/metalcasting.jpg,3
+28,Military Science,Systematic doctrine for organizing and deploying armed forces.,img/technology/militaryscience.jpg,3
+29,Railroad,Steam-powered rail networks enabling rapid movement of troops and goods.,img/technology/railroad.jpg,3
+30,Steam Power,Harnessing steam to drive engines and machinery.,img/technology/steampower.jpg,3
+31,Theology,Formal study of religious doctrine shaping culture and authority.,img/technology/theology.jpg,3
+32,Atomic Theory,Understanding of atomic structure enabling new materials and energy.,img/technology/atomictheory.jpg,4
+33,Ballistics,Science of projectile motion optimizing artillery accuracy and range.,img/technology/ballistics.jpg,4
+34,Combustion,Internal combustion engines powering vehicles and machinery.,img/technology/combustion.jpg,4
+35,Computers,Electronic computation enabling complex logistics and coordination.,img/technology/computers.jpg,4
+36,Flight,Controlled powered flight opening air superiority and rapid transport.,img/technology/flight.jpg,4
+37,Mass Media,Broadcast communication shaping public opinion and morale.,img/technology/massmedia.jpg,4
+38,Plastics,Synthetic polymers enabling lightweight durable materials.,img/technology/plastics.jpg,4
+39,Replaceable Parts,Standardized interchangeable components enabling mass production.,img/technology/replaceableparts.jpg,4
+40,Space Flight,Rockets and spacecraft projecting power beyond Earth.,img/technology/spaceflight.jpg,5

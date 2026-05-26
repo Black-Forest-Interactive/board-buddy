@@ -37,7 +37,7 @@ export class NationComponent {
   readonly items = computed(() => this.nationResource.value()?.content ?? [])
   readonly totalSize = computed(() => this.nationResource.value()?.totalSize ?? 0)
   readonly loading = this.nationResource.isLoading
-  readonly columns = ['name', 'description', 'effects', 'actions']
+  readonly columns = ['image', 'name', 'description', 'effects', 'actions']
 
   handlePageChange(event: PageEvent) {
     this.page.set(event.pageIndex)

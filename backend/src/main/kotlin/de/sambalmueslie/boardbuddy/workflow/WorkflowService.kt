@@ -89,7 +89,6 @@ class WorkflowService(
     fun get(id: String): Workflow {
         val session = sessionService.findByKey(id) ?: throw WorkflowInvalidId(id)
         val battle = battleService.get(session)
-        engine
         return Workflow.create(session, battle)
     }
 

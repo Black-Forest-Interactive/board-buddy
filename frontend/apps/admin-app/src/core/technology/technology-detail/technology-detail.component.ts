@@ -36,6 +36,7 @@ export class TechnologyDetailComponent {
 
   readonly technology = computed(() => this.technologyResource.value())
   readonly name = computed(() => this.technology()?.name ?? '')
+  readonly imageUrl = computed(() => this.technology()?.imageUrl ?? '')
   readonly effects = computed(() => this.technology()?.effect ?? [])
 
   readonly effectColumns = ['unitType', 'unitLevel', 'actions']

@@ -44,8 +44,8 @@ export class RuleSetDetailComponent {
   readonly nations = computed(() => this.ruleSet()?.nations ?? [])
 
   readonly unitColumns = ['name', 'unitType', 'counterType', 'maxLevel', 'actions']
-  readonly technologyColumns = ['name', 'description', 'tier', 'actions']
-  readonly nationColumns = ['name', 'description', 'actions']
+  readonly technologyColumns = ['image', 'name', 'description', 'tier', 'actions']
+  readonly nationColumns = ['image', 'name', 'description', 'actions']
 
   openAssignUnit() {
     const id = this.id()

@@ -23,6 +23,10 @@
           {
             "glob": "**/*",
             "input": "apps/admin-app/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/ui/src/assets"
           }
         ],
         "styles": [

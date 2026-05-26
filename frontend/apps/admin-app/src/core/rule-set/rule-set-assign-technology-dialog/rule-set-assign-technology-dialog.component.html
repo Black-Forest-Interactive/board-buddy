@@ -7,7 +7,11 @@
     <mat-action-list>
       @for (tech of available(); track tech.id) {
         <button mat-list-item (click)="assign(tech)">
-          <mat-icon matListItemIcon>science</mat-icon>
+          @if (tech.imageUrl) {
+            <img matListItemAvatar [src]="tech.imageUrl" [alt]="tech.name" class="rounded object-cover">
+          } @else {
+            <mat-icon matListItemIcon>science</mat-icon>
+          }
           <span matListItemTitle>{{ tech.name }}</span>
           <span matListItemLine>{{ 'technology.tier.' + tech.tier | translate }}</span>
         </button>

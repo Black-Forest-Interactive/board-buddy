@@ -37,7 +37,7 @@ export class TechnologyComponent {
   readonly items = computed(() => this.technologyResource.value()?.content ?? [])
   readonly totalSize = computed(() => this.technologyResource.value()?.totalSize ?? 0)
   readonly loading = this.technologyResource.isLoading
-  readonly columns = ['name', 'description', 'tier', 'effects', 'actions']
+  readonly columns = ['image', 'name', 'description', 'tier', 'effects', 'actions']
 
   handlePageChange(event: PageEvent) {
     this.page.set(event.pageIndex)

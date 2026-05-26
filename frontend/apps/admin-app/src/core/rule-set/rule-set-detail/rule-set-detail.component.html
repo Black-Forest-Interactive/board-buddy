@@ -57,6 +57,15 @@
 
       <mat-table [dataSource]="technologies()">
 
+        <ng-container matColumnDef="image">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            @if (row.imageUrl) {
+              <img [src]="row.imageUrl" [alt]="row.name" class="w-10 h-10 rounded object-cover">
+            }
+          </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef>{{ 'technology.table.name' | translate }}</mat-header-cell>
           <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
@@ -96,6 +105,15 @@
       </div>
 
       <mat-table [dataSource]="nations()">
+
+        <ng-container matColumnDef="image">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            @if (row.imageUrl) {
+              <img [src]="row.imageUrl" [alt]="row.name" class="w-10 h-10 rounded object-cover">
+            }
+          </mat-cell>
+        </ng-container>
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef>{{ 'nation.table.name' | translate }}</mat-header-cell>

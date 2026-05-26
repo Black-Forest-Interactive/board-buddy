@@ -15,7 +15,14 @@
         <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
         <mat-select [formControl]="form.controls.nationId">
           @for (nation of nations(); track nation.id) {
-            <mat-option [value]="nation.id">{{ nation.name }}</mat-option>
+            <mat-option [value]="nation.id">
+              <span class="flex items-center gap-2">
+                @if (nation.imageUrl) {
+                  <img [src]="nation.imageUrl" [alt]="nation.name" class="w-6 h-6 rounded object-cover">
+                }
+                {{ nation.name }}
+              </span>
+            </mat-option>
           }
         </mat-select>
       </mat-form-field>
