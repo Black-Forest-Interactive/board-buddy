@@ -29,6 +29,7 @@ class UnitUpgradeSystem(
     private val levelModel = componentModelService.get(Level::class)
     private val typeModel = componentModelService.get(Type::class)
     private val technologyModel = componentModelService.get(Technologies::class)
+    private val unitProgressModel = componentModelService.get(UnitProgress::class)
 
 
     fun handleCreation(player: GameSessionPlayer, unit: GameEntity) {
@@ -51,6 +52,11 @@ class UnitUpgradeSystem(
         units.forEach { unit ->
             upgradeUnit(unit, unitRelatedTechnologies)
         }
+
+        val current = unitProgressModel.get(player.entity)?.levels?.toMutableMap()
+            ?: UnitType.entries.associateWith { 1 }.toMutableMap()
+        unitRelatedTechnologies.forEach { (type, level) -> if ((current[type] ?: 1) < level) current[type] = level }
+        unitProgressModel.update(player.entity, UnitProgress(current))
     }
 
     private fun getUnitRelatedTechnologies(technologyIds: Set<Long>): Map<UnitType, Int> {

@@ -118,7 +118,8 @@ class WorkflowService(
             val entities = sessionService.getAssignedEntities(session, p)
             val units = entities.map { engine.getUnit(it) }
             val player = engine.getPlayer(p.entity)
-            WorkflowParticipantInfo(p.player, player.nation, player.government, units, player.technologies, available)
+            val unitLevel = player.unitProgress?.levels ?: emptyMap()
+            WorkflowParticipantInfo(p.player, player.nation, player.government, units, unitLevel, player.technologies, available)
         }
     }
 

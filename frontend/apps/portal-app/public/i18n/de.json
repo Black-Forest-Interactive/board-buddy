@@ -99,6 +99,7 @@
     "units": "Einh.",
     "action": {
       "research": "Forschen",
+      "produceUnit": "Produzieren",
       "startBattle": "Gefecht starten",
       "showQr": "Beitritts-QR anzeigen",
       "hideQr": "Beitritts-QR ausblenden"

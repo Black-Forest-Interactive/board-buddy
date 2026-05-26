@@ -99,6 +99,7 @@
     "units": "units",
     "action": {
       "research": "Research",
+      "produceUnit": "Produce",
       "startBattle": "Start battle",
       "showQr": "Show join QR",
       "hideQr": "Hide join QR"

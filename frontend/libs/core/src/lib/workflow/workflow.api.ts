@@ -100,6 +100,7 @@ export interface WorkflowParticipantInfo {
   nation: {id: number} | null
   government: {type: GovernmentType} | null
   units: GameUnit[]
+  unitLevel: Record<string, number>
   technologies: Technology[]
   availableTechnologies: Technology[]
 }

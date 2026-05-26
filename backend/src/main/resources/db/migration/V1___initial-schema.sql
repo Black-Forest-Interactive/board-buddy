@@ -225,6 +225,16 @@ CREATE TABLE component_technology
     updated   TIMESTAMP WITHOUT TIME ZONE
 );
 
+CREATE TABLE component_unit_progress
+(
+    entity_id BIGINT NOT NULL PRIMARY KEY references game_entity (id),
+
+    levels    JSONB                       NOT NULL,
+
+    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated   TIMESTAMP WITHOUT TIME ZONE
+);
+
 -- session
 CREATE SEQUENCE game_session_seq;
 CREATE TABLE game_session

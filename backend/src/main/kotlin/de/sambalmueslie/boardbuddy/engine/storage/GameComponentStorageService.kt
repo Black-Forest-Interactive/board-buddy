@@ -16,6 +16,7 @@ class GameComponentStorageService(
     governmentRepository: ComponentGovernmentRepository,
     nationRepository: ComponentNationRepository,
     technologyRepository: ComponentTechnologyRepository,
+    unitProgressRepository: ComponentUnitProgressRepository,
     private val timeProvider: TimeProvider
 ) {
 
@@ -33,6 +34,9 @@ class GameComponentStorageService(
     private val technologiesStore = GameComponentStorageOperator(technologyRepository) { e, t ->
         ComponentTechnologyData(e, t.ids.map { it.toString() }, timeProvider.currentTime())
     }
+    private val unitProgressStore = GameComponentStorageOperator(unitProgressRepository) { e, t ->
+        ComponentUnitProgressData(e, t.levels.mapKeys { it.key.name }, timeProvider.currentTime())
+    }
 
     private val operator = mapOf(
         CounterType::class to counterTypeStore,
@@ -43,6 +47,7 @@ class GameComponentStorageService(
         Government::class to governmentStore,
         NationReference::class to nationStore,
         Technologies::class to technologiesStore,
+        UnitProgress::class to unitProgressStore,
     )
 
     @Suppress("UNCHECKED_CAST")

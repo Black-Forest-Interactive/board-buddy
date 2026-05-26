@@ -40,6 +40,7 @@ class GameEngine(
     private val nationModel = componentModelService.get(NationReference::class)
     private val governmentModel = componentModelService.get(Government::class)
     private val technologyModel = componentModelService.get(Technologies::class)
+    private val unitProgressModel = componentModelService.get(UnitProgress::class)
 
 
     fun <T : GameComponent> getComponent(entity: GameEntity, type: KClass<T>): T? {
@@ -61,8 +62,9 @@ class GameEngine(
         val playerEntity = entityStorage.get(entity, GameEntityType.PLAYER) ?: throw WorkflowInvalidGameEntity(entity)
         val nation = nationModel.get(playerEntity)
         val government = governmentModel.get(playerEntity)
+        val unitProgress = unitProgressModel.get(playerEntity)
         val technologies = researchSystem.getTechnologies(playerEntity)
-        return GamePlayer(playerEntity, nation, government, technologies)
+        return GamePlayer(playerEntity, nation, government, unitProgress, technologies)
     }
 
     fun exists(entity: GameEntity): Boolean {

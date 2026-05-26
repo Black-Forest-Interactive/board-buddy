@@ -11,3 +11,4 @@ data class CounterType(val kind: UnitType) : GameComponent
 data class Government(val type: GovernmentType) : GameComponent
 data class NationReference(val id: Long) : GameComponent
 data class Technologies(val ids: Set<Long> = emptySet()) : GameComponent
+data class UnitProgress(val levels: Map<UnitType, Int> = emptyMap()) : GameComponent

@@ -14,12 +14,20 @@ class CreatePlayerSystem(
 ) : GameSystem {
     private val nationModel = componentModelService.get(NationReference::class)
     private val governmentModel = componentModelService.get(Government::class)
+    private val unitProgressModel = componentModelService.get(UnitProgress::class)
+
+    private val initialUnitTypes = mapOf(
+        UnitType.INFANTRY to 1,
+        UnitType.MOUNTED to 1,
+        UnitType.ARTILLERY to 1,
+    )
 
     fun create(nation: Nation): GameEntity {
         val entity = model.create(GameEntityType.PLAYER)
 
         nationModel.create(entity) { NationReference(nation.id) }
         governmentModel.create(entity) { Government(getStartingGovernment(nation)) }
+        unitProgressModel.create(entity) { UnitProgress(initialUnitTypes) }
 
         return entity
     }

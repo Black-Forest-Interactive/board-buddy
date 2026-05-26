@@ -36,8 +36,13 @@ export class SessionArmyComponent {
     loader: (p) => p.params ? toPromise(this.workflowService.getMyInfo(p.params), p.abortSignal) : Promise.resolve(undefined)
   })
 
-  readonly unitDefinitions = computed(() => this.workflowResource.value()?.ruleSet.unitDefinitions ?? [])
+  private readonly unitOrder: Record<string, number> = {INFANTRY: 0, MOUNTED: 1, ARTILLERY: 2, AIRCRAFT: 3}
+  readonly unitDefinitions = computed(() => {
+    const defs = this.workflowResource.value()?.ruleSet.unitDefinitions ?? []
+    return [...defs].sort((a, b) => (this.unitOrder[a.unitType] ?? 99) - (this.unitOrder[b.unitType] ?? 99))
+  })
   readonly myUnits = computed(() => this.myInfoResource.value()?.units ?? [])
+  readonly unitLevel = computed(() => this.myInfoResource.value()?.unitLevel ?? {})
 
   createUnit(unitDef: UnitDefinition) {
     const key = this.sessionKey()

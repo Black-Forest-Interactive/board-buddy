@@ -6,5 +6,6 @@ data class GamePlayer(
     val entity: GameEntity,
     val nation: NationReference? = null,
     val government: Government? = null,
+    val unitProgress: UnitProgress? = null,
     val technologies: List<Technology> = emptyList(),
 )

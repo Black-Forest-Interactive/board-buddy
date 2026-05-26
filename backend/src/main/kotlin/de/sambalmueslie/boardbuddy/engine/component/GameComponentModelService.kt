@@ -23,6 +23,7 @@ class GameComponentModelService(
         Pair(Government::class, createModel(Government::class)),
         Pair(NationReference::class, createModel(NationReference::class)),
         Pair(Technologies::class, createModel(Technologies::class)),
+        Pair(UnitProgress::class, createModel(UnitProgress::class)),
     )
 
     @Suppress("UNCHECKED_CAST")
