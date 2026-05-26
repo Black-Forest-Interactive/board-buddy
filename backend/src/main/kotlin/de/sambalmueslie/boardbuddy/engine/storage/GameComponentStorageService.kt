@@ -35,7 +35,7 @@ class GameComponentStorageService(
         ComponentTechnologyData(e, t.ids.map { it.toString() }, timeProvider.currentTime())
     }
     private val unitProgressStore = GameComponentStorageOperator(unitProgressRepository) { e, t ->
-        ComponentUnitProgressData(e, t.levels.mapKeys { it.key.name }, timeProvider.currentTime())
+        ComponentUnitProgressData(e, t.entries.mapKeys { it.key.name }.mapValues { (_, v) -> UnitProgressEntryData(v.level, v.minDamagePoints, v.maxDamagePoints, v.minHealthPoints, v.maxHealthPoints) }, timeProvider.currentTime())
     }
 
     private val operator = mapOf(

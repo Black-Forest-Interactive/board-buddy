@@ -10,6 +10,7 @@ import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowInvalidPlayer
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowInvalidUnitDefinition
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowUnitTypeLocked
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
@@ -35,6 +36,8 @@ class WorkflowUnitService(
     fun createUnit(session: GameSession, request: WorkflowCreateUnitRequest) {
         val player = getAndValidatePlayer(session, request.playerId)
         val unitType = get(session, request.unitTypeId)
+        val progress = engine.getPlayer(player.entity).unitProgress?.entries?.get(unitType.unitType)
+        if (progress == null || progress.level <= 0) throw WorkflowUnitTypeLocked(unitType.unitType.name)
         val entity = engine.createUnit(player, unitType)
         sessionService.assignEntity(session, player.player, entity)
     }

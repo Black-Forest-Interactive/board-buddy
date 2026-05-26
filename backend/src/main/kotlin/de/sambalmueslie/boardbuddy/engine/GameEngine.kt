@@ -82,8 +82,8 @@ class GameEngine(
         return entity
     }
 
-    fun createPlayer(nation: Nation): GameEntity {
-        val entity = createPlayerSystem.create(nation)
+    fun createPlayer(nation: Nation, unitDefinitions: List<UnitDefinition>): GameEntity {
+        val entity = createPlayerSystem.create(nation, unitDefinitions)
         componentModelService.persist(entity)
         return entity
     }

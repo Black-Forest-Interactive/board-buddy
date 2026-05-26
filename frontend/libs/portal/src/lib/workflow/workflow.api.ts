@@ -1,11 +1,11 @@
-import {BattleFront, BattleLogEntry, BattleParticipant, BattleStatus, GameSessionPlayer, GameUnit, GovernmentType, Player, Technology} from '@board-buddy/core'
+import {BattleFront, BattleLogEntry, BattleParticipant, BattleStatus, GameSessionPlayer, GameUnit, GovernmentType, Player, Technology, UnitProgressInfo} from '@board-buddy/core'
 
 export interface PortalParticipantInfo {
   player: Player
   nation: {id: number} | null
   government: {type: GovernmentType} | null
   units: GameUnit[]
-  unitLevel: Record<string, number>
+  unitLevel: Record<string, UnitProgressInfo>
   technologies: Technology[]
   availableTechnologies: Technology[]
 }

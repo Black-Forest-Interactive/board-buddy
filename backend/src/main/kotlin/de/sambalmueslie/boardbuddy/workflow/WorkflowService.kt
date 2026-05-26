@@ -32,11 +32,10 @@ class WorkflowService(
 
 
     fun create(request: WorkflowCreateRequest): Workflow {
-        val host = playerService.createHost(request.hostId, request.nationId)
         val game = gameService.get(request.gameId) ?: throw WorkflowInvalidGame(request.gameId)
         val ruleSet = ruleSetService.get(request.ruleSetId) ?: throw WorkflowInvalidRuleSet(request.ruleSetId)
+        val host = playerService.createHost(request.hostId, request.nationId, ruleSet.unitDefinitions)
         val session = sessionService.create(GameSessionChangeRequest(request.name, host.player, host.entity, game, ruleSet))
-
         return Workflow.create(session, null)
     }
 
@@ -118,7 +117,7 @@ class WorkflowService(
             val entities = sessionService.getAssignedEntities(session, p)
             val units = entities.map { engine.getUnit(it) }
             val player = engine.getPlayer(p.entity)
-            val unitLevel = player.unitProgress?.levels ?: emptyMap()
+            val unitLevel = player.unitProgress?.entries ?: emptyMap()
             WorkflowParticipantInfo(p.player, player.nation, player.government, units, unitLevel, player.technologies, available)
         }
     }

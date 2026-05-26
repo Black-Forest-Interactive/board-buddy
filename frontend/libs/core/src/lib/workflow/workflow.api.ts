@@ -95,12 +95,20 @@ export interface Workflow {
   activeBattle: Battle | null
 }
 
+export interface UnitProgressInfo {
+  level: number
+  minHealthPoints: number
+  maxHealthPoints: number
+  minDamagePoints: number
+  maxDamagePoints: number
+}
+
 export interface WorkflowParticipantInfo {
   player: Player
   nation: {id: number} | null
   government: {type: GovernmentType} | null
   units: GameUnit[]
-  unitLevel: Record<string, number>
+  unitLevel: Record<string, UnitProgressInfo>
   technologies: Technology[]
   availableTechnologies: Technology[]
 }

@@ -33,11 +33,14 @@ class UnitUpgradeSystem(
 
 
     fun handleCreation(player: GameSessionPlayer, unit: GameEntity) {
-        val technologies = technologyModel.get(player.entity) ?: return
-        val unitRelatedTechnologies = getUnitRelatedTechnologies(technologies.ids)
-        if (unitRelatedTechnologies.isEmpty()) return
-
-        upgradeUnit(unit, unitRelatedTechnologies)
+        val progress = unitProgressModel.get(player.entity) ?: return
+        val type = typeModel.get(unit) ?: return
+        val entry = progress.entries[type.kind] ?: return
+        val offset = entry.level - 1
+        if (offset <= 0) return
+        levelModel.update(unit, Level(entry.level))
+        damageModel.get(unit)?.let { damageModel.update(unit, Damage(it.amount + offset)) }
+        healthModel.get(unit)?.let { healthModel.update(unit, Health(it.amount + offset)) }
     }
 
     fun handleResearch(session: GameSession, player: GameSessionPlayer, changedTechnologies: List<Technology>) {
@@ -49,13 +52,19 @@ class UnitUpgradeSystem(
         if (unitRelatedTechnologies.isEmpty()) return
 
         val units = sessionService.getAssignedEntities(session, player)
-        units.forEach { unit ->
-            upgradeUnit(unit, unitRelatedTechnologies)
-        }
+        units.forEach { unit -> upgradeUnit(unit, unitRelatedTechnologies) }
 
-        val current = unitProgressModel.get(player.entity)?.levels?.toMutableMap()
-            ?: UnitType.entries.associateWith { 1 }.toMutableMap()
-        unitRelatedTechnologies.forEach { (type, level) -> if ((current[type] ?: 1) < level) current[type] = level }
+        val defByType = session.ruleSet.unitDefinitions.associateBy { it.unitType }
+        val current = unitProgressModel.get(player.entity)?.entries?.toMutableMap()
+            ?: session.ruleSet.unitDefinitions.associate { it.unitType to UnitProgressEntry(1, it.damagePoints.min, it.damagePoints.max, it.healthPoints.min, it.healthPoints.max) }.toMutableMap()
+        unitRelatedTechnologies.forEach { (type, level) ->
+            val existing = current[type]
+            if (existing == null || existing.level < level) {
+                val def = defByType[type]
+                val offset = level - 1
+                current[type] = UnitProgressEntry(level, (def?.damagePoints?.min ?: 1) + offset, (def?.damagePoints?.max ?: 1) + offset, (def?.healthPoints?.min ?: 1) + offset, (def?.healthPoints?.max ?: 1) + offset)
+            }
+        }
         unitProgressModel.update(player.entity, UnitProgress(current))
     }
 
