@@ -28,6 +28,8 @@ micronaut:
         pattern: /swagger/**
       - access: isAnonymous()
         pattern: /swagger-ui/**
+      - access: isAnonymous()
+        pattern: /img/**
       - access: isAuthenticated()
         pattern: /**
   router:
