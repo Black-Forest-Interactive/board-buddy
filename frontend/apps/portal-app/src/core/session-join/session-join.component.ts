@@ -1,7 +1,7 @@
 import {Component, computed, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
-import {Router} from '@angular/router'
+import {ActivatedRoute, Router} from '@angular/router'
 import {MatButtonModule} from '@angular/material/button'
 import {MatFormFieldModule} from '@angular/material/form-field'
 import {MatInputModule} from '@angular/material/input'
@@ -32,6 +32,11 @@ export class SessionJoinComponent {
   })
 
   private key = toSignal(this.form.controls.key.valueChanges, {initialValue: ''})
+
+  constructor() {
+    const key = inject(ActivatedRoute).snapshot.queryParamMap.get('key')
+    if (key) this.form.controls.key.setValue(key)
+  }
 
   private nationResource = resource({
     params: this.key,
