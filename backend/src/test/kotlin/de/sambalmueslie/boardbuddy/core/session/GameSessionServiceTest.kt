@@ -80,7 +80,7 @@ class GameSessionServiceTest {
         val host = playerService.create(PlayerChangeRequest("host"))
         val player = playerService.create(PlayerChangeRequest("player"))
         val hostNation = nationService.create(NationChangeRequest("host-nation", "desc", ""))
-        val hostEntity = engine.createPlayer(hostNation)
+        val hostEntity = engine.createPlayer(hostNation, ruleSet.unitDefinitions)
 
         val request = GameSessionChangeRequest("session", host, hostEntity, game, ruleSet)
         var response = service.create(request)
@@ -88,7 +88,7 @@ class GameSessionServiceTest {
         assertEquals(reference, response)
 
         val playerNation = nationService.create(NationChangeRequest("player-nation", "desc", ""))
-        val playerEntity = engine.createPlayer(playerNation)
+        val playerEntity = engine.createPlayer(playerNation, ruleSet.unitDefinitions)
         response = service.assignPlayer(response, player, playerEntity)!!
         reference = GameSession(response.id, response.key, request.name, request.host, listOf(GameSessionPlayer(host, hostEntity), GameSessionPlayer(player, playerEntity)), request.game, request.ruleSet, response.timestamp)
         assertEquals(reference, response)

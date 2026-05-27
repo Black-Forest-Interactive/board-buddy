@@ -2,7 +2,7 @@ name: Build & Push Frontend
 
 on:
   push:
-    branches: [master]
+    branches: [master, development]
     tags: ['v*.*.*']
 
 jobs:
