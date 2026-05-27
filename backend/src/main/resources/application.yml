@@ -11,17 +11,25 @@ micronaut:
           - /health
           - /prometheus
   security:
-    enabled: false
+    enabled: true
     endpoints:
       login:
         enabled: false
       oauth:
         enabled: false
+    token:
+      jwt:
+        signatures:
+          jwks:
+            keycloak:
+              url: https://auth.blackforrestdevelopment.de/realms/board-buddy/protocol/openid-connect/certs
     intercept-url-map:
       - access: isAnonymous()
         pattern: /swagger/**
       - access: isAnonymous()
         pattern: /swagger-ui/**
+      - access: isAuthenticated()
+        pattern: /**
   router:
     static-resources:
       swagger:

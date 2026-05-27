@@ -201,8 +201,8 @@ sonar {
 jib {
     from.image = "eclipse-temurin:25-jre-alpine"
     to {
-        image = "open-event-backend"
-        tags = setOf(version.toString(), "latest")
+        image = "ghcr.io/black-forest-interactive/board-buddy-backend"
+        tags = setOf("latest")
     }
     container {
         creationTime.set("USE_CURRENT_TIMESTAMP")

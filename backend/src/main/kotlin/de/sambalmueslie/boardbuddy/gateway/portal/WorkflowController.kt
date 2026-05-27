@@ -2,8 +2,11 @@ package de.sambalmueslie.boardbuddy.gateway.portal
 
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import io.micronaut.http.annotation.*
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.swagger.v3.oas.annotations.tags.Tag
 
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller(value = "/api/portal/workflow")
 @Tag(name = "Portal Workflow API")
 class WorkflowController(private val gateway: WorkflowGateway) {
