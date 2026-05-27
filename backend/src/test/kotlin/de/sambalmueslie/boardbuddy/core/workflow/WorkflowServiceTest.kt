@@ -121,13 +121,13 @@ class WorkflowServiceTest {
         val bp2Units = service.getUnits(bp2)
 
         val bp2u1 = bp2Units.find { it.type?.kind == inf.unitType }!!
-        assertEquals(GameUnit(bp2u1.entity, bp2u1.damage, bp2u1.health, Level(1), Type(inf.unitType), CounterType(inf.counterType)), bp2u1)
+        assertEquals(GameUnit(bp2u1.entity, bp2u1.damage, bp2u1.health, Level(1), Type(inf.unitType), CounterType(inf.counterType!!)), bp2u1)
 
         val bp2u2 = bp2Units.find { it.type?.kind == cav.unitType }!!
-        assertEquals(GameUnit(bp2u2.entity, bp2u2.damage, bp2u2.health, Level(1), Type(cav.unitType), CounterType(cav.counterType)), bp2u2)
+        assertEquals(GameUnit(bp2u2.entity, bp2u2.damage, bp2u2.health, Level(1), Type(cav.unitType), CounterType(cav.counterType!!)), bp2u2)
 
         val bp2u3 = bp2Units.find { it.type?.kind == art.unitType }!!
-        assertEquals(GameUnit(bp2u3.entity, bp2u3.damage, bp2u3.health, Level(1), Type(art.unitType), CounterType(art.counterType)), bp2u3)
+        assertEquals(GameUnit(bp2u3.entity, bp2u3.damage, bp2u3.health, Level(1), Type(art.unitType), CounterType(art.counterType!!)), bp2u3)
 
         // p2 (defender, active) creates front with infantry
         workflow = service.battleCreateFront(workflow.id, WorkflowBattleCreateFrontRequest(p2.id, bp2u1.entity))
