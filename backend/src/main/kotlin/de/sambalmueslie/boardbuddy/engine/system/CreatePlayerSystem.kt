@@ -17,17 +17,21 @@ class CreatePlayerSystem(
     private val governmentModel = componentModelService.get(Government::class)
     private val unitProgressModel = componentModelService.get(UnitProgress::class)
 
+    private val initialUnitTypes = setOf(UnitType.INFANTRY, UnitType.MOUNTED, UnitType.ARTILLERY)
+
     fun create(nation: Nation, unitDefinitions: List<UnitDefinition>): GameEntity {
         val entity = model.create(GameEntityType.PLAYER)
 
         nationModel.create(entity) { NationReference(nation.id) }
         governmentModel.create(entity) { Government(getStartingGovernment(nation)) }
-        val initialEntries = unitDefinitions.associate { def ->
-            def.unitType to UnitProgressEntry(1, def.damagePoints.min, def.damagePoints.max, def.healthPoints.min, def.healthPoints.max)
-        }
+        val initialEntries = unitDefinitions.filter { initialUnitTypes.contains(it.unitType) }.associate { it.unitType to it.toUnitProgressEntry() }
         unitProgressModel.create(entity) { UnitProgress(initialEntries) }
 
         return entity
+    }
+
+    private fun UnitDefinition.toUnitProgressEntry(): UnitProgressEntry {
+        return UnitProgressEntry(1, damagePoints.min, damagePoints.max, healthPoints.min, healthPoints.max)
     }
 
     private fun getStartingGovernment(nation: Nation): GovernmentType {
