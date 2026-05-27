@@ -102,7 +102,8 @@
       "produceUnit": "Produce",
       "startBattle": "Start battle",
       "showQr": "Show join QR",
-      "hideQr": "Hide join QR"
+      "hideQr": "Hide join QR",
+      "copyLink": "Copy link"
     },
     "message": {
       "unitCreated": "Unit produced.",

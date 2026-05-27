@@ -1,7 +1,7 @@
-import {Component, computed, DestroyRef, inject, resource, signal} from '@angular/core'
+import {Component, computed, DestroyRef, inject, signal} from '@angular/core'
 import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute, Router, RouterModule} from '@angular/router'
-import {interval, map} from 'rxjs'
+import {catchError, combineLatest, EMPTY, filter, interval, map, of, startWith, switchMap} from 'rxjs'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
@@ -11,10 +11,8 @@ import {MatDividerModule} from '@angular/material/divider'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {GameSessionPlayer, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowParticipantInfo, BattleFront, BattleFrontUnit, GameUnit, Nation} from '@board-buddy/core'
-import {PlayerService, PortalWorkflowService} from '@board-buddy/portal'
-import {PortalBattle} from '@board-buddy/portal'
-import {toPromise} from '@board-buddy/shared'
+import {BattleFront, BattleFrontUnit, GameSessionPlayer, GameUnit, Nation, Workflow, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowParticipantInfo} from '@board-buddy/core'
+import {PlayerService, PortalBattle, PortalWorkflowService} from '@board-buddy/portal'
 import {SessionBattleStartDialogComponent} from './session-battle-start-dialog/session-battle-start-dialog.component'
 
 @Component({
@@ -35,33 +33,19 @@ export class SessionComponent {
   private sessionKey = toSignal(this.route.paramMap.pipe(map(p => p.get('key') ?? '')))
   readonly playerId = computed(() => this.playerService.getPlayerId())
 
-  private workflowResource = resource({
-    params: this.sessionKey,
-    loader: (p) => p.params ? toPromise(this.workflowService.getWorkflow(p.params), p.abortSignal) : Promise.resolve(undefined)
-  })
+  private readonly workflowData = signal<Workflow | undefined>(undefined)
+  private readonly participantsData = signal<WorkflowParticipantInfo[]>([])
+  private readonly battleData = signal<PortalBattle | null>(null)
 
-  private participantsInfoResource = resource({
-    params: this.sessionKey,
-    loader: (p) => p.params ? toPromise(this.workflowService.getParticipantsInfo(p.params), p.abortSignal) : Promise.resolve([] as WorkflowParticipantInfo[])
-  })
-
-  private battleResource = resource({
-    params: computed(() => ({key: this.sessionKey(), hasBattle: !!this.workflowResource.value()?.activeBattle})),
-    loader: (p) => p.params.key && p.params.hasBattle
-      ? toPromise(this.workflowService.getBattle(p.params.key), p.abortSignal).catch(() => null as PortalBattle | null)
-      : Promise.resolve(null as PortalBattle | null)
-  })
-
-  readonly workflow = computed(() => this.workflowResource.value())
+  readonly workflow = computed(() => this.workflowData())
   readonly sessionName = computed(() => this.workflow()?.name ?? '')
   readonly sessionId = computed(() => this.workflow()?.id ?? '')
   readonly hostId = computed(() => this.workflow()?.host.id ?? null)
   readonly participants = computed(() => this.workflow()?.participants ?? [])
   readonly myParticipant = computed(() => this.participants().find(p => p.player.id === this.playerId()))
 
-  private participantsInfo = computed(() => this.participantsInfoResource.value() ?? [])
   private nationById = computed(() => new Map<number, Nation>((this.workflow()?.ruleSet.nations ?? []).map(n => [n.id, n])))
-  private infoByPlayerId = computed(() => new Map<number, WorkflowParticipantInfo>(this.participantsInfo().map(i => [i.player.id, i])))
+  private infoByPlayerId = computed(() => new Map<number, WorkflowParticipantInfo>(this.participantsData().map(i => [i.player.id, i])))
   readonly participantsEnriched = computed(() => this.participants().map(p => ({
     participant: p,
     nation: this.nationById().get(this.infoByPlayerId().get(p.player.id)?.nation?.id ?? -1) ?? null,
@@ -69,7 +53,7 @@ export class SessionComponent {
   })))
   readonly isHost = computed(() => this.workflow()?.host.id === this.playerId())
   readonly hasBattle = computed(() => !!this.workflow()?.activeBattle)
-  readonly battle = computed(() => this.battleResource.value() ?? null)
+  readonly battle = computed(() => this.battleData())
   readonly battleStatus = computed(() => this.battle()?.status ?? null)
   readonly battleFinished = computed(() => this.battleStatus() === 'FINISHED')
   readonly activePlayerId = computed(() => this.battle()?.activePlayer.player.id ?? null)
@@ -80,7 +64,9 @@ export class SessionComponent {
   readonly fronts = computed(() => this.battle()?.fronts ?? [])
   readonly logEntries = computed(() => this.battle()?.logEntries ?? [])
   readonly selectedUnit = signal<GameUnit | null>(null)
-  readonly showQr = signal(false)
+
+  private readonly showQrOverride = signal<boolean | null>(null)
+  readonly showQr = computed(() => this.showQrOverride() ?? this.participants().length === 1)
 
   readonly joinUrl = computed(() => {
     const key = this.sessionId()
@@ -111,30 +97,62 @@ export class SessionComponent {
   })
 
   constructor() {
-    interval(5000).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.workflowResource.reload()
+    interval(5000).pipe(
+      startWith(0),
+      takeUntilDestroyed(this.destroyRef),
+      switchMap(() => this.fetchSessionData())
+    ).subscribe(data => {
+      this.workflowData.set(data.workflow)
+      this.participantsData.set(data.participants)
+      this.battleData.set(data.battle)
     })
-    interval(1000).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      if (this.hasBattle() && !this.isMyTurn() && !this.battleFinished()) this.battleResource.reload()
+
+    interval(1000).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      filter(() => !!this.battleData() && !this.isMyTurn() && !this.battleFinished()),
+      switchMap(() => {
+        const key = this.sessionKey()
+        return key ? this.workflowService.getBattle(key).pipe(catchError(() => EMPTY)) : EMPTY
+      })
+    ).subscribe(battle => this.battleData.set(battle))
+  }
+
+  private fetchSessionData() {
+    const key = this.sessionKey()
+    if (!key) return EMPTY
+    return combineLatest([
+      this.workflowService.getWorkflow(key),
+      this.workflowService.getParticipantsInfo(key)
+    ]).pipe(
+      switchMap(([workflow, participants]) => {
+        if (!workflow.activeBattle) return of({workflow, participants, battle: null as PortalBattle | null})
+        return this.workflowService.getBattle(key).pipe(
+          map(battle => ({workflow, participants, battle})),
+          catchError(() => of({workflow, participants, battle: null as PortalBattle | null}))
+        )
+      })
+    )
+  }
+
+  private reloadAll() {
+    this.fetchSessionData().subscribe(data => {
+      this.workflowData.set(data.workflow)
+      this.participantsData.set(data.participants)
+      this.battleData.set(data.battle)
     })
   }
 
-  toggleQr() { this.showQr.set(!this.showQr()) }
-
+  toggleQr() { this.showQrOverride.set(!this.showQr()) }
+  copyLink() { navigator.clipboard.writeText(this.joinUrl()) }
   back() { this.router.navigate(['/home']) }
-
-  reload() {
-    this.workflowResource.reload()
-    this.participantsInfoResource.reload()
-    if (this.hasBattle()) this.battleResource.reload()
-  }
+  reload() { this.reloadAll() }
 
   attackPlayer(defender: GameSessionPlayer) {
     const key = this.sessionKey()
     const attacker = this.myParticipant()
     if (!key || !attacker) return
     this.dialog.open(SessionBattleStartDialogComponent, {data: {sessionKey: key, attacker: attacker.player, defender: defender.player}, maxWidth: '95vw', width: '480px'})
-      .afterClosed().subscribe(saved => { if (saved) { this.workflowResource.reload(); this.battleResource.reload() } })
+      .afterClosed().subscribe(saved => { if (saved) this.reloadAll() })
   }
 
   selectUnit(unit: GameUnit) {
@@ -146,7 +164,7 @@ export class SessionComponent {
     const pid = this.playerId()
     if (!key || !pid) return
     this.workflowService.battleCreateFront(key, new WorkflowBattleCreateFrontRequest(pid, unit.entity)).subscribe({
-      next: (battle) => { this.battleResource.set(battle); this.selectedUnit.set(null) },
+      next: (battle) => { this.battleData.set(battle); this.selectedUnit.set(null) },
       error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
     })
   }
@@ -161,7 +179,7 @@ export class SessionComponent {
     this.workflowService.battleAttackFront(key, new WorkflowBattleAttackFrontRequest(pid, opponentId, unit.entity, frontIndex)).subscribe({
       next: (result) => {
         this.translate.get('session.battle.attacked').subscribe(t => this.toast.success(t))
-        this.battleResource.set(result)
+        this.battleData.set(result)
         this.selectedUnit.set(null)
       },
       error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
@@ -173,8 +191,8 @@ export class SessionComponent {
     if (!key) return
     this.workflowService.battleFinish(key).subscribe({
       next: () => {
-        this.battleResource.set(null)
-        this.workflowResource.reload()
+        this.battleData.set(null)
+        this.reloadAll()
       },
       error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
     })
@@ -198,8 +216,7 @@ export class SessionComponent {
 
   unitImagePath(kind: string | null | undefined): string | null {
     if (!kind) return null
-    const map: Record<string, string> = {INFANTRY: '/img/unit/infantry2.jpg', MOUNTED: '/img/unit/cavalry2.jpg', ARTILLERY: '/img/unit/artillery2.jpg', AIRCRAFT: '/img/unit/plane2.jpg'}
+    const map: Record<string, string> = {INFANTRY: '/img/unit/infantry2_mini.jpg', MOUNTED: '/img/unit/cavalry2_mini.jpg', ARTILLERY: '/img/unit/artillery2_mini.jpg', AIRCRAFT: '/img/unit/plane2_mini.jpg'}
     return map[kind] ?? null
   }
-
 }

@@ -13,10 +13,16 @@
     <!-- QR Code + Key (host only, toggle) -->
     @if (isHost()) {
       <div>
-        <button matButton (click)="toggleQr()">
-          <mat-icon>qr_code_2</mat-icon>
-          {{ (showQr() ? 'session.action.hideQr' : 'session.action.showQr') | translate }}
-        </button>
+        <div class="flex items-center gap-2">
+          <button matButton (click)="toggleQr()">
+            <mat-icon>qr_code_2</mat-icon>
+            {{ (showQr() ? 'session.action.hideQr' : 'session.action.showQr') | translate }}
+          </button>
+          <button matButton (click)="copyLink()" [matTooltip]="'session.action.copyLink' | translate">
+            <mat-icon>content_copy</mat-icon>
+            {{ 'session.action.copyLink' | translate }}
+          </button>
+        </div>
         @if (showQr()) {
           <mat-card appearance="raised" class="mt-2">
             <div class="flex flex-col items-center gap-3 p-4">

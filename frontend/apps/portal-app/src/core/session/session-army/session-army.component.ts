@@ -63,7 +63,7 @@ export class SessionArmyComponent {
 
   unitImagePath(kind: string | null | undefined): string | null {
     if (!kind) return null
-    const map: Record<string, string> = {INFANTRY: '/img/unit/infantry2.jpg', MOUNTED: '/img/unit/cavalry2.jpg', ARTILLERY: '/img/unit/artillery2.jpg', AIRCRAFT: '/img/unit/plane2.jpg'}
+    const map: Record<string, string> = {INFANTRY: '/img/unit/infantry2_mini.jpg', MOUNTED: '/img/unit/cavalry2_mini.jpg', ARTILLERY: '/img/unit/artillery2_mini.jpg', AIRCRAFT: '/img/unit/plane2_mini.jpg'}
     return map[kind] ?? null
   }
 
