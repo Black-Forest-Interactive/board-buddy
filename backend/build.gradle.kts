@@ -205,6 +205,7 @@ jib {
         tags = setOf("latest")
     }
     container {
+        mainClass = "de.sambalmueslie.boardbuddy.BoardBuddyApplication"
         creationTime.set("USE_CURRENT_TIMESTAMP")
 
         jvmFlags = listOf(
