@@ -6,6 +6,12 @@
 
   <mat-card appearance="raised">
     <div class="p-4 flex flex-col gap-3">
+      @if (!hasPlayer()) {
+        <mat-form-field class="w-full">
+          <mat-label>{{ 'register.form.name' | translate }}</mat-label>
+          <input matInput [formControl]="form.controls.name" autocomplete="off" [placeholder]="'register.form.namePlaceholder' | translate">
+        </mat-form-field>
+      }
       <mat-form-field class="w-full">
         <mat-label>{{ 'session.join.form.key' | translate }}</mat-label>
         <input matInput [formControl]="form.controls.key" autocomplete="off" (keyup.enter)="submit()" [placeholder]="'session.join.form.keyPlaceholder' | translate">

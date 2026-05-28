@@ -7,7 +7,8 @@
     "create": "Erstellen",
     "logout": "Abmelden",
     "reload": "Aktualisieren",
-    "back": "Zurück"
+    "back": "Zurück",
+    "close": "Schließen"
   },
   "player": {
     "title": "Mein Profil"
@@ -54,6 +55,7 @@
     }
   },
   "home": {
+    "title": "Startseite",
     "welcome": "Willkommen zurück,",
     "mySessions": "Meine Sitzungen",
     "noSessions": "Keine aktiven Sitzungen.",
@@ -77,6 +79,11 @@
     "create": {
       "title": "Session starten",
       "action": "Session erstellen"
+    },
+    "dialog": {
+      "qrCode": {
+        "title": "Session beitreten"
+      }
     },
     "join": {
       "title": "Session beitreten",
@@ -112,7 +119,9 @@
       "error": "Aktion fehlgeschlagen."
     },
     "research": {
-      "tier": "Zeitalter"
+      "tier": "Zeitalter",
+      "hideDiscovered": "Erforschte ausblenden",
+      "showDiscovered": "Alle anzeigen"
     },
     "battle": {
       "yourTurn": "Du bist dran!",
@@ -133,6 +142,7 @@
       "winner": "Sieger",
       "draw": "Unentschieden",
       "finishAction": "Gefecht beenden",
+      "cancelAction": "Abbrechen",
       "attacked": "Angriff ausgeführt.",
       "attacker": "Angreifer",
       "defender": "Verteidiger",

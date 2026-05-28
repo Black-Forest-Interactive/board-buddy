@@ -30,6 +30,7 @@ export const BattleStatus = {
   INIT: 'INIT',
   ONGOING: 'ONGOING',
   FINISHED: 'FINISHED',
+  CANCELED: 'CANCELED',
 } as const
 export type BattleStatus = typeof BattleStatus[keyof typeof BattleStatus]
 

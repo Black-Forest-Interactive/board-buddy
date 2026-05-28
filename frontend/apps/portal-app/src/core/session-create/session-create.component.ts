@@ -52,23 +52,20 @@ export class SessionCreateComponent {
 
   constructor() {
     effect(() => {
+      const games = this.games()
+      if (games.length === 1) this.form.controls.gameId.setValue(games[0].id)
+    })
+
+    effect(() => {
       const ruleSets = this.ruleSets()
-      this.form.controls.ruleSetId.reset(null)
-      if (ruleSets.length > 0) {
-        this.form.controls.ruleSetId.enable()
-      } else {
-        this.form.controls.ruleSetId.disable()
-      }
+      this.form.controls.ruleSetId.reset(ruleSets.length === 1 ? ruleSets[0].id : null)
+      ruleSets.length > 0 ? this.form.controls.ruleSetId.enable() : this.form.controls.ruleSetId.disable()
     })
 
     effect(() => {
       const nations = this.nations()
-      this.form.controls.nationId.reset(null)
-      if (nations.length > 0) {
-        this.form.controls.nationId.enable()
-      } else {
-        this.form.controls.nationId.disable()
-      }
+      this.form.controls.nationId.reset(nations.length === 1 ? nations[0].id : null)
+      nations.length > 0 ? this.form.controls.nationId.enable() : this.form.controls.nationId.disable()
     })
   }
 

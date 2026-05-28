@@ -1,28 +1,26 @@
-<div class="min-h-full flex flex-col items-center p-6 gap-6">
-  @if (playerName()) {
-    <div class="text-center mt-4">
-      <p class="text-on-surface/60 text-sm">{{ 'home.welcome' | translate }}</p>
-      <h2 class="text-2xl font-bold">{{ playerName() }}</h2>
-    </div>
-  }
+<ui-main-content [title]="'home.title' | translate" containerClass="p-6 flex flex-col items-center gap-6">
+
+  <div actions>
+    <button matIconButton (click)="reload()"><mat-icon>refresh</mat-icon></button>
+  </div>
 
   <div class="w-full max-w-sm flex flex-col gap-4 mt-4">
     <mat-card appearance="raised" class="cursor-pointer hover:shadow-lg transition-shadow" (click)="createSession()">
-      <div class="flex flex-col items-center gap-3 p-8">
-        <mat-icon class="!text-5xl !w-12 !h-12 text-primary">add_circle</mat-icon>
+      <div class="flex flex-col items-center gap-3 p-4 md:p-8">
+        <mat-icon class="!text-3xl !w-8 !h-8 md:!text-5xl md:!w-12 md:!h-12 text-primary">add_circle</mat-icon>
         <div class="text-center">
-          <div class="text-lg font-bold">{{ 'home.action.createSession' | translate }}</div>
-          <div class="text-sm text-on-surface/60 mt-1">{{ 'home.action.createSessionHint' | translate }}</div>
+          <div class="text-base md:text-lg font-bold">{{ 'home.action.createSession' | translate }}</div>
+          <div class="text-xs md:text-sm text-on-surface/60 mt-1">{{ 'home.action.createSessionHint' | translate }}</div>
         </div>
       </div>
     </mat-card>
 
     <mat-card appearance="raised" class="cursor-pointer hover:shadow-lg transition-shadow" (click)="joinSession()">
-      <div class="flex flex-col items-center gap-3 p-8">
-        <mat-icon class="!text-5xl !w-12 !h-12 text-secondary">login</mat-icon>
+      <div class="flex flex-col items-center gap-3 p-4 md:p-8">
+        <mat-icon class="!text-3xl !w-8 !h-8 md:!text-5xl md:!w-12 md:!h-12 text-secondary">login</mat-icon>
         <div class="text-center">
-          <div class="text-lg font-bold">{{ 'home.action.joinSession' | translate }}</div>
-          <div class="text-sm text-on-surface/60 mt-1">{{ 'home.action.joinSessionHint' | translate }}</div>
+          <div class="text-base md:text-lg font-bold">{{ 'home.action.joinSession' | translate }}</div>
+          <div class="text-xs md:text-sm text-on-surface/60 mt-1">{{ 'home.action.joinSessionHint' | translate }}</div>
         </div>
       </div>
     </mat-card>
@@ -57,4 +55,5 @@
       {{ 'action.logout' | translate }}
     </button>
   </div>
-</div>
+
+</ui-main-content>

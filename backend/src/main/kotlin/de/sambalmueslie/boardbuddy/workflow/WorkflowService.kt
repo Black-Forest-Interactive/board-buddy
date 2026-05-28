@@ -10,6 +10,8 @@ import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.engine.api.GameUnit
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import de.sambalmueslie.boardbuddy.workflow.battle.WorkflowBattleService
+import de.sambalmueslie.boardbuddy.workflow.sse.SessionEventService
+import de.sambalmueslie.boardbuddy.workflow.sse.SessionEventType
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
@@ -24,7 +26,8 @@ class WorkflowService(
     private val nationService: WorkflowNationService,
 
     private val sessionService: GameSessionService,
-    private val engine: GameEngine
+    private val engine: GameEngine,
+    private val eventService: SessionEventService,
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(WorkflowService::class.java)
@@ -60,23 +63,36 @@ class WorkflowService(
     fun battleStart(id: String, request: WorkflowBattleStartRequest): Workflow {
         val session = getSession(id)
         battleService.start(session, request)
+        eventService.emit(id, SessionEventType.BATTLE_STARTED)
+        return get(id)
+    }
+
+    fun battleCancel(id: String): Workflow {
+        val session = getSession(id)
+        battleService.cancel(session)
+        eventService.emit(id, SessionEventType.BATTLE_CANCELLED)
         return get(id)
     }
 
     fun battleCreateFront(id: String, request: WorkflowBattleCreateFrontRequest): Workflow {
         val session = getSession(id)
         battleService.createFront(session, request)
+        eventService.emit(id, SessionEventType.BATTLE_FRONT_CREATED)
         return get(id)
     }
 
     fun battleAttackFront(id: String, request: WorkflowBattleAttackFrontRequest): Battle {
         val session = getSession(id)
-        return battleService.attackFront(session, request)
+        val result = battleService.attackFront(session, request)
+        eventService.emit(id, SessionEventType.BATTLE_FRONT_ATTACKED)
+        return result
     }
 
     fun battleFinish(id: String) {
         val session = getSession(id)
         battleService.finish(session)
+        eventService.emit(id, SessionEventType.BATTLE_FINISHED)
+        eventService.cleanup(id)
     }
 
     fun research(id: String, request: WorkflowResearchRequest): Workflow {

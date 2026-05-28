@@ -1,5 +1,8 @@
-<div class="p-4 flex flex-col gap-4">
-  <h2 class="text-xl font-bold mt-2">{{ 'player.title' | translate }}</h2>
+<ui-main-content [title]="'player.title' | translate" containerClass="p-4 flex flex-col gap-4" [showBack]="true" (back)="back()">
+
+  <div actions>
+    <button matIconButton (click)="reload()"><mat-icon>refresh</mat-icon></button>
+  </div>
 
   <mat-card appearance="outlined">
     <div class="flex items-center gap-4 p-4">
@@ -13,8 +16,4 @@
     </div>
   </mat-card>
 
-  <button matButton routerLink="/home" class="w-full">
-    <mat-icon>home</mat-icon>
-    {{ 'action.back' | translate }}
-  </button>
-</div>
+</ui-main-content>

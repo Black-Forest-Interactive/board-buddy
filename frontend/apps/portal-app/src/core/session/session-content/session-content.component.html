@@ -1,0 +1,38 @@
+@if (participants().length === 0) {
+  <p class="text-sm text-on-surface/40 italic px-1">{{ 'session.noParticipants' | translate }}</p>
+}
+<div class="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+  @for (e of participants(); track e.participant.player.id) {
+    <mat-card appearance="outlined" class="w-full sm:w-52" [class.ring-2]="e.participant.player.id === playerId()" [class.ring-primary]="e.participant.player.id === playerId()">
+      <div class="flex flex-col gap-2 items-center">
+        <div class="flex items-center justify-between px-3 pt-3 pb-1 w-full">
+          <span class="font-semibold truncate">{{ e.participant.player.name }}</span>
+          @if (hostId() === e.participant.player.id) {
+            <span class="text-xs shrink-0 border rounded px-1 leading-none py-0.5 text-on-surface/60 border-on-surface/30">{{ 'session.host' | translate }}</span>
+          }
+        </div>
+        @if (e.nation) {
+          <img [src]="e.nation.imageUrl" [alt]="e.nation.name" class="w-full aspect-square object-cover">
+        } @else {
+          <div class="w-full aspect-square bg-surface-low flex items-center justify-center"><mat-icon class="text-on-surface/30">public</mat-icon></div>
+        }
+        <div class="h-5 text-sm text-on-surface/60 truncate px-3 text-center w-full">{{ e.nation?.name }}</div>
+        <div class="h-5 text-xs text-on-surface/60 px-3 text-center w-full">{{ e.government ? ('government.type.' + e.government.type | translate) : '' }}</div>
+        <div class="px-3 pb-3 w-full flex flex-col gap-1">
+          @if (e.participant.player.id !== playerId()) {
+            <button matButton="outlined" class="w-full" (click)="attackPlayer.emit(e.participant)">
+              <mat-icon>gps_fixed</mat-icon>{{ 'session.action.startBattle' | translate }}
+            </button>
+          } @else {
+            <button matButton="outlined" class="w-full" [routerLink]="['/session', sessionId(), 'army']">
+              <mat-icon>military_tech</mat-icon>{{ 'MENU.Army' | translate }}
+            </button>
+            <button matButton="outlined" class="w-full" [routerLink]="['/session', sessionId(), 'research']">
+              <mat-icon>science</mat-icon>{{ 'MENU.Research' | translate }}
+            </button>
+          }
+        </div>
+      </div>
+    </mat-card>
+  }
+</div>

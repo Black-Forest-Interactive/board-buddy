@@ -1,9 +1,12 @@
-<div class="p-4 flex flex-col gap-4 pb-8">
-  <h2 class="text-xl font-bold mt-2">{{ 'session.myArmy' | translate }}</h2>
+<ui-main-content [title]="'session.myArmy' | translate" containerClass="p-1 md:p-2 lg:p-4 flex flex-col gap-4 pb-8" [showBack]="true" (back)="back()">
 
-  <div class="flex flex-wrap gap-3 items-stretch">
+  <div actions>
+    <button matIconButton (click)="reload()"><mat-icon>refresh</mat-icon></button>
+  </div>
+
+  <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 items-stretch">
     @for (def of unitDefinitions(); track def.id) {
-      <mat-card appearance="outlined" class="w-44 transition-shadow hover:shadow-lg" [class.opacity-40]="!unitLevel()[def.unitType]">
+      <mat-card appearance="outlined" class="sm:w-44 transition-shadow hover:shadow-lg" [class.opacity-40]="!unitLevel()[def.unitType]">
         <div class="flex flex-col h-full">
 
           <!-- Title + stats -->
@@ -62,4 +65,5 @@
       </mat-card>
     }
   </div>
-</div>
+
+</ui-main-content>

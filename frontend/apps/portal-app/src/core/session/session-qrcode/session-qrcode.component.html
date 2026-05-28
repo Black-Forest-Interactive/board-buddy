@@ -1,0 +1,13 @@
+<div class="flex flex-col items-center gap-3 p-2">
+  @if (qrUrl()) {
+    <img [src]="qrUrl()" alt="QR Code" class="w-48 h-48 rounded-lg">
+  }
+  <div class="flex items-center gap-2 bg-surface-low rounded-lg pl-3 pr-1 py-1">
+    <mat-icon class="text-on-surface/50 shrink-0">key</mat-icon>
+    <code class="text-sm font-bold tracking-wide break-all">{{ sessionId() }}</code>
+    <button matIconButton [matTooltip]="'session.action.copyLink' | translate" (click)="copyId()">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  </div>
+  <p class="text-xs text-on-surface/50 text-center">{{ 'session.join.hint' | translate }}</p>
+</div>

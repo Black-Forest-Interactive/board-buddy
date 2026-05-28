@@ -38,3 +38,8 @@ export class PortalWorkflowCreateRequest {
 export class PortalJoinRequest {
   constructor(public nationId: number) {}
 }
+
+export interface SessionEvent {
+  sessionKey: string
+  type: 'BATTLE_STARTED' | 'BATTLE_FRONT_CREATED' | 'BATTLE_FRONT_ATTACKED' | 'BATTLE_FINISHED'
+}

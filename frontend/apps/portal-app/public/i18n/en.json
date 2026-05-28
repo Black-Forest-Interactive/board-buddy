@@ -7,7 +7,8 @@
     "create": "Create",
     "logout": "Log out",
     "reload": "Refresh",
-    "back": "Back"
+    "back": "Back",
+    "close": "Close"
   },
   "player": {
     "title": "My Profile"
@@ -54,6 +55,7 @@
     }
   },
   "home": {
+    "title": "Home",
     "welcome": "Welcome back,",
     "mySessions": "My sessions",
     "noSessions": "No active sessions.",
@@ -77,6 +79,11 @@
     "create": {
       "title": "Start session",
       "action": "Create session"
+    },
+    "dialog": {
+      "qrCode": {
+        "title": "Join session"
+      }
     },
     "join": {
       "title": "Join session",
@@ -112,7 +119,9 @@
       "error": "Action failed."
     },
     "research": {
-      "tier": "Age"
+      "tier": "Age",
+      "hideDiscovered": "Hide researched",
+      "showDiscovered": "Show all"
     },
     "battle": {
       "yourTurn": "It's your turn!",
@@ -133,6 +142,7 @@
       "winner": "Winner",
       "draw": "Draw",
       "finishAction": "Finish battle",
+      "cancelAction": "Cancel",
       "attacked": "Attack executed.",
       "attacker": "Attacker",
       "defender": "Defender",

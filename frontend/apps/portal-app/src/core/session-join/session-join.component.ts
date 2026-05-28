@@ -26,7 +26,10 @@ export class SessionJoinComponent {
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)
 
+  readonly hasPlayer = computed(() => !!this.playerService.getPlayerId())
+
   readonly form = new FormGroup({
+    name: new FormControl('', [Validators.minLength(2), Validators.maxLength(30)]),
     key: new FormControl('', [Validators.required, Validators.minLength(3)]),
     nationId: new FormControl<number | null>(null, Validators.required),
   })
@@ -46,12 +49,24 @@ export class SessionJoinComponent {
   readonly nations = computed(() => this.nationResource.value() ?? [])
 
   submit() {
-    if (this.form.invalid) return
-    const {key, nationId} = this.form.value
-    this.sessionService.joinSession(key!, new PortalJoinSessionRequest(nationId!)).subscribe({
+    const {name, key, nationId} = this.form.value
+    if (!key || !nationId) return
+
+    const onError = () => this.translate.get('session.join.message.error').subscribe(t => this.toast.error(t))
+    const doJoin = () => this.sessionService.joinSession(key, new PortalJoinSessionRequest(nationId)).subscribe({
       next: (workflow) => this.router.navigate(['/session', workflow.id]),
-      error: () => this.translate.get('session.join.message.error').subscribe(t => this.toast.error(t))
+      error: onError
     })
+
+    if (!this.hasPlayer()) {
+      if (!name || name.trim().length < 2) return
+      this.playerService.createPlayer({name: name.trim()}).subscribe({
+        next: (player) => { this.playerService.setPlayerId(player.id); doJoin() },
+        error: onError
+      })
+    } else {
+      doJoin()
+    }
   }
 
   back() { this.router.navigate(['/home']) }

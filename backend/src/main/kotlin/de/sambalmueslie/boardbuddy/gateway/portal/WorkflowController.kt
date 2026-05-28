@@ -35,6 +35,9 @@ class WorkflowController(private val gateway: WorkflowGateway) {
     @Post("{id}/battle/start")
     fun battleStart(id: String, @Body request: WorkflowBattleStartRequest) = gateway.battleStart(id, request)
 
+    @Post("{id}/battle/cancel")
+    fun battleCancel(id: String) = gateway.battleCancel(id)
+
     @Post("{id}/battle/front")
     fun battleCreateFront(@CookieValue("player-id") playerId: Long, id: String, @Body request: WorkflowBattleCreateFrontRequest) =
         gateway.battleCreateFront(id, request, playerId)

@@ -67,8 +67,6 @@ export class App {
       title: 'MENU.group.session',
       items: [
         {routerLink: `/session/${key}`, icon: 'casino', text: 'MENU.Session', exact: true},
-        {routerLink: `/session/${key}/army`, icon: 'military_tech', text: 'MENU.Army', exact: true},
-        {routerLink: `/session/${key}/research`, icon: 'science', text: 'MENU.Research', exact: true},
       ]
     })
     return groups

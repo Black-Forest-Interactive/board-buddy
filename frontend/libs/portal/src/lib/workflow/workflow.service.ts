@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core'
 import {Observable} from 'rxjs'
 import {BaseService} from '@board-buddy/shared'
+import {SessionEvent} from './workflow.api'
 import {Nation, TechnologyStatus, Workflow, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowBattleStartRequest, WorkflowCreateUnitRequest, WorkflowParticipantInfo, WorkflowResearchRequest} from '@board-buddy/core'
 import {PortalBattle, PortalParticipantInfo} from './workflow.api'
 
@@ -52,7 +53,20 @@ export class PortalWorkflowService extends BaseService {
     return this.post<PortalBattle>(`${key}/battle/attack`, request)
   }
 
+  battleCancel(key: string): Observable<void> {
+    return this.post<void>(`${key}/battle/cancel`, {})
+  }
+
   battleFinish(key: string): Observable<void> {
     return this.post<void>(`${key}/battle/finish`, {})
+  }
+
+  getSessionEvents(key: string): Observable<SessionEvent> {
+    return new Observable(observer => {
+      const source = new EventSource(`/api/portal/workflow/${key}/events`)
+      source.onmessage = (e) => { try { observer.next(JSON.parse(e.data)) } catch { /* ignore */ } }
+      source.onerror = () => observer.error(new Error('SSE error'))
+      return () => source.close()
+    })
   }
 }

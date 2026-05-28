@@ -23,6 +23,7 @@ class WorkflowGateway(
     fun createUnit(id: String, request: WorkflowCreateUnitRequest) = service.createUnit(id, request)
     fun research(id: String, request: WorkflowResearchRequest) = service.research(id, request)
     fun battleStart(id: String, request: WorkflowBattleStartRequest) = service.battleStart(id, request)
+    fun battleCancel(id: String) = service.battleCancel(id)
     fun battleFinish(id: String) = service.battleFinish(id)
     fun getParticipantsInfo(id: String) = service.getParticipantsInfo(id)
 
@@ -72,4 +73,5 @@ class WorkflowGateway(
             winner = battle.winner,
         )
     }
+
 }

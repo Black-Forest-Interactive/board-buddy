@@ -1,3 +1,14 @@
+// Angular Material's default hover opacity (8%) is too subtle with dark primary colors.
+// Increasing to 12% ensures hover states are clearly visible.
+:root {
+  --mat-text-button-hover-state-layer-opacity: 0.12;
+  --mat-icon-button-hover-state-layer-opacity: 0.12;
+  --mat-filled-button-hover-state-layer-opacity: 0.12;
+  --mat-tonal-button-hover-state-layer-opacity: 0.12;
+  --mat-outlined-button-hover-state-layer-opacity: 0.12;
+  --mat-protected-button-hover-state-layer-opacity: 0.12;
+}
+
 html, body {
   height: 100%;
   background-color: var(--mat-sys-surface);

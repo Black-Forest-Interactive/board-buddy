@@ -1,80 +1,96 @@
 @use '@angular/material' as mat;
-
 @include mat.core();
 
-// Define light theme
 $light-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$green-palette,
+    primary: mat.$yellow-palette,
+    tertiary: mat.$cyan-palette,
   )
 ));
 
-// Define dark theme
 $dark-theme: mat.define-theme((
   color: (
     theme-type: dark,
-    primary: mat.$azure-palette,
-    tertiary: mat.$green-palette,
+    primary: mat.$yellow-palette,
+    tertiary: mat.$cyan-palette,
   ),
 ));
 
-// Apply light theme by default
 html {
   @include mat.all-component-themes($light-theme);
   @include mat.all-component-typographies($light-theme);
 
-  // Light theme colors
-  --mat-sys-primary: #1565c0;
-  --mat-sys-on-primary: #ffffff;
-  --mat-sys-primary-container: #d3e4ff;
-  --mat-sys-on-primary-container: #001d35;
+  // Gold — light mode
+  --mat-sys-primary:                #b8860b;  // Dark Goldenrod
+  --mat-sys-on-primary:             #ffffff;
+  --mat-sys-primary-container:      #ffe57a;  // Light Gold
+  --mat-sys-on-primary-container:   #3a2800;
 
-  --mat-sys-tertiary: #6a1b9a;
-  --mat-sys-on-tertiary: #ffffff;
-  --mat-sys-tertiary-container: #e1e2ec;
-  --mat-sys-on-tertiary-container: #1f0033;
+  --mat-sys-secondary:              #8b6914;  // Bronze
+  --mat-sys-on-secondary:           #ffffff;
+  --mat-sys-secondary-container:    #ffd980;  // Light Bronze
+  --mat-sys-on-secondary-container: #2e1a00;
 
-  --mat-sys-error: #ba1a1a;
-  --mat-sys-on-error: #ffffff;
-  --mat-sys-error-container: #ffdad6;
-  --mat-sys-on-error-container: #410002;
+  --mat-sys-tertiary:               #1565c0;  // Navy Blue
+  --mat-sys-on-tertiary:            #ffffff;
+  --mat-sys-tertiary-container:     #d3e4ff;
+  --mat-sys-on-tertiary-container:  #001d35;
 
-  --mat-app-background-color: #ffffff;
+  --mat-sys-error:                  #ba1a1a;
+  --mat-sys-on-error:               #ffffff;
+  --mat-sys-error-container:        #ffdad6;
+  --mat-sys-on-error-container:     #410002;
+
+  --mat-sys-surface:                    #fffdf0;
+  --mat-sys-surface-container-lowest:  #ffffff;
+  --mat-sys-surface-container-low:     #fff8d6;
+  --mat-sys-surface-container:         #fff3b0;
+  --mat-sys-surface-container-high:    #ffe980;
+  --mat-sys-on-surface:                #1a1800;
+  --mat-app-background-color:          #fffdf0;
 }
 
-// Dark theme
 html.dark-theme {
   @include mat.all-component-colors($dark-theme);
 
-  // Dark theme colors
-  --mat-sys-primary: #a8cbff;
-  --mat-sys-on-primary: #003060;
-  --mat-sys-primary-container: #004a82;
-  --mat-sys-on-primary-container: #d3e4ff;
+  // Gold + Navy Blue — dark mode
+  --mat-sys-primary:                #ffd700;  // Pure Gold
+  --mat-sys-on-primary:             #3a2800;
+  --mat-sys-primary-container:      #7a5900;  // Deep Gold
+  --mat-sys-on-primary-container:   #fff3b0;
 
-  --mat-sys-tertiary: #d588f7;
-  --mat-sys-on-tertiary: #3d0061;
-  --mat-sys-tertiary-container: #5a007e;
-  --mat-sys-on-tertiary-container: #f0b9ff;
+  --mat-sys-secondary:              #d4a843;  // Light Bronze
+  --mat-sys-on-secondary:           #2e1a00;
+  --mat-sys-secondary-container:    #5a3d00;
+  --mat-sys-on-secondary-container: #ffd980;
 
-  --mat-sys-error: #ffb4ab;
-  --mat-sys-on-error: #690005;
-  --mat-sys-error-container: #93000a;
-  --mat-sys-on-error-container: #ffdad6;
+  --mat-sys-tertiary:               #7ec8f0;  // Steel Blue
+  --mat-sys-on-tertiary:            #001d35;
+  --mat-sys-tertiary-container:     #0d3f60;
+  --mat-sys-on-tertiary-container:  #c8e2f7;
 
-  --mat-app-background-color: #1a1c1e;
+  --mat-sys-error:                  #ffb4ab;
+  --mat-sys-on-error:               #690005;
+  --mat-sys-error-container:        #93000a;
+  --mat-sys-on-error-container:     #ffdad6;
+
+  // Navy Blue surface family
+  --mat-sys-surface:                    #1a2744;  // Navy Blue
+  --mat-sys-surface-container-lowest:  #0d1628;
+  --mat-sys-surface-container-low:     #141f3d;
+  --mat-sys-surface-container:         #1e2f52;
+  --mat-sys-surface-container-high:    #243660;
+  --mat-sys-on-surface:                #e8e4d0;
+  --mat-app-background-color:          #111b33;  // Deep Navy
 }
 
-/* Fix M3 date-range vertical alignment */
 .mat-mdc-form-field,
 .mat-date-range-input-container,
 .mdc-text-field__input {
   line-height: 1.5 !important;
 }
 
-/* Fix mirror span used for width calculation */
 .mat-mdc-form-field,
 .mat-date-range-input-mirror {
   font: inherit !important;
@@ -82,14 +98,6 @@ html.dark-theme {
   height: auto !important;
 }
 
-.dense-1 {
-  @include mat.all-component-densities(-1)
-}
-
-.dense-2 {
-  @include mat.all-component-densities(-2)
-}
-
-.dense-3 {
-  @include mat.all-component-densities(-3)
-}
+.dense-1 { @include mat.all-component-densities(-1) }
+.dense-2 { @include mat.all-component-densities(-2) }
+.dense-3 { @include mat.all-component-densities(-3) }
