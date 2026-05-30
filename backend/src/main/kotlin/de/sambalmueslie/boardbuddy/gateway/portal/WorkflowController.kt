@@ -1,6 +1,8 @@
 package de.sambalmueslie.boardbuddy.gateway.portal
 
 import de.sambalmueslie.boardbuddy.workflow.api.*
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
@@ -13,6 +15,10 @@ class WorkflowController(private val gateway: WorkflowGateway) {
 
     @Get("{id}")
     fun get(id: String) = gateway.get(id)
+
+    @Get("{id}/og-preview")
+    @Produces(MediaType.TEXT_HTML)
+    fun getOgPreview(id: String): HttpResponse<String> = gateway.getOgPreview(id)
 
     @Get("{id}/nations")
     fun getAvailableNations(id: String) = gateway.getAvailableNations(id)

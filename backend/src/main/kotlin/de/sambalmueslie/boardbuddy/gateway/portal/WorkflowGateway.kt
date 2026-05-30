@@ -4,6 +4,8 @@ import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattle
 import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattleOpponent
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
 import de.sambalmueslie.boardbuddy.workflow.api.*
+import io.micronaut.http.HttpResponse
+import io.micronaut.http.MediaType
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
@@ -16,6 +18,38 @@ class WorkflowGateway(
     }
 
     fun get(id: String) = service.get(id)
+
+    fun getOgPreview(id: String): HttpResponse<String> {
+        val workflow = runCatching { service.get(id) }.getOrNull()
+            ?: return HttpResponse.notFound()
+        val baseUrl = "https://blackforrestdevelopment.de"
+        val joinUrl = "$baseUrl/session/join?key=$id"
+        val participantCount = workflow.participants.size
+        val description = "${workflow.host.name} invites you to join \"${workflow.name}\" " +
+            "(${workflow.game.name}) — $participantCount player${if (participantCount == 1) "" else "s"} already in."
+        val content = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <title>${workflow.name} — Board Buddy</title>
+              <meta property="og:type" content="website">
+              <meta property="og:title" content="${workflow.name} — Board Buddy">
+              <meta property="og:description" content="$description">
+              <meta property="og:image" content="$baseUrl/img/og-preview.png">
+              <meta property="og:url" content="$baseUrl/api/portal/workflow/$id/og-preview">
+              <meta name="twitter:card" content="summary">
+              <meta name="twitter:title" content="${workflow.name} — Board Buddy">
+              <meta name="twitter:description" content="$description">
+              <meta http-equiv="refresh" content="0;url=$joinUrl">
+            </head>
+            <body>
+              <script>window.location.href = '$joinUrl'</script>
+            </body>
+            </html>
+        """.trimIndent()
+        return HttpResponse.ok(content).contentType(MediaType.TEXT_HTML)
+    }
     fun getAvailableNations(id: String) = service.getAvailableNations(id)
     fun getTechnologyStatus(id: String, playerId: Long) = service.getTechnologyStatus(id, playerId)
     fun create(request: WorkflowCreateRequest) = service.create(request)
