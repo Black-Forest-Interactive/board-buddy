@@ -8,18 +8,20 @@ import {MatCardModule} from '@angular/material/card'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {GameUnit, UnitDefinition, WorkflowCreateUnitRequest} from '@board-buddy/core'
+import {MatTooltipModule} from '@angular/material/tooltip'
 import {MainContentComponent} from '@board-buddy/ui'
-import {PlayerService, PortalWorkflowService} from '@board-buddy/portal'
+import {PlayerService, PortalWorkflowService, TourService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 @Component({
   selector: 'portal-session-army',
-  imports: [MatButtonModule, MatIconModule, MatCardModule, TranslatePipe, MainContentComponent],
+  imports: [MatButtonModule, MatIconModule, MatCardModule, MatTooltipModule, TranslatePipe, MainContentComponent],
   templateUrl: './session-army.component.html',
 })
 export class SessionArmyComponent {
   private workflowService = inject(PortalWorkflowService)
   private playerService = inject(PlayerService)
+  private tourService = inject(TourService)
   private router = inject(Router)
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)
@@ -56,6 +58,7 @@ export class SessionArmyComponent {
     }
   }
 
+  startTour() { this.tourService.startArmyTour() }
   back() { this.router.navigate(['/session', this.sessionKey()]) }
   reload() { this.workflowResource.reload(); this.myInfoResource.reload() }
 

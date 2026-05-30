@@ -1,3 +1,4 @@
+export * from './lib/tour/tour.service'
 export * from './lib/nation/nation.service'
 export * from './lib/player/player.api'
 export * from './lib/player/player.service'

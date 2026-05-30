@@ -31,7 +31,8 @@
         ],
         "styles": [
           "apps/portal-app/src/styles.scss",
-          "@ngxpert/hot-toast/styles.css"
+          "@ngxpert/hot-toast/styles.css",
+          "driver.js/dist/driver.css"
         ]
       },
       "configurations": {
