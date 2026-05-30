@@ -1,0 +1,36 @@
+<ui-main-content [title]="name()">
+
+  @if (imageUrl()) {
+    <img [src]="imageUrl()" [alt]="name()" class="w-32 h-32 rounded-lg object-cover mb-4">
+  }
+
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-base font-semibold">{{ 'nation.effect.title' | translate }}</h3>
+    <button matButton (click)="openAddEffect()">
+      <mat-icon>add</mat-icon>
+      {{ 'nation.effect.add' | translate }}
+    </button>
+  </div>
+
+  <mat-table [dataSource]="effects()">
+
+    <ng-container matColumnDef="governmentType">
+      <mat-header-cell *matHeaderCellDef>{{ 'nation.effect.table.governmentType' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ 'government.type.' + row.type | translate }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button matIconButton (click)="revokeEffect(row)" [matTooltip]="'action.delete' | translate">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="effectColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: effectColumns"></mat-row>
+
+  </mat-table>
+
+</ui-main-content>

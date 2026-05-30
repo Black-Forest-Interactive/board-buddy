@@ -1,7 +1,9 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
+import de.sambalmueslie.boardbuddy.core.nation.NationService
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
+import de.sambalmueslie.boardbuddy.core.technology.TechnologyService
 import de.sambalmueslie.boardbuddy.core.unit.UnitDefinitionService
 import io.micronaut.data.model.Pageable
 import jakarta.inject.Singleton
@@ -10,7 +12,9 @@ import org.slf4j.LoggerFactory
 @Singleton
 class RuleSetGateway(
     private val service: RuleSetService,
-    private val unitDefinitionService: UnitDefinitionService
+    private val unitDefinitionService: UnitDefinitionService,
+    private val technologyService: TechnologyService,
+    private val nationService: NationService
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(RuleSetGateway::class.java)
@@ -29,4 +33,20 @@ class RuleSetGateway(
     fun revokeUnitDefinition(ruleSetId: Long, unitDefinitionId: Long) =
         unitDefinitionService.get(unitDefinitionId)
             ?.let { service.revokeUnitDefinition(ruleSetId, it) }
+
+    fun assignTechnology(ruleSetId: Long, technologyId: Long) =
+        technologyService.get(technologyId)
+            ?.let { service.assignTechnology(ruleSetId, it) }
+
+    fun revokeTechnology(ruleSetId: Long, technologyId: Long) =
+        technologyService.get(technologyId)
+            ?.let { service.revokeTechnology(ruleSetId, it) }
+
+    fun assignNation(ruleSetId: Long, nationId: Long) =
+        nationService.get(nationId)
+            ?.let { service.assignNation(ruleSetId, it) }
+
+    fun revokeNation(ruleSetId: Long, nationId: Long) =
+        nationService.get(nationId)
+            ?.let { service.revokeNation(ruleSetId, it) }
 }

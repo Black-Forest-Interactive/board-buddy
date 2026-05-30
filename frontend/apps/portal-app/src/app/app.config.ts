@@ -1,5 +1,5 @@
 import {ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZoneChangeDetection} from '@angular/core'
-import {provideRouter, withComponentInputBinding} from '@angular/router'
+import {provideRouter, withComponentInputBinding, withRouterConfig} from '@angular/router'
 import {appRoutes} from './app.routes'
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter'
 import {MAT_DATE_LOCALE} from '@angular/material/core'
@@ -34,6 +34,6 @@ export const appConfig: ApplicationConfig = {
       fallbackLang: 'de',
       lang: 'en'
     }),
-    provideRouter(appRoutes, withComponentInputBinding()),
+    provideRouter(appRoutes, withComponentInputBinding(), withRouterConfig({paramsInheritanceStrategy: 'always'})),
   ],
 }

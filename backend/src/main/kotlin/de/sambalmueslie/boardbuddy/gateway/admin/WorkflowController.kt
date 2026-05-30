@@ -5,6 +5,7 @@ import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.QueryValue
 import io.swagger.v3.oas.annotations.tags.Tag
 
 @Controller(value = "/api/admin/workflow")
@@ -38,9 +39,18 @@ class WorkflowController(private val gateway: WorkflowGateway) {
     @Post("{id}/battle/finish")
     fun battleFinish(id: String) = gateway.battleFinish(id)
 
+    @Post("{id}/research")
+    fun research(id: String, @Body request: WorkflowResearchRequest) = gateway.research(id, request)
+
     @Get("{id}/participants")
     fun getParticipantsInfo(id: String) = gateway.getParticipantsInfo(id)
 
     @Get("{id}/battle")
     fun getBattleInfo(id: String) = gateway.getBattleInfo(id)
+
+    @Get("{id}/nations")
+    fun getAvailableNations(id: String) = gateway.getAvailableNations(id)
+
+    @Get("{id}/technology-status")
+    fun getTechnologyStatus(id: String, @QueryValue playerId: Long) = gateway.getTechnologyStatus(id, playerId)
 }

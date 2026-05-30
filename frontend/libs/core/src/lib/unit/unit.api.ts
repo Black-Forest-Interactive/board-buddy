@@ -1,8 +1,8 @@
 export const UnitType = {
   INFANTRY: 'INFANTRY',
   ARTILLERY: 'ARTILLERY',
-  CAVALRY: 'CAVALRY',
-  PLANE: 'PLANE',
+  MOUNTED: 'MOUNTED',
+  AIRCRAFT: 'AIRCRAFT',
 } as const
 
 export type UnitType = typeof UnitType[keyof typeof UnitType]

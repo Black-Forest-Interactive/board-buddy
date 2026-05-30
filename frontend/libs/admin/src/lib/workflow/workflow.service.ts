@@ -1,8 +1,11 @@
 import {Injectable} from '@angular/core'
+import {HttpParams} from '@angular/common/http'
 import {Observable} from 'rxjs'
 import {BaseService} from '@board-buddy/shared'
 import {
   Battle,
+  Nation,
+  TechnologyStatus,
   Workflow,
   WorkflowAssignPlayerRequest,
   WorkflowCreateRequest,
@@ -11,6 +14,7 @@ import {
   WorkflowBattleCreateFrontRequest,
   WorkflowBattleStartRequest,
   WorkflowCreateUnitRequest,
+  WorkflowResearchRequest,
 } from '@board-buddy/core'
 
 @Injectable({providedIn: 'root'})
@@ -27,6 +31,10 @@ export class WorkflowService extends BaseService {
 
   getWorkflow(sessionKey: string): Observable<Workflow> {
     return this.get<Workflow>(sessionKey)
+  }
+
+  getAvailableNations(sessionKey: string): Observable<Nation[]> {
+    return this.getAll<Nation>(`${sessionKey}/nations`)
   }
 
   getParticipantsInfo(sessionKey: string): Observable<WorkflowParticipantInfo[]> {
@@ -55,5 +63,13 @@ export class WorkflowService extends BaseService {
 
   battleFinish(sessionKey: string): Observable<void> {
     return this.post<void>(`${sessionKey}/battle/finish`, {})
+  }
+
+  research(sessionKey: string, request: WorkflowResearchRequest): Observable<Workflow> {
+    return this.post<Workflow>(`${sessionKey}/research`, request)
+  }
+
+  getTechnologyStatus(sessionKey: string, playerId: number): Observable<TechnologyStatus> {
+    return this.get<TechnologyStatus>(`${sessionKey}/technology-status`, new HttpParams().set('playerId', playerId))
   }
 }

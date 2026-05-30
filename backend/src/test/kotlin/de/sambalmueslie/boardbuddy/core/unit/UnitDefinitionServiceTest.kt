@@ -10,10 +10,8 @@ import io.mockk.*
 import jakarta.inject.Inject
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest
-@Testcontainers
 class UnitDefinitionServiceTest {
     @Inject
     lateinit var service: UnitDefinitionService
@@ -22,7 +20,7 @@ class UnitDefinitionServiceTest {
     lateinit var eventService: EventService
 
     private val eventCollector: EventConsumer<UnitDefinition> = mockk()
-    private val request = UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4)
+    private val request = UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.MOUNTED, PointsRange(1, 3), PointsRange(1, 3), 4)
 
     init {
         every { eventCollector.created(any()) } just Runs
@@ -55,7 +53,7 @@ class UnitDefinitionServiceTest {
         assertEquals(listOf(reference), service.getAll(Pageable.from(0)).content)
 
         // UPDATE
-        val update = UnitDefinitionChangeRequest("name-update", UnitType.CAVALRY, UnitType.ARTILLERY, PointsRange(2, 4), PointsRange(2, 4), 4)
+        val update = UnitDefinitionChangeRequest("name-update", UnitType.MOUNTED, UnitType.ARTILLERY, PointsRange(2, 4), PointsRange(2, 4), 4)
         reference = UnitDefinition(response.id, update.name, update.unitType, update.counterType, update.damagePoints, update.healthPoints, update.maxLevel)
         assertEquals(reference, service.update(reference.id, update))
         verify { eventCollector.updated(reference) }

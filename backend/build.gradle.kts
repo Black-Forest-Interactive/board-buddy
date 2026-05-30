@@ -5,13 +5,13 @@ plugins {
     kotlin("plugin.allopen") version "2.3.21"
     kotlin("plugin.jpa") version "2.3.21"
     kotlin("plugin.serialization") version "2.3.21"
-    id("com.google.devtools.ksp") version "2.3.7"
+    id("com.google.devtools.ksp") version "2.3.8"
     id("org.sonarqube") version "7.3.0.8198"
     id("net.researchgate.release") version "3.1.0"
     id("com.google.cloud.tools.jib") version "3.5.3"
-    id("io.micronaut.application") version "4.6.2"
-    id("io.micronaut.test-resources") version "4.6.2"
-    id("io.micronaut.aot") version "4.6.2"
+    id("io.micronaut.application") version "5.0.0"
+    id("io.micronaut.test-resources") version "5.0.0"
+    id("io.micronaut.aot") version "5.0.0"
     id("maven-publish")
     id("jacoco")
 }
@@ -32,8 +32,8 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.32")
     runtimeOnly("org.yaml:snakeyaml")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.0")
     // jackson
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut:micronaut-jackson-databind")
@@ -60,7 +60,7 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.security:micronaut-security-oauth2")
-    aotPlugins("io.micronaut.security:micronaut-security-aot:4.18.0")
+    aotPlugins("io.micronaut.security:micronaut-security-aot:5.0.0")
 
     // kotlin
     implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
@@ -97,9 +97,9 @@ dependencies {
 
     // test
     testImplementation("io.micronaut:micronaut-http-client")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:postgresql")
-    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:testcontainers:2.0.5")
+    testImplementation("org.testcontainers:testcontainers-jdbc:2.0.5")
+    testImplementation("org.testcontainers:testcontainers-postgresql:2.0.5")
     testImplementation("org.opensearch:opensearch-testcontainers:4.1.0")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testImplementation("io.fusionauth:fusionauth-jwt:6.0.0")
@@ -201,10 +201,11 @@ sonar {
 jib {
     from.image = "eclipse-temurin:25-jre-alpine"
     to {
-        image = "open-event-backend"
-        tags = setOf(version.toString(), "latest")
+        image = "ghcr.io/black-forest-interactive/board-buddy-backend"
+        tags = setOf("latest")
     }
     container {
+        mainClass = "de.sambalmueslie.boardbuddy.BoardBuddyApplication"
         creationTime.set("USE_CURRENT_TIMESTAMP")
 
         jvmFlags = listOf(

@@ -21,9 +21,10 @@ class GameComponentModelService(
         Pair(Type::class, createModel(Type::class)),
         Pair(CounterType::class, createModel(CounterType::class)),
         Pair(Government::class, createModel(Government::class)),
-        Pair(Nation::class, createModel(Nation::class)),
+        Pair(NationReference::class, createModel(NationReference::class)),
+        Pair(Technologies::class, createModel(Technologies::class)),
+        Pair(UnitProgress::class, createModel(UnitProgress::class)),
     )
-
 
     @Suppress("UNCHECKED_CAST")
     fun <T : GameComponent> get(type: KClass<T>): GameComponentModel<T> {
@@ -36,11 +37,10 @@ class GameComponentModelService(
     }
 
     fun persist(entity: GameEntity) {
-        model.forEach { (type, model) -> model.persist(entity) }
+        model.forEach { (_, m) -> m.persist(entity) }
     }
 
     fun load(entity: GameEntity) {
-        model.forEach { (type, model) -> model.load(entity) }
+        model.forEach { (_, m) -> m.load(entity) }
     }
-
 }

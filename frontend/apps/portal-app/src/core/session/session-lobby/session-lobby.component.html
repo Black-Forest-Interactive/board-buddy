@@ -1,0 +1,24 @@
+<ui-main-content [title]="sessionName()" containerClass="p-1 md:p-2 lg:p-4 flex flex-col gap-4 pb-8" [showBack]="true" (back)="back()">
+
+  <div actions class="flex items-center gap-1">
+    @if (isHost() && !hasBattle()) {
+      @if (isMobile()) {
+        <button matIconButton (click)="openQrDialog()" [matTooltip]="'session.action.showQr' | translate"><mat-icon>qr_code_2</mat-icon></button>
+        <button matIconButton (click)="copyLink()" [matTooltip]="'session.action.copyLink' | translate"><mat-icon>content_copy</mat-icon></button>
+      } @else {
+        <button matButton="outlined" (click)="openQrDialog()"><mat-icon>qr_code_2</mat-icon>{{ 'session.action.showQr' | translate }}</button>
+        <button matButton="outlined" (click)="copyLink()"><mat-icon>content_copy</mat-icon>{{ 'session.action.copyLink' | translate }}</button>
+      }
+    }
+    <button matIconButton (click)="reload()" [matTooltip]="'action.reload' | translate"><mat-icon>refresh</mat-icon></button>
+  </div>
+
+  @if (!hasBattle()) {
+    <portal-session-content [participants]="participantsEnriched()" [playerId]="playerId()" [hostId]="hostId()" [sessionId]="sessionId()" (attackPlayer)="attackPlayer($event)"/>
+  }
+
+  @if (hasBattle() && battle()) {
+    <portal-session-battle [battle]="battle()!" [fronts]="fronts()" [reserveUnits]="reserveUnits()" [playerId]="playerId()" [isMyTurn]="isMyTurn()" [battleFinished]="battleFinished()" [battleWinner]="battleWinner()" [attackableFronts]="attackableFronts()" [isHost]="isHost()" [selectedUnit]="selectedUnit()" [opponentNation]="opponentNation()" (finishBattle)="finishBattle()" (cancelBattle)="cancelBattle()" (selectUnit)="selectUnit($event)" (createFront)="createFront($event)" (attackFront)="attackFront($event)"/>
+  }
+
+</ui-main-content>

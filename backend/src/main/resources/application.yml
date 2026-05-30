@@ -11,17 +11,27 @@ micronaut:
           - /health
           - /prometheus
   security:
-    enabled: false
+    enabled: true
     endpoints:
       login:
         enabled: false
       oauth:
         enabled: false
+    token:
+      jwt:
+        signatures:
+          jwks:
+            keycloak:
+              url: https://auth.blackforrestdevelopment.de/realms/board-buddy/protocol/openid-connect/certs
     intercept-url-map:
       - access: isAnonymous()
         pattern: /swagger/**
       - access: isAnonymous()
         pattern: /swagger-ui/**
+      - access: isAnonymous()
+        pattern: /img/**
+      - access: isAuthenticated()
+        pattern: /**
   router:
     static-resources:
       swagger:
@@ -30,6 +40,10 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
+      img:
+        paths: classpath:static/img
+        mapping: /img/**
+
 
 
 datasources:
@@ -41,6 +55,9 @@ datasources:
     schema-generate: NONE
     dialect: POSTGRES
     schema: board_buddy
+
+jackson:
+  serialization-inclusion: ALWAYS
 
 flyway:
   datasources:

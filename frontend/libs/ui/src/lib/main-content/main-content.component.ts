@@ -1,11 +1,13 @@
 import {Component, input, output} from '@angular/core'
 import {MatCardModule} from '@angular/material/card'
+import {MatButtonModule} from '@angular/material/button'
+import {MatIconModule} from '@angular/material/icon'
 import {SearchComponent} from '../search/search.component'
-import {MatToolbar} from "@angular/material/toolbar"
+import {MatToolbar} from '@angular/material/toolbar'
 
 @Component({
   selector: 'ui-main-content',
-  imports: [MatCardModule, SearchComponent, MatToolbar],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, SearchComponent, MatToolbar],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss',
 })
@@ -14,10 +16,10 @@ export class MainContentComponent {
   readonly containerClass = input('')
   readonly enableSearch = input(false)
   readonly searchLabel = input('Search')
+  readonly showBack = input(false)
 
   readonly search = output<string>()
+  readonly back = output()
 
-  handleSearch(query: string) {
-    this.search.emit(query)
-  }
+  handleSearch(query: string) { this.search.emit(query) }
 }

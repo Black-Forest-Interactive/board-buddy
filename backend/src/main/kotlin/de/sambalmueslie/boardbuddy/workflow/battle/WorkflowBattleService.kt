@@ -60,10 +60,16 @@ class WorkflowBattleService(
         activeBattles.remove(session.key)
     }
 
+    fun cancel(session: GameSession) {
+        val battle = getData(session) ?: throw WorkflowBattleNotExisting(session.key)
+        battle.status = BattleStatus.CANCELED
+        updateWinner(battle)
+    }
+
     fun createFront(session: GameSession, request: WorkflowBattleCreateFrontRequest): Battle {
         val player = getAndValidatePlayer(session, request.playerId)
         return battleAction(session, player) {
-            actionFrontCreate.process( it, request, player)
+            actionFrontCreate.process(it, request, player)
         }
     }
 
@@ -72,7 +78,7 @@ class WorkflowBattleService(
         val defender = getAndValidatePlayer(session, request.defenderId)
 
         return battleAction(session, attacker) {
-            actionFrontAttack.process( it, request, attacker, defender)
+            actionFrontAttack.process(it, request, attacker, defender)
         }
 
     }
@@ -83,7 +89,7 @@ class WorkflowBattleService(
 
         val result = action.invoke(battle)
 
-        updateStatus(battle)
+        updateStatus(battle, player)
 
         if (result.status != BattleStatus.FINISHED) {
             switchActivePlayer(result, player)
@@ -105,10 +111,20 @@ class WorkflowBattleService(
         return participant
     }
 
-    private fun updateStatus(battle: BattleData) {
-        val noUnitsAvailable = battle.participant.all { it.units.isEmpty() }
-        battle.status = if (noUnitsAvailable) BattleStatus.FINISHED else BattleStatus.ONGOING
-        if (battle.status == BattleStatus.FINISHED) {
+    private fun updateStatus(battle: BattleData, currentPlayer: GameSessionPlayer) {
+        val allEmpty = battle.participant.all { it.units.isEmpty() }
+        val nextIsEmpty = if (!allEmpty) {
+            val currentIndex = battle.participant.indexOfFirst { it.matches(currentPlayer) }
+            val nextIndex = if (currentIndex >= battle.participant.size - 1) 0 else currentIndex + 1
+            battle.participant[nextIndex].units.isEmpty()
+        } else false
+
+        battle.status = if (allEmpty || nextIsEmpty) BattleStatus.FINISHED else BattleStatus.ONGOING
+        updateWinner(battle)
+    }
+
+    private fun updateWinner(battle: BattleData) {
+        if (battle.status == BattleStatus.FINISHED || battle.status == BattleStatus.CANCELED) {
             val playerRemainingHealth = battle.fronts.flatMap { it.units }.groupBy { it.player }
                 .mapValues { it.value.sumOf { u -> u.currentHealth } }
                 .filter { it.value > 0 }

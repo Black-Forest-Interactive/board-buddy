@@ -1,23 +1,24 @@
 package de.sambalmueslie.boardbuddy.engine.storage
 
-import de.sambalmueslie.boardbuddy.engine.api.Nation
-import de.sambalmueslie.boardbuddy.engine.api.NationType
-import jakarta.persistence.*
+import de.sambalmueslie.boardbuddy.engine.api.NationReference
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.time.LocalDateTime
 
-@Entity(name = "ComponentNation  ")
+@Entity(name = "ComponentNation")
 @Table(name = "component_nation")
 data class ComponentNationData(
     @Id var entityId: Long,
 
-    @Enumerated(EnumType.STRING) var type: NationType,
+    var nationId: Long,
 
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
-) : GameComponentData<Nation, ComponentNationData> {
-    override fun convert() = Nation(type)
+) : GameComponentData<NationReference, ComponentNationData> {
+    override fun convert() = NationReference(nationId)
     override fun update(value: ComponentNationData): ComponentNationData {
-        type = value.type
+        nationId = value.nationId
         updated = value.created
         return this
     }

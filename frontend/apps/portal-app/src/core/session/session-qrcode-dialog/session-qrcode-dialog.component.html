@@ -1,0 +1,7 @@
+<h2 mat-dialog-title>{{ 'session.dialog.qrCode.title' | translate }}</h2>
+<mat-dialog-content class="px-1!">
+  <portal-session-qrcode [sessionId]="data.sessionId" [qrUrl]="data.qrUrl"/>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton="filled" (click)="dialogRef.close()">{{ 'action.close' | translate }}</button>
+</mat-dialog-actions>

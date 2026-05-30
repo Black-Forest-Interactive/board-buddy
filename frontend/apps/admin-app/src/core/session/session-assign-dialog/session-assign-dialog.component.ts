@@ -8,7 +8,7 @@ import {MatFormFieldModule} from '@angular/material/form-field'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {PlayerService, WorkflowService} from '@board-buddy/admin'
-import {NationType, Player, WorkflowAssignPlayerRequest} from '@board-buddy/core'
+import {Nation, Player, WorkflowAssignPlayerRequest} from '@board-buddy/core'
 import {toPromise} from '@board-buddy/shared'
 
 @Component({
@@ -25,12 +25,11 @@ export class SessionAssignDialogComponent {
 
   private data: {sessionKey: string, participants: Player[]} = inject(MAT_DIALOG_DATA)
 
-  private allResource = resource({
-    loader: () => toPromise(this.playerService.getPlayers(0, 100))
-  })
+  private allResource = resource({loader: () => toPromise(this.playerService.getPlayers(0, 100))})
+  private nationResource = resource({loader: () => toPromise(this.workflowService.getAvailableNations(this.data.sessionKey))})
 
-  readonly nations = Object.values(NationType)
-  readonly selectedNation = signal<NationType>(NationType.AMERICA)
+  readonly nations = computed(() => this.nationResource.value() ?? [])
+  readonly selectedNation = signal<number | null>(null)
 
   readonly available = computed(() => {
     const participantIds = new Set(this.data.participants.map(p => p.id))
@@ -38,7 +37,9 @@ export class SessionAssignDialogComponent {
   })
 
   assign(player: Player) {
-    const request = new WorkflowAssignPlayerRequest(player.id, this.selectedNation())
+    const nationId = this.selectedNation()
+    if (!nationId) return
+    const request = new WorkflowAssignPlayerRequest(player.id, nationId)
     this.workflowService.assignPlayer(this.data.sessionKey, request).subscribe({
       next: () => {
         this.translate.get('session.message.playerAssigned').subscribe(t => this.toast.success(t))

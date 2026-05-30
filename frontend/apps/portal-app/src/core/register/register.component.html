@@ -1,0 +1,26 @@
+<div class="min-h-full flex items-center justify-center p-6">
+  <mat-card appearance="raised" class="w-full max-w-sm">
+    <div class="flex flex-col items-center gap-2 p-6 pb-2">
+      <mat-icon class="!text-5xl !w-12 !h-12 text-primary">sports_esports</mat-icon>
+      <h1 class="text-2xl font-bold mt-2">{{ 'register.title' | translate }}</h1>
+      <p class="text-sm text-center text-on-surface/60">{{ 'register.subtitle' | translate }}</p>
+    </div>
+    <div class="px-6 pb-2">
+      <mat-form-field class="w-full">
+        <mat-label>{{ 'register.form.name' | translate }}</mat-label>
+        <input matInput [formControl]="nameControl" (keyup.enter)="submit()" autocomplete="off" [placeholder]="'register.form.namePlaceholder' | translate">
+        @if (nameControl.hasError('required')) {
+          <mat-error>{{ 'register.form.error.required' | translate }}</mat-error>
+        }
+        @if (nameControl.hasError('minlength')) {
+          <mat-error>{{ 'register.form.error.minLength' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="px-6 pb-6">
+      <button matButton="filled" class="w-full" (click)="submit()" [disabled]="nameControl.invalid">
+        {{ 'register.action.start' | translate }}
+      </button>
+    </div>
+  </mat-card>
+</div>

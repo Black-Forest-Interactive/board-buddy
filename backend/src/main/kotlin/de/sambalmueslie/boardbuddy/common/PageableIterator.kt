@@ -1,4 +1,4 @@
-package de.sambalmueslie.openevent.common
+package de.sambalmueslie.boardbuddy.common
 
 
 import io.micronaut.data.model.Page
@@ -6,7 +6,7 @@ import io.micronaut.data.model.Pageable
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class PageableIterator<T>(pageSize: Int = 500, private val provider: (pageable: Pageable) -> Page<T>) :
+class PageableIterator<T : Any>(pageSize: Int = 500, private val provider: (pageable: Pageable) -> Page<T>) :
     Iterator<T> {
 
     companion object {

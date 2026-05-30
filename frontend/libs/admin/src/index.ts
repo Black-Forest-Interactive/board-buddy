@@ -1,4 +1,6 @@
+export * from './lib/nation/nation.service'
 export * from './lib/game/game.service'
+export * from './lib/technology/technology.service'
 export * from './lib/player/player.service'
 export * from './lib/session/session.service'
 export * from './lib/rule-set/rule-set.service'

@@ -17,8 +17,8 @@ import {
   BattleFront,
   BattleFrontUnit,
   BattleParticipant,
-  GameSessionPlayer,
   GameUnit,
+  Player,
   UnitDefinition,
   WorkflowBattleAttackFrontRequest,
   WorkflowBattleCreateFrontRequest,
@@ -29,6 +29,7 @@ import {toPromise} from '@board-buddy/shared'
 import {MainContentComponent} from '@board-buddy/ui'
 import {SessionAssignDialogComponent} from '../session-assign-dialog/session-assign-dialog.component'
 import {SessionBattleStartDialogComponent} from '../session-battle-start-dialog/session-battle-start-dialog.component'
+import {SessionResearchDialogComponent} from '../session-research-dialog/session-research-dialog.component'
 
 @Component({
   selector: 'admin-session-detail',
@@ -132,10 +133,10 @@ export class SessionDetailComponent {
     })
   }
 
-  createUnit(player: GameSessionPlayer, unitDef: UnitDefinition) {
+  createUnit(player: Player, unitDef: UnitDefinition) {
     const key = this.sessionKey()
     if (!key) return
-    const request = new WorkflowCreateUnitRequest(player.player.id, unitDef.id)
+    const request = new WorkflowCreateUnitRequest(player.id, unitDef.id)
     this.workflowService.createUnit(key, request).subscribe({
       next: () => {
         this.translate.get('session.message.unitCreated').subscribe(t => this.toast.success(t))
@@ -199,8 +200,8 @@ export class SessionDetailComponent {
     return unit?.type?.kind ?? `#${entityId}`
   }
 
-  unitsOfType(units: GameUnit[], unitType: string): GameUnit[] {
-    return units.filter(u => u.type?.kind === unitType)
+  unitsOfType(units: GameUnit[] | undefined, unitType: string): GameUnit[] {
+    return (units ?? []).filter(u => u.type?.kind === unitType)
   }
 
   hpBoxes(current: number, max: number | null | undefined): boolean[] {
@@ -214,7 +215,7 @@ export class SessionDetailComponent {
 
   unitImagePath(kind: string | null | undefined): string | null {
     if (!kind) return null
-    const map: Record<string, string> = {'INFANTRY': '/img/infantry2.jpg', 'CAVALRY': '/img/cavalry2.jpg', 'ARTILLERY': '/img/artillery2.jpg', 'PLANE': '/img/plane2.jpg'}
+    const map: Record<string, string> = {'INFANTRY': '/img/unit/infantry2_mini.jpg', 'MOUNTED': '/img/unit/cavalry2_mini.jpg', 'ARTILLERY': '/img/unit/artillery2_mini.jpg', 'AIRCRAFT': '/img/unit/plane2_mini.jpg'}
     return map[kind] ?? null
   }
 
@@ -227,10 +228,20 @@ export class SessionDetailComponent {
     return participant.units.filter(u => !onFront.has(u.entity))
   }
 
-  revokePlayer(player: GameSessionPlayer) {
+  openResearch(info: WorkflowParticipantInfo) {
+    const key = this.sessionKey()
+    if (!key) return
+    this.dialog.open(SessionResearchDialogComponent, {
+      data: {sessionKey: key, participantInfo: info}
+    }).afterClosed().subscribe(saved => {
+      if (saved) this.participantsInfoResource.reload()
+    })
+  }
+
+  revokePlayer(player: Player) {
     const id = this.id()
     if (!id) return
-    this.sessionService.revokePlayer(id, player.player.id).subscribe({
+    this.sessionService.revokePlayer(id, player.id).subscribe({
       next: (updated) => {
         this.sessionResource.set(updated)
         this.translate.get('session.message.playerRevoked').subscribe(t => this.toast.success(t))

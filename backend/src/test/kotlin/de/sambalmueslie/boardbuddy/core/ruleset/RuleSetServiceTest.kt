@@ -16,10 +16,8 @@ import io.mockk.*
 import jakarta.inject.Inject
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest()
-@Testcontainers
 class RuleSetServiceTest {
     @Inject
     lateinit var service: RuleSetService
@@ -56,7 +54,7 @@ class RuleSetServiceTest {
 
         // CREATE
         val response = service.create(request)
-        var reference = RuleSet(response.id, request.name, emptyList())
+        var reference = RuleSet(response.id, request.name, emptyList(), emptyList(), emptyList())
         assertEquals(reference, response)
         verify { eventCollector.created(reference) }
 
@@ -66,7 +64,7 @@ class RuleSetServiceTest {
 
         // UPDATE
         val update = RuleSetChangeRequest("name-update")
-        reference = RuleSet(response.id, update.name, emptyList())
+        reference = RuleSet(response.id, update.name, emptyList(), emptyList(), emptyList())
         assertEquals(reference, service.update(reference.id, update))
         verify { eventCollector.updated(reference) }
 
@@ -86,7 +84,7 @@ class RuleSetServiceTest {
         service.create(request)
 
         val updateResponse = service.update(99, request)
-        val updateReference = RuleSet(updateResponse.id, request.name, emptyList())
+        val updateReference = RuleSet(updateResponse.id, request.name, emptyList(), emptyList(), emptyList())
         assertEquals(updateReference, updateResponse)
         verify { eventCollector.created(updateReference) }
     }
@@ -104,7 +102,7 @@ class RuleSetServiceTest {
     @Test
     fun testUnitTypeRelations() {
         val ruleSet = service.create(request)
-        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.MOUNTED, PointsRange(1, 3), PointsRange(1, 3), 4))
 
         val assigned = service.assignUnitDefinition(ruleSet, unitType)
         Assertions.assertNotNull(assigned)
@@ -125,7 +123,7 @@ class RuleSetServiceTest {
     @Test
     fun testDeletionWithRelations() {
         val ruleSet = service.create(request)
-        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val unitType = unitTypeService.create(UnitDefinitionChangeRequest("name", UnitType.INFANTRY, UnitType.MOUNTED, PointsRange(1, 3), PointsRange(1, 3), 4))
 
         service.assignUnitDefinition(ruleSet, unitType)
 

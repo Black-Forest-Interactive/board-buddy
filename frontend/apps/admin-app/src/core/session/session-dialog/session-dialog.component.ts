@@ -9,7 +9,7 @@ import {MatSelectModule} from '@angular/material/select'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {GameService, PlayerService, WorkflowService} from '@board-buddy/admin'
-import {Game, NationType, Player, RuleSet, WorkflowCreateRequest} from '@board-buddy/core'
+import {Game, Nation, Player, RuleSet, WorkflowCreateRequest} from '@board-buddy/core'
 import {toPromise} from '@board-buddy/shared'
 
 @Component({
@@ -30,21 +30,20 @@ export class SessionDialogComponent {
 
   readonly players = computed(() => this.playersResource.value()?.content ?? [])
   readonly games = computed(() => this.gamesResource.value()?.content ?? [])
-  readonly nations = Object.values(NationType)
 
   readonly form = new FormGroup({
     name: new FormControl('', Validators.required),
     host: new FormControl<Player | null>(null, Validators.required),
-    nation: new FormControl<NationType>(NationType.AMERICA, Validators.required),
     game: new FormControl<Game | null>(null, Validators.required),
     ruleSet: new FormControl<RuleSet | null>({value: null, disabled: true}, Validators.required),
+    nationId: new FormControl<number | null>({value: null, disabled: true}, Validators.required),
   })
 
   private selectedGame = toSignal(this.form.controls.game.valueChanges, {initialValue: null})
+  private selectedRuleSet = toSignal(this.form.controls.ruleSet.valueChanges, {initialValue: null})
 
-  readonly ruleSets = computed<RuleSet[]>(() =>
-    this.selectedGame()?.ruleSets ?? []
-  )
+  readonly ruleSets = computed<RuleSet[]>(() => this.selectedGame()?.ruleSets ?? [])
+  readonly nations = computed<Nation[]>(() => this.selectedRuleSet()?.nations ?? [])
 
   constructor() {
     effect(() => {
@@ -56,12 +55,22 @@ export class SessionDialogComponent {
         this.form.controls.ruleSet.disable()
       }
     })
+
+    effect(() => {
+      const ruleSet = this.selectedRuleSet()
+      this.form.controls.nationId.reset(null)
+      if (ruleSet && ruleSet.nations.length > 0) {
+        this.form.controls.nationId.enable()
+      } else {
+        this.form.controls.nationId.disable()
+      }
+    })
   }
 
   submit() {
     if (this.form.invalid) return
     const v = this.form.getRawValue()
-    const request = new WorkflowCreateRequest(v.name!, v.host!.id, v.game!.id, v.ruleSet!.id, v.nation!)
+    const request = new WorkflowCreateRequest(v.name!, v.host!.id, v.game!.id, v.ruleSet!.id, v.nationId!)
     this.workflowService.create(request).subscribe({
       next: () => {
         this.translate.get('session.message.created').subscribe(t => this.toast.success(t))

@@ -1,44 +1,145 @@
 <ui-main-content [title]="name()">
 
-  <button matButton="filled" actions (click)="openAssign()">
-    <mat-icon>add</mat-icon>
-    {{ 'rule-set.assignUnit' | translate }}
-  </button>
+  <mat-tab-group>
 
-  <mat-table [dataSource]="unitDefinitions()">
-
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.name' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="unitType">
-      <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.unitType' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ 'unit-definition.type.' + row.unitType | translate }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="counterType">
-      <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.counterType' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.counterType ? ('unit-definition.type.' + row.counterType | translate) : '—' }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="maxLevel">
-      <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.maxLevel' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.maxLevel }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <button matIconButton (click)="revoke(row)" [matTooltip]="'rule-set.revokeUnit' | translate">
-          <mat-icon>link_off</mat-icon>
+    <mat-tab [label]="'unit-definition.title' | translate">
+      <div class="flex justify-end py-3">
+        <button matButton (click)="openAssignUnit()">
+          <mat-icon>add</mat-icon>
+          {{ 'rule-set.assignUnit' | translate }}
         </button>
-      </mat-cell>
-    </ng-container>
+      </div>
 
-    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: columns"></mat-row>
+      <mat-table [dataSource]="unitDefinitions()">
 
-  </mat-table>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.name' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="unitType">
+          <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.unitType' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ 'unit-definition.type.' + row.unitType | translate }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="counterType">
+          <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.counterType' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.counterType ? ('unit-definition.type.' + row.counterType | translate) : '—' }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="maxLevel">
+          <mat-header-cell *matHeaderCellDef>{{ 'unit-definition.table.maxLevel' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.maxLevel }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button matIconButton (click)="revokeUnit(row)" [matTooltip]="'rule-set.revokeUnit' | translate">
+              <mat-icon>link_off</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="unitColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: unitColumns"></mat-row>
+
+      </mat-table>
+    </mat-tab>
+
+    <mat-tab [label]="'technology.title' | translate">
+      <div class="flex justify-end py-3">
+        <button matButton (click)="openAssignTechnology()">
+          <mat-icon>add</mat-icon>
+          {{ 'rule-set.assignTechnology' | translate }}
+        </button>
+      </div>
+
+      <mat-table [dataSource]="technologies()">
+
+        <ng-container matColumnDef="image">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            @if (row.imageUrl) {
+              <img [src]="row.imageUrl" [alt]="row.name" class="w-10 h-10 rounded object-cover">
+            }
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>{{ 'technology.table.name' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef>{{ 'technology.table.description' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.description }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tier">
+          <mat-header-cell *matHeaderCellDef>{{ 'technology.table.tier' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.tier }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button matIconButton (click)="revokeTechnology(row)" [matTooltip]="'rule-set.revokeTechnology' | translate">
+              <mat-icon>link_off</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="technologyColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: technologyColumns"></mat-row>
+
+      </mat-table>
+    </mat-tab>
+
+    <mat-tab [label]="'nation.title' | translate">
+      <div class="flex justify-end py-3">
+        <button matButton (click)="openAssignNation()">
+          <mat-icon>add</mat-icon>
+          {{ 'rule-set.assignNation' | translate }}
+        </button>
+      </div>
+
+      <mat-table [dataSource]="nations()">
+
+        <ng-container matColumnDef="image">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            @if (row.imageUrl) {
+              <img [src]="row.imageUrl" [alt]="row.name" class="w-10 h-10 rounded object-cover">
+            }
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>{{ 'nation.table.name' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef>{{ 'nation.table.description' | translate }}</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.description }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button matIconButton (click)="revokeNation(row)" [matTooltip]="'rule-set.revokeNation' | translate">
+              <mat-icon>link_off</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="nationColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: nationColumns"></mat-row>
+
+      </mat-table>
+    </mat-tab>
+
+  </mat-tab-group>
 
 </ui-main-content>

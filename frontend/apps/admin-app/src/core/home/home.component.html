@@ -22,6 +22,16 @@
       </mat-card-content>
     </mat-card>
 
+    <mat-card routerLink="/technology" class="cursor-pointer hover:shadow-md transition-shadow" appearance="outlined">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>science</mat-icon>
+        <mat-card-title>{{ 'technology.title' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="pt-2">
+        <p class="text-sm text-gray-600">{{ 'home.card.technology' | translate }}</p>
+      </mat-card-content>
+    </mat-card>
+
     <mat-card routerLink="/game" class="cursor-pointer hover:shadow-md transition-shadow" appearance="outlined">
       <mat-card-header>
         <mat-icon mat-card-avatar>sports_esports</mat-icon>
@@ -39,6 +49,16 @@
       </mat-card-header>
       <mat-card-content class="pt-2">
         <p class="text-sm text-gray-600">{{ 'home.card.player' | translate }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card routerLink="/nation" class="cursor-pointer hover:shadow-md transition-shadow" appearance="outlined">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>public</mat-icon>
+        <mat-card-title>{{ 'nation.title' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="pt-2">
+        <p class="text-sm text-gray-600">{{ 'home.card.nation' | translate }}</p>
       </mat-card-content>
     </mat-card>
 

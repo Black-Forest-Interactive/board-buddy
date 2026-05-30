@@ -7,6 +7,6 @@ import jakarta.persistence.Table
 @Entity(name = "RuleSetUnitDefinition")
 @Table(name = "rule_set_unit_definition")
 data class RuleSetUnitDefinitionRelation(
-    val ruleSetId: Long,
-    val unitDefinitionId: Long
+    var ruleSetId: Long,
+    var unitDefinitionId: Long
 )

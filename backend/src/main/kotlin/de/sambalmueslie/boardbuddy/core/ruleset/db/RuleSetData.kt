@@ -1,8 +1,10 @@
 package de.sambalmueslie.boardbuddy.core.ruleset.db
 
 import de.sambalmueslie.boardbuddy.common.EntityData
+import de.sambalmueslie.boardbuddy.core.nation.api.Nation
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSet
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
+import de.sambalmueslie.boardbuddy.core.technology.api.Technology
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinition
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -19,7 +21,7 @@ data class RuleSetData(
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert(unitDefinitions: List<UnitDefinition>) = RuleSet(id, name, unitDefinitions)
+    fun convert(unitDefinitions: List<UnitDefinition>, technologies: List<Technology>, nations: List<Nation>) = RuleSet(id, name, unitDefinitions, technologies, nations)
     fun update(request: RuleSetChangeRequest, currentTime: LocalDateTime): RuleSetData {
         name = request.name
         updated = currentTime

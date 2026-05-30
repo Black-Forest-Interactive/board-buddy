@@ -7,5 +7,7 @@ export const appRoutes: Route[] = [
   {path: 'game', loadChildren: () => import('../core/game/game.routes').then(m => m.routes)},
   {path: 'player', loadChildren: () => import('../core/player/player.routes').then(m => m.routes)},
   {path: 'unit-definition', loadChildren: () => import('../core/unit-definition/unit-definition.routes').then(m => m.routes)},
+  {path: 'technology', loadChildren: () => import('../core/technology/technology.routes').then(m => m.routes)},
+  {path: 'nation', loadChildren: () => import('../core/nation/nation.routes').then(m => m.routes)},
   {path: 'session', loadChildren: () => import('../core/session/session.routes').then(m => m.routes)},
 ]

@@ -3,8 +3,11 @@ package de.sambalmueslie.boardbuddy.gateway.portal
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.annotation.*
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import io.swagger.v3.oas.annotations.tags.Tag
 
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller(value = "/api/portal/player")
 @Tag(name = "Portal Player API")
 class PlayerController(private val gateway: PlayerGateway) {

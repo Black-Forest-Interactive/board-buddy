@@ -1,0 +1,19 @@
+<ui-main-content [title]="'player.title' | translate" containerClass="p-4 flex flex-col gap-4" [showBack]="true" (back)="back()">
+
+  <div actions>
+    <button matIconButton (click)="reload()"><mat-icon>refresh</mat-icon></button>
+  </div>
+
+  <mat-card appearance="outlined">
+    <div class="flex items-center gap-4 p-4">
+      <div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center shrink-0">
+        <mat-icon class="!text-3xl text-on-primary">person</mat-icon>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-lg font-semibold">{{ playerName() }}</span>
+        <span class="text-sm text-on-surface/50">ID: {{ playerIdDisplay() }}</span>
+      </div>
+    </div>
+  </mat-card>
+
+</ui-main-content>

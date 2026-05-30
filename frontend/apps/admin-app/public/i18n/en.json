@@ -40,7 +40,9 @@
       "unit-definition": "Manage unit definitions",
       "game": "Manage games",
       "player": "Manage players",
-      "session": "Manage game sessions"
+      "session": "Manage game sessions",
+      "technology": "Manage technologies",
+      "nation": "Manage nations"
     }
   },
   "game": {
@@ -133,8 +135,8 @@
     "type": {
       "INFANTRY": "Infantry",
       "ARTILLERY": "Artillery",
-      "CAVALRY": "Cavalry",
-      "PLANE": "Plane"
+      "MOUNTED": "Mounted",
+      "AIRCRAFT": "Aircraft"
     },
     "dialog": {
       "create": {
@@ -191,6 +193,9 @@
       },
       "unit": {
         "title": "Create Unit"
+      },
+      "research": {
+        "title": "Research Technology"
       }
     },
     "message": {
@@ -200,11 +205,13 @@
       "playerAssigned": "Player added",
       "playerRevoked": "Player removed",
       "battleStarted": "Battle started",
-      "unitCreated": "Unit created"
+      "unitCreated": "Unit created",
+      "technologyResearched": "Technology researched"
     },
     "assignPlayer": "Add Player",
     "action": {
-      "startBattle": "Start Battle"
+      "startBattle": "Start Battle",
+      "research": "Research"
     },
     "createUnit": "Create Unit",
     "battle": {
@@ -266,6 +273,107 @@
       "ZULU": "Zulu"
     }
   },
+  "technology": {
+    "title": "Technologies",
+    "create": "New Technology",
+    "table": {
+      "name": "Name",
+      "description": "Description",
+      "tier": "Tier"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Description",
+      "imageUrl": "Image URL",
+      "tier": "Tier",
+      "error": {
+        "name": "Name required",
+        "description": "Description required",
+        "tier": "Tier required"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Create Technology"
+      },
+      "edit": {
+        "title": "Edit Technology"
+      }
+    },
+    "message": {
+      "created": "Technology created",
+      "updated": "Technology updated",
+      "deleted": "Technology deleted",
+      "error": "An error occurred"
+    },
+    "effect": {
+      "title": "Effects",
+      "add": "Add Effect",
+      "table": {
+        "unitType": "Unit Type",
+        "unitLevel": "Level"
+      },
+      "form": {
+        "unitType": "Unit Type",
+        "unitLevel": "Level",
+        "error": {
+          "unitType": "Unit type required",
+          "unitLevel": "Level required"
+        }
+      },
+      "dialog": {
+        "title": "Add Effect"
+      },
+      "message": {
+        "added": "Effect added",
+        "removed": "Effect removed",
+        "error": "An error occurred"
+      }
+    },
+    "tier": {
+      "1": "Tier I",
+      "2": "Tier II",
+      "3": "Tier III",
+      "4": "Tier IV",
+      "5": "Tier V"
+    },
+    "type": {
+      "ANIMAL_HUSBANDRY": "Animal Husbandry",
+      "POTTERY": "Pottery",
+      "MINING": "Mining",
+      "SAILING": "Sailing",
+      "PHILOSOPHY": "Philosophy",
+      "MASONRY": "Masonry",
+      "METAL_WORKING": "Metal Working",
+      "CODE_OF_LAWS": "Code of Laws",
+      "MYSTICISM": "Mysticism",
+      "HORSEBACK_RIDING": "Horseback Riding",
+      "AGRICULTURE": "Agriculture",
+      "CURRENCY": "Currency",
+      "CONSTRUCTION": "Construction",
+      "MATHEMATICS": "Mathematics",
+      "IRRIGATION": "Irrigation",
+      "IRON_WORKING": "Iron Working",
+      "THEOLOGY": "Theology",
+      "DRAMA_AND_POETRY": "Drama and Poetry",
+      "LITERATURE": "Literature",
+      "CIVIL_SERVICE": "Civil Service",
+      "EDUCATION": "Education",
+      "ENGINEERING": "Engineering",
+      "MACHINERY": "Machinery",
+      "CHIVALRY": "Chivalry",
+      "MILITARY_TRADITION": "Military Tradition",
+      "ACOUSTICS": "Acoustics",
+      "GUNPOWDER": "Gunpowder",
+      "NAVIGATION": "Navigation",
+      "PRINTING_PRESS": "Printing Press",
+      "FLIGHT": "Flight",
+      "DEMOCRACY": "Democracy",
+      "COMMUNISM": "Communism",
+      "FUNDAMENTALISM": "Fundamentalism",
+      "SPACE_FLIGHT": "Space Flight"
+    }
+  },
   "rule-set": {
     "title": "Rule Sets",
     "create": "New Rule Set",
@@ -289,6 +397,14 @@
       "assign": {
         "title": "Assign Unit Definition",
         "empty": "No unit definitions available"
+      },
+      "assignTechnology": {
+        "title": "Assign Technology",
+        "empty": "No technologies available"
+      },
+      "assignNation": {
+        "title": "Assign Nation",
+        "empty": "No nations available"
       }
     },
     "message": {
@@ -297,9 +413,80 @@
       "deleted": "Rule set deleted",
       "error": "An error occurred",
       "unitAssigned": "Unit assigned",
-      "unitRevoked": "Assignment revoked"
+      "unitRevoked": "Assignment revoked",
+      "technologyAssigned": "Technology assigned",
+      "technologyRevoked": "Assignment revoked",
+      "nationAssigned": "Nation assigned",
+      "nationRevoked": "Assignment revoked"
     },
     "assignUnit": "Assign Unit",
-    "revokeUnit": "Revoke Assignment"
+    "revokeUnit": "Revoke Assignment",
+    "assignTechnology": "Assign Technology",
+    "revokeTechnology": "Revoke Assignment",
+    "assignNation": "Assign Nation",
+    "revokeNation": "Revoke Assignment"
+  },
+  "government": {
+    "type": {
+      "DESPOTISM": "Despotism",
+      "ANARCHY": "Anarchy",
+      "REPUBLIC": "Republic",
+      "FEUDALISM": "Feudalism",
+      "COMMUNISM": "Communism",
+      "FUNDAMENTALISM": "Fundamentalism",
+      "DEMOCRACY": "Democracy"
+    }
+  },
+  "nation": {
+    "title": "Nations",
+    "create": "New Nation",
+    "table": {
+      "name": "Name",
+      "description": "Description"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Description",
+      "imageUrl": "Image URL",
+      "error": {
+        "name": "Name required",
+        "description": "Description required"
+      }
+    },
+    "dialog": {
+      "create": {
+        "title": "Create Nation"
+      },
+      "edit": {
+        "title": "Edit Nation"
+      }
+    },
+    "message": {
+      "created": "Nation created",
+      "updated": "Nation updated",
+      "deleted": "Nation deleted",
+      "error": "An error occurred"
+    },
+    "effect": {
+      "title": "Effects",
+      "add": "Add Effect",
+      "table": {
+        "governmentType": "Initial Government"
+      },
+      "form": {
+        "governmentType": "Government Type",
+        "error": {
+          "type": "Government type required"
+        }
+      },
+      "dialog": {
+        "title": "Add Effect"
+      },
+      "message": {
+        "added": "Effect added",
+        "removed": "Effect removed",
+        "error": "An error occurred"
+      }
+    }
   }
 }

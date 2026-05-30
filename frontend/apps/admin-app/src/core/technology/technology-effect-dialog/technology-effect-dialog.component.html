@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{ 'technology.effect.dialog.title' | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2 min-w-[360px]">
+
+    <mat-form-field>
+      <mat-label>{{ 'technology.effect.form.unitType' | translate }}</mat-label>
+      <mat-select formControlName="unitType">
+        @for (type of unitTypes; track type) {
+          <mat-option [value]="type">{{ 'unit-definition.type.' + type | translate }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.unitType.hasError('required')) {
+        <mat-error>{{ 'technology.effect.form.error.unitType' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'technology.effect.form.unitLevel' | translate }}</mat-label>
+      <input matInput type="number" formControlName="unitLevel" min="1" max="10"/>
+      @if (form.controls.unitLevel.hasError('required') || form.controls.unitLevel.hasError('min') || form.controls.unitLevel.hasError('max')) {
+        <mat-error>{{ 'technology.effect.form.error.unitLevel' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>{{ 'action.cancel' | translate }}</button>
+  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">{{ 'action.save' | translate }}</button>
+</mat-dialog-actions>

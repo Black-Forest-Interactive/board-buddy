@@ -4,8 +4,15 @@ mat-toolbar.content-toolbar {
   color: var(--mat-sys-on-primary) !important;
   border-radius: 8px 8px 0 0;
 
-  button,
-  mat-icon {
+  button {
+    color: var(--mat-sys-on-primary) !important;
+    --mat-icon-button-state-layer-color: var(--mat-sys-on-primary);
+    --mat-text-button-state-layer-color: var(--mat-sys-on-primary);
+    --mat-filled-button-state-layer-color: var(--mat-sys-on-primary);
+  }
+
+  mat-icon,
+  .mdc-button__label {
     color: var(--mat-sys-on-primary) !important;
   }
 }

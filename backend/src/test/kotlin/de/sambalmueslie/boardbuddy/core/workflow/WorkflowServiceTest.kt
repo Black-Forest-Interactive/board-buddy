@@ -3,6 +3,8 @@ package de.sambalmueslie.boardbuddy.core.workflow
 import de.sambalmueslie.boardbuddy.core.event.EventService
 import de.sambalmueslie.boardbuddy.core.game.GameService
 import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
+import de.sambalmueslie.boardbuddy.core.nation.NationService
+import de.sambalmueslie.boardbuddy.core.nation.api.NationChangeRequest
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
@@ -19,10 +21,8 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import org.testcontainers.junit.jupiter.Testcontainers
 
 @MicronautTest()
-@Testcontainers
 class WorkflowServiceTest {
     @Inject
     lateinit var service: WorkflowService
@@ -40,6 +40,9 @@ class WorkflowServiceTest {
     lateinit var sessionService: GameSessionService
 
     @Inject
+    lateinit var nationService: NationService
+
+    @Inject
     lateinit var unitTypeService: UnitDefinitionService
 
     @Inject
@@ -50,12 +53,19 @@ class WorkflowServiceTest {
     fun testSimpleGame() {
         var ruleSet = ruleSetService.create(RuleSetChangeRequest("default"))
 
-        val inf = unitTypeService.create(UnitDefinitionChangeRequest("infantery", UnitType.INFANTRY, UnitType.CAVALRY, PointsRange(1, 3), PointsRange(1, 3), 4))
-        val cav = unitTypeService.create(UnitDefinitionChangeRequest("cavalery", UnitType.CAVALRY, UnitType.ARTILLERY, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val inf = unitTypeService.create(UnitDefinitionChangeRequest("infantery", UnitType.INFANTRY, UnitType.MOUNTED, PointsRange(1, 3), PointsRange(1, 3), 4))
+        val cav = unitTypeService.create(UnitDefinitionChangeRequest("cavalery", UnitType.MOUNTED, UnitType.ARTILLERY, PointsRange(1, 3), PointsRange(1, 3), 4))
         val art = unitTypeService.create(UnitDefinitionChangeRequest("artillery", UnitType.ARTILLERY, UnitType.INFANTRY, PointsRange(1, 3), PointsRange(1, 3), 4))
         ruleSet = ruleSetService.assignUnitDefinition(ruleSet, inf)!!
         ruleSet = ruleSetService.assignUnitDefinition(ruleSet, cav)!!
         ruleSet = ruleSetService.assignUnitDefinition(ruleSet, art)!!
+
+        val nation1 = nationService.create(NationChangeRequest("nation1", "desc", ""))
+        val nation2 = nationService.create(NationChangeRequest("nation2", "desc", ""))
+        val nation3 = nationService.create(NationChangeRequest("nation3", "desc", ""))
+        ruleSet = ruleSetService.assignNation(ruleSet, nation1)!!
+        ruleSet = ruleSetService.assignNation(ruleSet, nation2)!!
+        ruleSet = ruleSetService.assignNation(ruleSet, nation3)!!
 
         var game = gameService.create(GameChangeRequest("default", "default"))
         game = gameService.assignRuleSet(game, ruleSet)!!
@@ -64,10 +74,10 @@ class WorkflowServiceTest {
         val p2 = playerService.create(PlayerChangeRequest("p2"))
         val p3 = playerService.create(PlayerChangeRequest("p3"))
 
-        var workflow = service.create(WorkflowCreateRequest("workflow", p1.id, game.id, ruleSet.id, NationType.GERMANY))
+        var workflow = service.create(WorkflowCreateRequest("workflow", p1.id, game.id, ruleSet.id, nation1.id))
 
-        workflow = service.join(workflow.id, p2, NationType.GREEKS)
-        workflow = service.join(workflow.id, p3, NationType.AMERICA)
+        workflow = service.assign(workflow.id, WorkflowAssignPlayerRequest(p2.id, nation2.id))
+        workflow = service.assign(workflow.id, WorkflowAssignPlayerRequest(p3.id, nation3.id))
 
         // create units
         workflow = service.createUnit(workflow.id, WorkflowCreateUnitRequest(p1.id, inf.id))
@@ -111,13 +121,13 @@ class WorkflowServiceTest {
         val bp2Units = service.getUnits(bp2)
 
         val bp2u1 = bp2Units.find { it.type?.kind == inf.unitType }!!
-        assertEquals(GameUnit(bp2u1.entity, bp2u1.damage, bp2u1.health, Level(1), Type(inf.unitType), CounterType(inf.counterType)), bp2u1)
+        assertEquals(GameUnit(bp2u1.entity, bp2u1.damage, bp2u1.health, Level(1), Type(inf.unitType), CounterType(inf.counterType!!)), bp2u1)
 
         val bp2u2 = bp2Units.find { it.type?.kind == cav.unitType }!!
-        assertEquals(GameUnit(bp2u2.entity, bp2u2.damage, bp2u2.health, Level(1), Type(cav.unitType), CounterType(cav.counterType)), bp2u2)
+        assertEquals(GameUnit(bp2u2.entity, bp2u2.damage, bp2u2.health, Level(1), Type(cav.unitType), CounterType(cav.counterType!!)), bp2u2)
 
         val bp2u3 = bp2Units.find { it.type?.kind == art.unitType }!!
-        assertEquals(GameUnit(bp2u3.entity, bp2u3.damage, bp2u3.health, Level(1), Type(art.unitType), CounterType(art.counterType)), bp2u3)
+        assertEquals(GameUnit(bp2u3.entity, bp2u3.damage, bp2u3.health, Level(1), Type(art.unitType), CounterType(art.counterType!!)), bp2u3)
 
         // p2 (defender, active) creates front with infantry
         workflow = service.battleCreateFront(workflow.id, WorkflowBattleCreateFrontRequest(p2.id, bp2u1.entity))

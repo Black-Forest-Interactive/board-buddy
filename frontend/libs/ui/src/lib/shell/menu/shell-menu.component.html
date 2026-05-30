@@ -23,7 +23,7 @@
         <div class="flex flex-col gap-2">
           @for (item of group.items; track item.routerLink) {
 
-            <a [routerLink]="item.routerLink" routerLinkActive="active-nav-link" class="menu-link">
+            <a [routerLink]="item.routerLink" routerLinkActive="active-nav-link" [routerLinkActiveOptions]="{exact: item.exact ?? false}" class="menu-link">
               <mat-icon>{{ item.icon }}</mat-icon>
 
               @if (!collapsed()) {

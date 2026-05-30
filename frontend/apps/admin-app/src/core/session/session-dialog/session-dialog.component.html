@@ -21,15 +21,6 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
-      <mat-select formControlName="nation">
-        @for (n of nations; track n) {
-          <mat-option [value]="n">{{ 'session.nation.' + n | translate }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field>
       <mat-label>{{ 'session.form.game' | translate }}</mat-label>
       <mat-select formControlName="game">
         @for (game of games(); track game.id) {
@@ -43,6 +34,15 @@
       <mat-select formControlName="ruleSet">
         @for (rs of ruleSets(); track rs.id) {
           <mat-option [value]="rs">{{ rs.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'session.form.nation' | translate }}</mat-label>
+      <mat-select formControlName="nationId">
+        @for (n of nations(); track n.id) {
+          <mat-option [value]="n.id">{{ n.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

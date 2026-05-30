@@ -10,5 +10,6 @@ data class UnitDefinition(
     val counterType: UnitType?,
     val damagePoints: PointsRange,
     val healthPoints: PointsRange,
+    @Deprecated("is determined by the rules")
     val maxLevel: Int,
 ) : Entity
