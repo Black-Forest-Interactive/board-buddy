@@ -1,4 +1,8 @@
 {
+  "footer": {
+    "legalNotice": "Legal Notice",
+    "privacy": "Privacy Policy"
+  },
   "action": {
     "save": "Save",
     "cancel": "Cancel",

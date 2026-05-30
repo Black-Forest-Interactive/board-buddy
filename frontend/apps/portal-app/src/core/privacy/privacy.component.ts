@@ -4,11 +4,11 @@ import {MainContentComponent} from '@board-buddy/ui'
 import {LEGAL} from '../legal/legal.config'
 
 @Component({
-  selector: 'portal-impressum',
+  selector: 'portal-privacy',
   imports: [MainContentComponent],
-  templateUrl: './impressum.component.html',
+  templateUrl: './privacy.component.html',
 })
-export class ImpressumComponent {
+export class PrivacyComponent {
   private location = inject(Location)
   readonly legal = LEGAL
   back() { this.location.back() }

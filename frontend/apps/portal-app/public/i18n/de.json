@@ -1,4 +1,8 @@
 {
+  "footer": {
+    "legalNotice": "Impressum",
+    "privacy": "Datenschutz"
+  },
   "action": {
     "save": "Speichern",
     "cancel": "Abbrechen",

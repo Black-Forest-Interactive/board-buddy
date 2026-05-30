@@ -8,7 +8,5 @@ export const LEGAL = {
   email:                '[E-Mail]',
   license:              'MIT',
   githubUrl:            'https://github.com/Black-Forest-Interactive/board-buddy',
-  logRetentionDays:     '[X]',
-  playerDataRetention:  '[Beschreibung]',
   legalDate:            '[Monat Jahr]',
 } as const
