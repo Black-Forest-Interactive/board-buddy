@@ -25,6 +25,12 @@
 
 ---
 
+## Community
+
+Join the Discord to ask questions, share feedback or just chat about the game:
+
+[![Discord](https://img.shields.io/badge/Discord-join%20the%20server-5865F2?logo=discord&logoColor=white)](https://discord.gg/2vgpyEMhet)
+
 ## Support & Feedback
 
 If Board Buddy saves you time at the table, consider buying me a coffee:
