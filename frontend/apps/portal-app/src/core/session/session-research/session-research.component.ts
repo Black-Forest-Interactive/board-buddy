@@ -11,7 +11,7 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {Technology, WorkflowResearchRequest} from '@board-buddy/core'
 import {MainContentComponent} from '@board-buddy/ui'
-import {PortalWorkflowService} from '@board-buddy/portal'
+import {PortalWorkflowService, TourService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 const TIERS = [1, 2, 3, 4, 5]
@@ -23,6 +23,7 @@ const TIERS = [1, 2, 3, 4, 5]
 })
 export class SessionResearchComponent {
   private workflowService = inject(PortalWorkflowService)
+  private tourService = inject(TourService)
   private router = inject(Router)
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)
@@ -77,6 +78,7 @@ export class SessionResearchComponent {
     }
   }
 
+  startTour() { this.tourService.startResearchTour() }
   back() { this.router.navigate(['/session', this.sessionKey()]) }
   reload() { this.myInfoResource.reload(); this.technologyStatusResource.reload() }
   scrollToTier(tier: number) { document.getElementById('tier-' + tier)?.scrollIntoView({behavior: 'smooth', block: 'start'}) }

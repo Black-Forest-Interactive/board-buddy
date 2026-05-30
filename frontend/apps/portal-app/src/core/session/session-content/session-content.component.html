@@ -3,7 +3,7 @@
 }
 <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3">
   @for (e of participants(); track e.participant.player.id) {
-    <mat-card appearance="outlined" class="w-full sm:w-52" [class.ring-2]="e.participant.player.id === playerId()" [class.ring-primary]="e.participant.player.id === playerId()">
+    <mat-card appearance="outlined" class="w-full sm:w-52 !bg-surface" [class.ring-2]="e.participant.player.id === playerId()" [class.ring-primary]="e.participant.player.id === playerId()">
       <div class="flex flex-col gap-2 items-center">
         <div class="flex items-center justify-between px-3 pt-3 pb-1 w-full">
           <span class="font-semibold truncate">{{ e.participant.player.name }}</span>
@@ -20,14 +20,14 @@
         <div class="h-5 text-xs text-on-surface/60 px-3 text-center w-full">{{ e.government ? ('government.type.' + e.government.type | translate) : '' }}</div>
         <div class="px-3 pb-3 w-full flex flex-col gap-1">
           @if (e.participant.player.id !== playerId()) {
-            <button matButton="outlined" class="w-full" (click)="attackPlayer.emit(e.participant)">
+            <button class="tour-lobby-battle w-full" matButton="outlined" (click)="attackPlayer.emit(e.participant)">
               <mat-icon>gps_fixed</mat-icon>{{ 'session.action.startBattle' | translate }}
             </button>
           } @else {
-            <button matButton="outlined" class="w-full" [routerLink]="['/session', sessionId(), 'army']">
+            <button id="tour-lobby-army" matButton="outlined" class="w-full" [routerLink]="['/session', sessionId(), 'army']">
               <mat-icon>military_tech</mat-icon>{{ 'MENU.Army' | translate }}
             </button>
-            <button matButton="outlined" class="w-full" [routerLink]="['/session', sessionId(), 'research']">
+            <button id="tour-lobby-research" matButton="outlined" class="w-full" [routerLink]="['/session', sessionId(), 'research']">
               <mat-icon>science</mat-icon>{{ 'MENU.Research' | translate }}
             </button>
           }

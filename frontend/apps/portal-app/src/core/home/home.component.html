@@ -1,11 +1,12 @@
 <ui-main-content [title]="'home.title' | translate" containerClass="p-6 flex flex-col items-center gap-6">
 
-  <div actions>
+  <div actions class="flex items-center gap-1">
+    <button matIconButton (click)="startTour()" [matTooltip]="'tour.action' | translate"><mat-icon>help_outline</mat-icon></button>
     <button matIconButton (click)="reload()"><mat-icon>refresh</mat-icon></button>
   </div>
 
   <div class="w-full max-w-sm flex flex-col gap-4 mt-4">
-    <mat-card appearance="raised" class="cursor-pointer hover:shadow-lg transition-shadow" (click)="createSession()">
+    <mat-card id="tour-home-create" appearance="raised" class="cursor-pointer hover:shadow-lg transition-shadow" (click)="createSession()">
       <div class="flex flex-col items-center gap-3 p-4 md:p-8">
         <mat-icon class="!text-3xl !w-8 !h-8 md:!text-5xl md:!w-12 md:!h-12 text-primary">add_circle</mat-icon>
         <div class="text-center">
@@ -15,7 +16,7 @@
       </div>
     </mat-card>
 
-    <mat-card appearance="raised" class="cursor-pointer hover:shadow-lg transition-shadow" (click)="joinSession()">
+    <mat-card id="tour-home-join" appearance="raised" class="cursor-pointer hover:shadow-lg transition-shadow" (click)="joinSession()">
       <div class="flex flex-col items-center gap-3 p-4 md:p-8">
         <mat-icon class="!text-3xl !w-8 !h-8 md:!text-5xl md:!w-12 md:!h-12 text-secondary">login</mat-icon>
         <div class="text-center">
@@ -26,7 +27,7 @@
     </mat-card>
   </div>
 
-  <div class="w-full max-w-sm flex flex-col gap-2">
+  <div id="tour-home-sessions" class="w-full max-w-sm flex flex-col gap-2">
     <h3 class="text-sm font-semibold text-on-surface/60 uppercase tracking-wide px-1">{{ 'home.mySessions' | translate }}</h3>
     @if (sessions().length === 0) {
       <p class="text-sm text-on-surface/50 px-1">{{ 'home.noSessions' | translate }}</p>

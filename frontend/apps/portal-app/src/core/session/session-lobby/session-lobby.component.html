@@ -3,18 +3,21 @@
   <div actions class="flex items-center gap-1">
     @if (isHost() && !hasBattle()) {
       @if (isMobile()) {
-        <button matIconButton (click)="openQrDialog()" [matTooltip]="'session.action.showQr' | translate"><mat-icon>qr_code_2</mat-icon></button>
+        <button id="tour-lobby-share" matIconButton (click)="openQrDialog()" [matTooltip]="'session.action.showQr' | translate"><mat-icon>qr_code_2</mat-icon></button>
         <button matIconButton (click)="copyLink()" [matTooltip]="'session.action.copyLink' | translate"><mat-icon>content_copy</mat-icon></button>
       } @else {
-        <button matButton="outlined" (click)="openQrDialog()"><mat-icon>qr_code_2</mat-icon>{{ 'session.action.showQr' | translate }}</button>
-        <button matButton="outlined" (click)="copyLink()"><mat-icon>content_copy</mat-icon>{{ 'session.action.copyLink' | translate }}</button>
+        <button id="tour-lobby-share" matButton="elevated" (click)="openQrDialog()"><mat-icon>qr_code_2</mat-icon>{{ 'session.action.showQr' | translate }}</button>
+        <button id="tour-lobby-share" matButton="outlined" (click)="openQrDialog()"><mat-icon>qr_code_2</mat-icon>{{ 'session.action.showQr' | translate }}</button>
+        <button id="tour-lobby-share" matButton="tonal" (click)="openQrDialog()"><mat-icon>qr_code_2</mat-icon>{{ 'session.action.showQr' | translate }}</button>
+        <button matButton="filled" (click)="copyLink()"><mat-icon>content_copy</mat-icon>{{ 'session.action.copyLink' | translate }}</button>
       }
     }
+    <button matIconButton (click)="startTour()" [matTooltip]="'tour.action' | translate"><mat-icon>help_outline</mat-icon></button>
     <button matIconButton (click)="reload()" [matTooltip]="'action.reload' | translate"><mat-icon>refresh</mat-icon></button>
   </div>
 
   @if (!hasBattle()) {
-    <portal-session-content [participants]="participantsEnriched()" [playerId]="playerId()" [hostId]="hostId()" [sessionId]="sessionId()" (attackPlayer)="attackPlayer($event)"/>
+    <portal-session-content id="tour-lobby-participants" [participants]="participantsEnriched()" [playerId]="playerId()" [hostId]="hostId()" [sessionId]="sessionId()" (attackPlayer)="attackPlayer($event)"/>
   }
 
   @if (hasBattle() && battle()) {

@@ -1,14 +1,15 @@
 <ui-main-content [title]="'session.action.research' | translate" containerClass="p-1 md:p-2 lg:p-4 flex flex-col gap-4 pb-8" [showBack]="true" (back)="back()">
 
   <div actions class="flex items-center gap-1">
-    <button matIconButton [matTooltip]="(hideDiscovered() ? 'session.research.showDiscovered' : 'session.research.hideDiscovered') | translate" (click)="hideDiscovered.set(!hideDiscovered())">
+    <button id="tour-research-toggle" matIconButton [matTooltip]="(hideDiscovered() ? 'session.research.showDiscovered' : 'session.research.hideDiscovered') | translate" (click)="hideDiscovered.set(!hideDiscovered())">
       <mat-icon>{{ hideDiscovered() ? 'visibility' : 'visibility_off' }}</mat-icon>
     </button>
+    <button matIconButton (click)="startTour()" [matTooltip]="'tour.action' | translate"><mat-icon>help_outline</mat-icon></button>
     <button matIconButton (click)="reload()" [matTooltip]="'action.reload' | translate"><mat-icon>refresh</mat-icon></button>
   </div>
 
   <!-- Sticky tier navigation -->
-  <div class="sticky top-0 z-10 flex items-center gap-1 flex-wrap -mx-1 -mt-1 md:-mx-2 md:-mt-2 lg:-mx-4 lg:-mt-4 px-1 md:px-2 lg:px-4 pt-3 pb-2 bg-surface-container border-b border-surface-high">
+  <div id="tour-research-tiers" class="sticky top-0 z-10 flex items-center gap-1 flex-wrap -mx-1 -mt-1 md:-mx-2 md:-mt-2 lg:-mx-4 lg:-mt-4 px-1 md:px-2 lg:px-4 pt-3 pb-2 bg-surface-container border-b border-surface-high">
     <span class="text-xs text-on-surface/50 uppercase tracking-wide mr-1 shrink-0">{{ 'session.research.tier' | translate }}</span>
     @for (tier of tiers; track tier) {
       <button class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold hover:bg-on-surface/10 transition-colors cursor-pointer" (click)="scrollToTier(tier)">{{ tier }}</button>

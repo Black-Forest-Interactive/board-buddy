@@ -1,18 +1,50 @@
-
 mat-toolbar.content-toolbar {
+  // 1. Toolbar-Basis (Nutzt deine Theme-Variablen für Light/Dark)
   background-color: var(--mat-sys-primary) !important;
   color: var(--mat-sys-on-primary) !important;
   border-radius: 8px 8px 0 0;
 
-  button {
+  // WICHTIG: Das ">" sorgt dafür, dass NUR direkte Texte der Toolbar gefärbt werden,
+  // und NICHT die Spans oder Divs innerhalb der Buttons!
+  > span, > div, > p, > h1, > h2, > h3 {
     color: var(--mat-sys-on-primary) !important;
-    --mat-icon-button-state-layer-color: var(--mat-sys-on-primary);
-    --mat-text-button-state-layer-color: var(--mat-sys-on-primary);
-    --mat-filled-button-state-layer-color: var(--mat-sys-on-primary);
   }
 
-  mat-icon,
-  .mdc-button__label {
+  // Rechte Icon-Buttons (Hilfe, Aktualisieren)
+  .mat-mdc-icon-button mat-icon {
     color: var(--mat-sys-on-primary) !important;
+  }
+
+  // ==========================================================================
+  // BULLETPROOF BUTTON OVERRIDES (Garantiert lesbar in Light & Dark)
+  // ==========================================================================
+
+  // --- 1. ELEVATED BUTTON (Ganz links: Weißer Grund) ---
+  .mat-mdc-elevated-button {
+    .mdc-button__label, mat-icon {
+      color: var(--mat-sys-primary) !important; // Dunkles Blaugrau im Light-Mode
+    }
+  }
+
+  // --- 2. OUTLINED BUTTON (Zweiter von links: Rahmen) ---
+  .mat-mdc-outlined-button {
+    border-color: var(--mat-sys-on-primary) !important;
+    .mdc-button__label, mat-icon {
+      color: var(--mat-sys-on-primary) !important; // Weiß im Light-Mode
+    }
+  }
+
+  // --- 3. TONAL BUTTON (Dritter von links: Hellblauer Grund) ---
+  .mat-mdc-filled-tonal-button {
+    .mdc-button__label, mat-icon {
+      color: var(--mat-sys-on-secondary-container) !important; // Sehr dunkles Blau für perfekten Kontrast
+    }
+  }
+
+  // --- 4. FILLED BUTTON (Ganz rechts: Dunkelgrüner/Teal Grund) ---
+  .mat-mdc-filled-button {
+    .mdc-button__label, mat-icon {
+      color: var(--mat-sys-on-primary) !important; // Weiß im Light-Mode
+    }
   }
 }

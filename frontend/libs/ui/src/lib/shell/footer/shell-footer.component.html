@@ -1,13 +1,13 @@
-<footer  class="h-8 bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sm:px-6">
-  <div class="text-sm text-gray-600 dark:text-gray-400">
-    <a href="https://github.com/Black-Forest-Interactive/board-buddy"
-       target="_blank"
-       rel="noopener noreferrer"
-       class="hover:text-gray-900 dark:hover:text-gray-200 hover:underline transition-colors">
-      Board Buddy {{ currentYear }}
-    </a>
-  </div>
-  <div class="text-sm text-gray-600 dark:text-gray-400">
-    Version {{ version }}
+<footer class="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 sm:px-6 py-1.5 text-xs text-gray-500 dark:text-gray-400">
+  <a href="https://github.com/Black-Forest-Interactive/board-buddy"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="hover:text-gray-800 dark:hover:text-gray-200 hover:underline transition-colors">
+    Board Buddy {{ currentYear }}
+  </a>
+  <div class="flex items-center gap-4">
+    <a routerLink="/impressum" class="hover:text-gray-800 dark:hover:text-gray-200 hover:underline transition-colors">Impressum</a>
+    <a routerLink="/datenschutz" class="hover:text-gray-800 dark:hover:text-gray-200 hover:underline transition-colors">Datenschutz</a>
+    <span class="text-gray-400 dark:text-gray-600">v{{ version }}</span>
   </div>
 </footer>

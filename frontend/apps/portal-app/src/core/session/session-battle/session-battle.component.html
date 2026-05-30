@@ -2,7 +2,7 @@
 
 <!-- Active player / winner banner -->
 @if (battleFinished()) {
-  <div class="flex items-center gap-3 p-2 lg:p-4 rounded-xl bg-tertiary-container text-on-tertiary-container">
+  <div id="tour-battle-banner" class="flex items-center gap-3 p-2 lg:p-4 rounded-xl bg-tertiary-container text-on-tertiary-container">
     <mat-icon>emoji_events</mat-icon>
     @if (battleWinner()) {
       <span class="font-semibold">{{ 'session.battle.winner' | translate }}:</span>
@@ -17,7 +17,7 @@
     }
   </div>
 } @else {
-  <div class="flex items-center gap-2 p-2 lg:p-4 rounded-xl" [class.bg-primary-container]="isMyTurn()" [class.text-on-primary-container]="isMyTurn()" [class.bg-surface-low]="!isMyTurn()">
+  <div id="tour-battle-banner" class="flex items-center gap-2 p-2 lg:p-4 rounded-xl" [class.bg-primary-container]="isMyTurn()" [class.text-on-primary-container]="isMyTurn()" [class.bg-surface-low]="!isMyTurn()">
     <mat-icon>swords</mat-icon>
     @if (isMyTurn()) {
       <span class="font-semibold">{{ 'session.battle.yourTurn' | translate }}</span>
@@ -51,7 +51,7 @@
 
 <!-- Fronts -->
 @if (fronts().length > 0) {
-  <div>
+  <div id="tour-battle-fronts">
     <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-2 px-1">{{ 'session.battle.fronts' | translate }}</p>
     <div class="flex flex-col gap-3">
       @for (front of fronts(); track front.index) {
@@ -118,7 +118,7 @@
 
 <!-- My reserve units -->
 @if (!battleFinished()) {
-  <div>
+  <div id="tour-battle-reserve">
     <p class="text-xs font-semibold text-on-surface/50 uppercase tracking-wide mb-2 px-1">{{ 'session.battle.myReserve' | translate }}</p>
     @if (reserveUnits().length === 0) {
       <p class="text-sm text-on-surface/40 italic px-1">{{ 'session.battle.noUnits' | translate }}</p>

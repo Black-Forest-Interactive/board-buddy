@@ -11,7 +11,7 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {GameSessionPlayer, GameUnit, Nation, Workflow, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowParticipantInfo} from '@board-buddy/core'
 import {MainContentComponent} from '@board-buddy/ui'
-import {PlayerService, PortalBattle, PortalWorkflowService} from '@board-buddy/portal'
+import {PlayerService, PortalBattle, PortalWorkflowService, TourService} from '@board-buddy/portal'
 import {SessionBattleStartDialogComponent} from '../session-battle-start-dialog/session-battle-start-dialog.component'
 import {SessionBattleComponent} from '../session-battle/session-battle.component'
 import {SessionContentComponent} from '../session-content/session-content.component'
@@ -25,6 +25,7 @@ import {SessionQrcodeDialogComponent} from '../session-qrcode-dialog/session-qrc
 export class SessionLobbyComponent {
   private workflowService = inject(PortalWorkflowService)
   private playerService = inject(PlayerService)
+  private tourService = inject(TourService)
   private dialog = inject(MatDialog)
   private router = inject(Router)
   private toast = inject(HotToastService)
@@ -143,6 +144,7 @@ export class SessionLobbyComponent {
     })
   }
 
+  startTour() { this.hasBattle() ? this.tourService.startBattleTour() : this.tourService.startLobbyTour() }
   openQrDialog() { this.dialog.open(SessionQrcodeDialogComponent, {data: {sessionId: this.sessionId(), qrUrl: this.qrUrl()}}) }
   copyLink() { navigator.clipboard.writeText(this.joinUrl()) }
   back() { this.router.navigate(['/home']) }

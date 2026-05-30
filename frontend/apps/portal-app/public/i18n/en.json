@@ -223,6 +223,34 @@
     "FUNDAMENTALISM": "Fundamentalism",
     "SPACE_FLIGHT": "Space Flight"
   },
+  "tour": {
+    "action": "Help",
+    "home": {
+      "create": {"title": "Start a Session", "description": "Create a new game session and invite your fellow players via a QR code or share link."},
+      "join": {"title": "Join a Session", "description": "Already have a session key? Enter it here to join an existing game as a participant."},
+      "sessions": {"title": "Your Sessions", "description": "All your active sessions are listed here. Tap one to jump back in — a sword icon means a battle is currently in progress."}
+    },
+    "lobby": {
+      "participants": {"title": "Participants", "description": "Every player in this session is shown here with their civilization and government type. Your own card is highlighted with a coloured border."},
+      "army": {"title": "Army", "description": "Opens your army view where you can produce new units. Units you have already built are listed there with their individual health and damage values."},
+      "research": {"title": "Research", "description": "Opens the technology tree. Research techs to unlock and upgrade unit types — each discovery takes effect immediately in your army."},
+      "battle": {"title": "Start Battle", "description": "Initiates a combat against this player. You will be asked to set the army sizes and whether the defending city has a wall."},
+      "share": {"title": "Invite Players", "description": "Share the join QR code or copy the link so other players can join this session."}
+    },
+    "army": {
+      "grid": {"title": "Your Units", "description": "Each card represents a unit type. Unlock them by researching the matching technology. Once unlocked, tap Produce to add a new unit with randomised health and damage values."}
+    },
+    "research": {
+      "tiers": {"title": "Ages", "description": "Technologies are grouped into Ages (I–V). Jump directly to any age using these buttons. Higher ages unlock more powerful units."},
+      "toggle": {"title": "Filter", "description": "Toggle this to hide already-discovered technologies and focus on what's still available."},
+      "grid": {"title": "Technology Cards", "description": "Each card shows the technology name, its effect on unit levels, and a Research button. Greyed-out cards have unmet prerequisites. Highlighted cards are already discovered."}
+    },
+    "battle": {
+      "banner": {"title": "Turn Indicator", "description": "Shows whose turn it is. When it's your turn, the banner lights up. Once all moves are done the winner is declared here."},
+      "fronts": {"title": "Battle Fronts", "description": "Each front is a face-off between one of your units and one opponent unit. Health is shown as green pips — depleted units are struck through."},
+      "reserve": {"title": "Your Reserve", "description": "These are your units not yet deployed. During your turn, select one and either open a new front or attack an existing one where the opponent has a unit but you don't."}
+    }
+  },
   "government": {
     "type": {
       "DESPOTISM": "Despotism",

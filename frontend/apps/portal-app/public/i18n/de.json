@@ -223,6 +223,34 @@
     "FUNDAMENTALISM": "Fundamentalismus",
     "SPACE_FLIGHT": "Raumfahrt"
   },
+  "tour": {
+    "action": "Hilfe",
+    "home": {
+      "create": {"title": "Session starten", "description": "Erstelle eine neue Spielsitzung und lade deine Mitspieler per QR-Code oder Link ein."},
+      "join": {"title": "Session beitreten", "description": "Du hast einen Session-Key? Gib ihn hier ein, um einer laufenden Sitzung beizutreten."},
+      "sessions": {"title": "Deine Sitzungen", "description": "Alle aktiven Sessions werden hier aufgelistet. Tippe eine an, um direkt einzusteigen — ein Schwerter-Symbol zeigt, dass gerade ein Gefecht läuft."}
+    },
+    "lobby": {
+      "participants": {"title": "Teilnehmer", "description": "Alle Spieler der Sitzung werden hier mit ihrer Zivilisation und Regierungsform angezeigt. Deine eigene Karte ist farbig hervorgehoben."},
+      "army": {"title": "Armee", "description": "Öffnet deine Armeeansicht, in der du neue Einheiten produzieren kannst. Bereits gebaute Einheiten werden dort mit ihren individuellen HP- und Schadenswerten angezeigt."},
+      "research": {"title": "Forschung", "description": "Öffnet den Technologiebaum. Erforsche Technologien, um Einheitentypen freizuschalten und aufzuwerten — jede Entdeckung wirkt sich sofort auf deine Armee aus."},
+      "battle": {"title": "Gefecht starten", "description": "Startet ein Gefecht gegen diesen Spieler. Du wirst nach den Armeegroessen gefragt sowie ob die verteidigende Stadt eine Stadtmauer besitzt."},
+      "share": {"title": "Spieler einladen", "description": "Teile den QR-Code oder kopiere den Link, damit andere Spieler der Sitzung beitreten können."}
+    },
+    "army": {
+      "grid": {"title": "Deine Einheiten", "description": "Jede Karte steht für einen Einheitentyp. Schalte ihn durch Erforschung der passenden Technologie frei. Danach kannst du über Produzieren neue Einheiten mit zufälligen HP- und Schadenswerten hinzufügen."}
+    },
+    "research": {
+      "tiers": {"title": "Zeitalter", "description": "Technologien sind in Zeitalter (I–V) eingeteilt. Klicke auf eine Schaltfläche, um direkt dorthin zu springen. Höhere Zeitalter schalten stärkere Einheiten frei."},
+      "toggle": {"title": "Filter", "description": "Blendet bereits erforschte Technologien aus, damit du dich auf die noch verfügbaren konzentrieren kannst."},
+      "grid": {"title": "Technologie-Karten", "description": "Jede Karte zeigt Technologiename, Auswirkung auf Einheitenlevel und eine Forschen-Schaltfläche. Ausgegraute Karten haben noch nicht erfüllte Voraussetzungen. Markierte Karten sind bereits erforscht."}
+    },
+    "battle": {
+      "banner": {"title": "Zuganzeige", "description": "Zeigt, wer gerade am Zug ist. Wenn du dran bist, leuchtet das Banner auf. Nachdem alle Einheiten platziert wurden, wird hier der Sieger bekannt gegeben."},
+      "fronts": {"title": "Gefechtslinien", "description": "Jede Front ist ein Duell zwischen einer deiner Einheiten und einer gegnerischen. HP werden als grüne Felder angezeigt — besiegte Einheiten sind durchgestrichen."},
+      "reserve": {"title": "Deine Reserve", "description": "Hier stehen deine noch nicht eingesetzten Einheiten. Wähle eine aus und eröffne eine neue Front oder greife eine bestehende an, auf der der Gegner steht, du aber nicht."}
+    }
+  },
   "government": {
     "type": {
       "DESPOTISM": "Despotismus",
