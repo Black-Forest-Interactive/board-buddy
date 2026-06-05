@@ -29,13 +29,9 @@
 
 Join the Discord to ask questions, share feedback or just chat about the game:
 
-[![Discord](https://img.shields.io/badge/Discord-join%20the%20server-5865F2?logo=discord&logoColor=white)](https://discord.gg/2vgpyEMhet)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/YCDNFJkGeb)
 
 ## Support & Feedback
-
-If Board Buddy saves you time at the table, consider buying me a coffee:
-
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support%20the%20project-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/Iee1394)
 
 Found a bug or have a feature idea? Please [open an issue on GitHub](../../issues) — all feedback is welcome.
 
