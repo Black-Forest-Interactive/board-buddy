@@ -1,4 +1,4 @@
-import {Component} from '@angular/core'
+import {Component, input} from '@angular/core'
 import {RouterLink} from '@angular/router'
 import {TranslatePipe} from '@ngx-translate/core'
 import packageJson from '../../../../../../package.json'
@@ -10,6 +10,7 @@ import packageJson from '../../../../../../package.json'
   styleUrl: './shell-footer.component.scss',
 })
 export class ShellFooterComponent {
+  readonly showLegalLinks = input(true)
   version = packageJson.version
   currentYear = new Date().getFullYear()
 }

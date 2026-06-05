@@ -1,4 +1,5 @@
 import {Component, computed, inject, resource, signal} from '@angular/core'
+import {DatePipe} from '@angular/common'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
 import {MatTooltipModule} from '@angular/material/tooltip'
@@ -15,7 +16,7 @@ import {PlayerDialogComponent} from './player-dialog/player-dialog.component'
 
 @Component({
   selector: 'admin-player',
-  imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe],
+  imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe, DatePipe],
   templateUrl: './player.component.html',
 })
 export class PlayerComponent {
@@ -37,7 +38,7 @@ export class PlayerComponent {
   readonly totalSize = computed(() => this.playerResource.value()?.totalSize ?? 0)
   readonly loading = this.playerResource.isLoading
   readonly error = this.playerResource.error
-  readonly columns = ['name', 'actions']
+  readonly columns = ['name', 'timestamp', 'actions']
 
   handlePageChange(event: PageEvent) {
     this.page.set(event.pageIndex)

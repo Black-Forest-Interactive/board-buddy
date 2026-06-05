@@ -87,7 +87,8 @@
     "title": "Spieler",
     "create": "Neuer Spieler",
     "table": {
-      "name": "Name"
+      "name": "Name",
+      "timestamp": "Zeitstempel"
     },
     "form": {
       "name": "Name",
@@ -160,7 +161,8 @@
       "name": "Name",
       "host": "Gastgeber",
       "game": "Spiel",
-      "participants": "Teilnehmer"
+      "participants": "Teilnehmer",
+      "timestamp": "Zeitstempel"
     },
     "form": {
       "name": "Name",

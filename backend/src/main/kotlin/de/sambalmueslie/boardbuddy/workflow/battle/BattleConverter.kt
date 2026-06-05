@@ -2,6 +2,7 @@ package de.sambalmueslie.boardbuddy.workflow.battle
 
 import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.battle.db.*
 import jakarta.inject.Singleton
 
 @Singleton

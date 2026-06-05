@@ -1,4 +1,5 @@
 import {Component, computed, inject, resource, signal} from '@angular/core'
+import {DatePipe} from '@angular/common'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
 import {MatTooltipModule} from '@angular/material/tooltip'
@@ -16,7 +17,7 @@ import {SessionDialogComponent} from './session-dialog/session-dialog.component'
 
 @Component({
   selector: 'admin-session',
-  imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe],
+  imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe, DatePipe],
   templateUrl: './session.component.html',
 })
 export class SessionComponent {
@@ -39,7 +40,7 @@ export class SessionComponent {
   readonly totalSize = computed(() => this.sessionResource.value()?.totalSize ?? 0)
   readonly loading = this.sessionResource.isLoading
   readonly error = this.sessionResource.error
-  readonly columns = ['name', 'host', 'game', 'participants', 'actions']
+  readonly columns = ['name', 'host', 'game', 'participants', 'timestamp', 'actions']
 
   handlePageChange(event: PageEvent) {
     this.page.set(event.pageIndex)

@@ -17,7 +17,7 @@ data class PlayerData(
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert() = Player(id, name)
+    fun convert() = Player(id, name, updated ?: created)
     fun update(request: PlayerChangeRequest, currentTime: LocalDateTime): PlayerData {
         name = request.name
         updated = currentTime

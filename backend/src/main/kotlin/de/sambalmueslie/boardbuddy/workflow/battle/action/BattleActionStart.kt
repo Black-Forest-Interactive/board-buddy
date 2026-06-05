@@ -1,12 +1,12 @@
-package de.sambalmueslie.boardbuddy.workflow.battle
+package de.sambalmueslie.boardbuddy.workflow.battle.action
 
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
-import de.sambalmueslie.boardbuddy.core.session.api.GameSession
-import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.workflow.api.BattleStatus
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowBattleStartFailed
-import de.sambalmueslie.boardbuddy.workflow.api.WorkflowBattleStartRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.cmd.BattleCmdStart
+import de.sambalmueslie.boardbuddy.workflow.battle.db.BattleData
+import de.sambalmueslie.boardbuddy.workflow.battle.db.BattleParticipantData
 import jakarta.inject.Singleton
 
 @Singleton
@@ -15,9 +15,13 @@ class BattleActionStart(
     private val gameEngine: GameEngine,
 ) {
 
-    internal fun process(session: GameSession, request: WorkflowBattleStartRequest, attacker: GameSessionPlayer, defender: GameSessionPlayer): BattleData {
-        val battleType = request.type
+    internal fun execute(cmd: BattleCmdStart): BattleData{
+        val session= cmd.session
+        val request = cmd.request
+        val attacker = cmd.attacker
+        val defender = cmd.defender
 
+        val battleType = request.type
         val attackerUnits = sessionService.getAssignedEntities(session, attacker).let { gameEngine.determineAttackerUnits(attacker, request.attacker.armyCount, battleType, it) }.toMutableList()
         if (attackerUnits.isEmpty()) throw WorkflowBattleStartFailed(session.id)
         val defenderUnits = sessionService.getAssignedEntities(session, defender).let { gameEngine.determineDefenderUnits(defender, request.defender.armyCount, battleType, it) }.toMutableList()

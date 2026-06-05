@@ -14,7 +14,7 @@ import {provideToastConfig} from '@board-buddy/ui'
 import {provideKeycloakAngular} from "./keycloak.config"
 import {includeBearerTokenInterceptor} from "keycloak-angular"
 
-registerLocaleData(de)
+registerLocaleData(de, 'de-DE')
 
 export const appConfig: ApplicationConfig = {
   providers: [

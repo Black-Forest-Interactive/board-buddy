@@ -1,18 +1,14 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
-import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionChangeRequest
-import de.sambalmueslie.boardbuddy.workflow.WorkflowService
 import io.micronaut.data.model.Pageable
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton
 class SessionGateway(
-    private val service: GameSessionService,
-    private val workflowService: WorkflowService,
-    private val playerService: PlayerService
+    private val service: GameSessionService
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(SessionGateway::class.java)

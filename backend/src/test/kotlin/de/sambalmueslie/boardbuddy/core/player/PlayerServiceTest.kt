@@ -46,7 +46,7 @@ class PlayerServiceTest {
     fun testCrudOperations() {
         // CREATE
         val response = service.create(request)
-        var reference = Player(response.id, request.name)
+        var reference = Player(response.id, request.name, response.timestamp)
         assertEquals(reference, response)
         verify { eventCollector.created(reference) }
 
@@ -56,8 +56,9 @@ class PlayerServiceTest {
 
         // UPDATE
         val update = PlayerChangeRequest("name-update")
-        reference = Player(response.id, update.name)
-        assertEquals(reference, service.update(reference.id, update))
+        val updateResult = service.update(reference.id, update)
+        reference = Player(response.id, update.name, updateResult.timestamp)
+        assertEquals(reference, updateResult)
         verify { eventCollector.updated(reference) }
 
         // DELETE
@@ -77,7 +78,7 @@ class PlayerServiceTest {
         service.create(request)
 
         val updateResponse = service.update(99, request)
-        val updateReference = Player(updateResponse.id, request.name)
+        val updateReference = Player(updateResponse.id, request.name, updateResponse.timestamp)
         assertEquals(updateReference, updateResponse)
         verify { eventCollector.created(updateReference) }
     }

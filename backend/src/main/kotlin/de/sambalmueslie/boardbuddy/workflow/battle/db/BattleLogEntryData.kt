@@ -1,4 +1,4 @@
-package de.sambalmueslie.boardbuddy.workflow.battle
+package de.sambalmueslie.boardbuddy.workflow.battle.db
 
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
 import de.sambalmueslie.boardbuddy.engine.api.CombatAction
