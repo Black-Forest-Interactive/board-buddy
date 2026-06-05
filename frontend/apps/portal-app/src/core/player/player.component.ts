@@ -1,4 +1,5 @@
 import {Component, computed, inject, resource} from '@angular/core'
+import {DatePipe} from '@angular/common'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
@@ -10,7 +11,7 @@ import {toPromise} from '@board-buddy/shared'
 
 @Component({
   selector: 'portal-player',
-  imports: [MatButtonModule, MatIconModule, MatCardModule, RouterModule, TranslatePipe, MainContentComponent],
+  imports: [MatButtonModule, MatIconModule, MatCardModule, RouterModule, TranslatePipe, DatePipe, MainContentComponent],
   templateUrl: './player.component.html',
 })
 export class PlayerComponent {
@@ -26,6 +27,7 @@ export class PlayerComponent {
 
   readonly playerName = computed(() => this.playerResource.value()?.name ?? '')
   readonly playerIdDisplay = computed(() => this.playerId() ?? '-')
+  readonly playerTimestamp = computed(() => this.playerResource.value()?.timestamp ?? '')
   readonly loading = this.playerResource.isLoading
 
   back() { this.router.navigate(['/home']) }

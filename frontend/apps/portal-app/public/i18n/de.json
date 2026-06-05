@@ -15,7 +15,10 @@
     "close": "Schließen"
   },
   "player": {
-    "title": "Mein Profil"
+    "title": "Mein Profil",
+    "property": {
+      "since": "Dabei seit"
+    }
   },
   "lang": {
     "en": "Englisch",
