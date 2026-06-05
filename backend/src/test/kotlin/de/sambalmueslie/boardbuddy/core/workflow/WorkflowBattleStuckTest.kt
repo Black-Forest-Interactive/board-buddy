@@ -6,6 +6,7 @@ import de.sambalmueslie.boardbuddy.core.nation.NationService
 import de.sambalmueslie.boardbuddy.core.nation.api.NationChangeRequest
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.unit.UnitDefinitionService
@@ -13,7 +14,10 @@ import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
 import de.sambalmueslie.boardbuddy.engine.api.UnitType
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
-import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowAssignPlayerRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.api.*
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -63,8 +67,8 @@ class WorkflowBattleStuckTest {
         var game = gameService.create(GameChangeRequest("game-stuck", "default"))
         game = gameService.assignRuleSet(game, ruleSet)!!
 
-        val pA = playerService.create(PlayerChangeRequest("playerA-stuck"))
-        val pB = playerService.create(PlayerChangeRequest("playerB-stuck"))
+        val pA = playerService.create(PlayerChangeRequest(PlayerType.HUMAN, "playerA-stuck"))
+        val pB = playerService.create(PlayerChangeRequest(PlayerType.HUMAN, "playerB-stuck"))
 
         // pA = defender → goes first in ARMY_VS_ARMY
         var workflow = service.create(WorkflowCreateRequest("workflow-stuck", pA.id, game.id, ruleSet.id, nationA.id))

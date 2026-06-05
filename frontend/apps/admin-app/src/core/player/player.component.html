@@ -12,6 +12,11 @@
       <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef class="!flex-none !w-28">{{ 'player.table.type' | translate }}</mat-header-cell>
+      <mat-cell *matCellDef="let row" class="!flex-none !w-28">{{ 'player.type.' + row.type | translate }}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="timestamp">
       <mat-header-cell *matHeaderCellDef class="!flex-none !w-44">{{ 'player.table.timestamp' | translate }}</mat-header-cell>
       <mat-cell *matCellDef="let row" class="!flex-none !w-44">{{ row.timestamp | date:'medium' }}</mat-cell>

@@ -18,6 +18,9 @@
     "title": "Mein Profil",
     "property": {
       "since": "Dabei seit"
+    },
+    "type": {
+      "AI": "KI"
     }
   },
   "lang": {

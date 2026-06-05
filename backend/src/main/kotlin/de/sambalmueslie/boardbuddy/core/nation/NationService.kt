@@ -24,6 +24,7 @@ class NationService(
 
     companion object {
         private val logger = LoggerFactory.getLogger(NationService::class.java)
+        private const val AI_NATION_NAME = "Barbarian"
     }
 
     fun assignNationEffect(nation: Nation, effect: NationEffect): Nation? {
@@ -69,5 +70,13 @@ class NationService(
 
     override fun deleteDependencies(data: NationData) {
         effectService.revokeAll(data)
+    }
+
+
+    fun getAiNation(): Nation {
+        val existing = repository.findByName(AI_NATION_NAME)
+        if (existing != null) return convert(existing)
+
+        return create(NationChangeRequest(AI_NATION_NAME, "", ""))
     }
 }

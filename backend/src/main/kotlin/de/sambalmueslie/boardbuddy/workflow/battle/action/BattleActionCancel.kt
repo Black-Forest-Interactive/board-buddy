@@ -1,6 +1,6 @@
 package de.sambalmueslie.boardbuddy.workflow.battle.action
 
-import de.sambalmueslie.boardbuddy.workflow.api.BattleStatus
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleStatus
 import de.sambalmueslie.boardbuddy.workflow.battle.cmd.BattleCmdCancel
 import de.sambalmueslie.boardbuddy.workflow.battle.db.BattleData
 import jakarta.inject.Singleton

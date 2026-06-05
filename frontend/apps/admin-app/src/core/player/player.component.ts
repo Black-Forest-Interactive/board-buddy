@@ -38,7 +38,7 @@ export class PlayerComponent {
   readonly totalSize = computed(() => this.playerResource.value()?.totalSize ?? 0)
   readonly loading = this.playerResource.isLoading
   readonly error = this.playerResource.error
-  readonly columns = ['name', 'timestamp', 'actions']
+  readonly columns = ['name', 'type', 'timestamp', 'actions']
 
   handlePageChange(event: PageEvent) {
     this.page.set(event.pageIndex)

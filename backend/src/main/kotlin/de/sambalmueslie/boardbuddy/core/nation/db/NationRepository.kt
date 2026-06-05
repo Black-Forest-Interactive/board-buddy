@@ -6,4 +6,5 @@ import io.micronaut.data.model.query.builder.sql.Dialect
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
 interface NationRepository : EntityRepository<NationData> {
+    fun findByName(name: String): NationData?
 }

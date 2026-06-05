@@ -7,6 +7,7 @@ import de.sambalmueslie.boardbuddy.core.nation.NationService
 import de.sambalmueslie.boardbuddy.core.nation.api.NationChangeRequest
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
@@ -15,7 +16,10 @@ import de.sambalmueslie.boardbuddy.core.unit.api.PointsRange
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
 import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
-import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowAssignPlayerRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.api.*
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -70,9 +74,9 @@ class WorkflowServiceTest {
         var game = gameService.create(GameChangeRequest("default", "default"))
         game = gameService.assignRuleSet(game, ruleSet)!!
 
-        val p1 = playerService.create(PlayerChangeRequest("p1"))
-        val p2 = playerService.create(PlayerChangeRequest("p2"))
-        val p3 = playerService.create(PlayerChangeRequest("p3"))
+        val p1 = playerService.create(PlayerChangeRequest(PlayerType.HUMAN, "p1"))
+        val p2 = playerService.create(PlayerChangeRequest(PlayerType.HUMAN, "p2"))
+        val p3 = playerService.create(PlayerChangeRequest(PlayerType.HUMAN, "p3"))
 
         var workflow = service.create(WorkflowCreateRequest("workflow", p1.id, game.id, ruleSet.id, nation1.id))
 

@@ -10,6 +10,7 @@ import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.engine.api.GameUnit
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import de.sambalmueslie.boardbuddy.workflow.battle.WorkflowBattleService
+import de.sambalmueslie.boardbuddy.workflow.battle.api.*
 import de.sambalmueslie.boardbuddy.workflow.sse.SessionEventService
 import de.sambalmueslie.boardbuddy.workflow.sse.SessionEventType
 import jakarta.inject.Singleton
@@ -39,6 +40,7 @@ class WorkflowService(
         val ruleSet = ruleSetService.get(request.ruleSetId) ?: throw WorkflowInvalidRuleSet(request.ruleSetId)
         val host = playerService.createHost(request.hostId, request.nationId, ruleSet.unitDefinitions)
         val session = sessionService.create(GameSessionChangeRequest(request.name, host.player, host.entity, game, ruleSet))
+        playerService.assignBarbarians(session)
         return Workflow.create(session, null)
     }
 

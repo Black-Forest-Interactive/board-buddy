@@ -1,6 +1,7 @@
 package de.sambalmueslie.boardbuddy.workflow.battle.action
 
 import de.sambalmueslie.boardbuddy.core.event.EventService
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.engine.api.GameEntity
 import de.sambalmueslie.boardbuddy.workflow.battle.cmd.BattleCmdFinish
@@ -9,7 +10,7 @@ import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton
- class BattleActionFinish(
+class BattleActionFinish(
     eventService: EventService,
     private val gameEngine: GameEngine,
 ) : BattleAction<BattleCmdFinish> {
@@ -24,7 +25,7 @@ import org.slf4j.LoggerFactory
         val battle = cmd.battle
         val session = cmd.session
         battle.fronts.flatMap { it.units }
-            .filter { it.currentHealth <= 0 }
+            .filter { it.currentHealth <= 0 || it.player.player.type == PlayerType.AI }
             .forEach { u ->
                 logger.debug("[{}] remove destroyed unit {}", session.id, u.unit)
                 sender.deleted(u.unit)

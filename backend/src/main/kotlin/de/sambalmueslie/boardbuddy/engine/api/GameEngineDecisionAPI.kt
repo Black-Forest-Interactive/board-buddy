@@ -1,7 +1,7 @@
 package de.sambalmueslie.boardbuddy.engine.api
 
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
-import de.sambalmueslie.boardbuddy.workflow.api.BattleType
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleType
 
 interface GameEngineDecisionAPI {
     fun determineStartPlayer(attacker: GameSessionPlayer, defender: GameSessionPlayer, type: BattleType, isWalled: Boolean): GameSessionPlayer

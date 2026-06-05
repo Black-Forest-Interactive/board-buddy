@@ -1,6 +1,6 @@
 package de.sambalmueslie.boardbuddy.gateway.portal
 
-import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
+import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalPlayerChangeRequest
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
@@ -19,10 +19,10 @@ class PlayerController(private val gateway: PlayerGateway) {
     fun getAll(pageable: Pageable) = gateway.getAll(pageable)
 
     @Post
-    fun create(@Body request: PlayerChangeRequest) = gateway.create(request)
+    fun create(@Body request: PortalPlayerChangeRequest) = gateway.create(request)
 
     @Put("{id}")
-    fun update(id: Long, @Body request: PlayerChangeRequest) = gateway.update(id, request)
+    fun update(id: Long, @Body request: PortalPlayerChangeRequest) = gateway.update(id, request)
 
     @Delete("{id}")
     fun delete(id: Long) = gateway.delete(id)

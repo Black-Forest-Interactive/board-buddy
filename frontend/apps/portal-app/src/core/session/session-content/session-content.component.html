@@ -7,9 +7,14 @@
       <div class="flex flex-col gap-2 items-center">
         <div class="flex items-center justify-between px-3 pt-3 pb-1 w-full">
           <span class="font-semibold truncate">{{ e.participant.player.name }}</span>
-          @if (hostId() === e.participant.player.id) {
-            <span class="text-xs shrink-0 border rounded px-1 leading-none py-0.5 text-on-surface/60 border-on-surface/30">{{ 'session.host' | translate }}</span>
-          }
+          <div class="flex gap-1 shrink-0">
+            @if (hostId() === e.participant.player.id) {
+              <span class="text-xs border rounded px-1 leading-none py-0.5 text-on-surface/60 border-on-surface/30">{{ 'session.host' | translate }}</span>
+            }
+            @if (e.participant.player.type === 'AI') {
+              <span class="text-xs border rounded px-1 leading-none py-0.5 text-primary border-primary/50">{{ 'player.type.AI' | translate }}</span>
+            }
+          </div>
         </div>
         @if (e.nation) {
           <img [src]="e.nation.imageUrl" [alt]="e.nation.name" class="w-full aspect-square object-cover">

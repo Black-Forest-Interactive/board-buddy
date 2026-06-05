@@ -1,10 +1,10 @@
 package de.sambalmueslie.boardbuddy.workflow.battle.db
 
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
-import de.sambalmueslie.boardbuddy.workflow.api.BattleStatus
-import de.sambalmueslie.boardbuddy.workflow.api.BattleType
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowBattleInvalidPlayer
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowBattlePlayerIsNotActive
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleStatus
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleType
 
 data class BattleData(
     val participant: List<BattleParticipantData>,

@@ -1,7 +1,7 @@
 package de.sambalmueslie.boardbuddy.workflow.battle.action
 
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
-import de.sambalmueslie.boardbuddy.workflow.api.BattleStatus
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleStatus
 import de.sambalmueslie.boardbuddy.workflow.battle.cmd.BattleCommand
 import de.sambalmueslie.boardbuddy.workflow.battle.db.BattleData
 

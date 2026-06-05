@@ -4,6 +4,7 @@ import de.sambalmueslie.boardbuddy.core.nation.api.Nation
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
@@ -39,7 +40,7 @@ class WorkflowPlayerService(
 
     fun join(session: GameSession, request: WorkflowPlayerJoinRequest): GameSessionPlayer {
         if (session.participants.any { it.player.name == request.name }) throw WorkflowPlayerJoinError()
-        val player = playerService.create(PlayerChangeRequest(request.name))
+        val player = playerService.create(PlayerChangeRequest(PlayerType.HUMAN, request.name))
         return assign(session, player, request.nationId)
     }
 
@@ -58,5 +59,11 @@ class WorkflowPlayerService(
         val playerEntity = engine.createPlayer(nation, session.ruleSet.unitDefinitions)
         sessionService.assignPlayer(session, player, playerEntity)
         return GameSessionPlayer(player, playerEntity)
+    }
+
+    fun assignBarbarians(session: GameSession) {
+        val aiPlayer = playerService.getAiPlayer()
+        val aiNation = nationService.getAiNation()
+        assign(session, aiPlayer, aiNation)
     }
 }

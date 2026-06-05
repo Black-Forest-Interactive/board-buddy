@@ -1,7 +1,11 @@
 package de.sambalmueslie.boardbuddy.workflow.battle
 
 import de.sambalmueslie.boardbuddy.engine.GameEngine
-import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.battle.api.Battle
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleFront
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleFrontUnit
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleLogEntry
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleParticipant
 import de.sambalmueslie.boardbuddy.workflow.battle.db.*
 import jakarta.inject.Singleton
 

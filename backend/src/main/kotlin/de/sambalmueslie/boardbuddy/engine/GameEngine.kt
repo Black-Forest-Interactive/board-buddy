@@ -9,7 +9,7 @@ import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
 import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import de.sambalmueslie.boardbuddy.engine.system.*
-import de.sambalmueslie.boardbuddy.workflow.api.BattleType
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleType
 import de.sambalmueslie.boardbuddy.workflow.api.TechnologyStatus
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory

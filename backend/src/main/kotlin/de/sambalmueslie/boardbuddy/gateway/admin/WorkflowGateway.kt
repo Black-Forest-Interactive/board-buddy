@@ -2,6 +2,9 @@ package de.sambalmueslie.boardbuddy.gateway.admin
 
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
 import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleAttackFrontRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleCreateFrontRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleStartRequest
 import jakarta.inject.Singleton
 
 @Singleton

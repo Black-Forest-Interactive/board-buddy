@@ -88,13 +88,19 @@
     "create": "New Player",
     "table": {
       "name": "Name",
+      "type": "Type",
       "timestamp": "Timestamp"
     },
     "form": {
+      "type": "Player type",
       "name": "Name",
       "error": {
         "name": "Name required"
       }
+    },
+    "type": {
+      "HUMAN": "Human",
+      "AI": "AI"
     },
     "dialog": {
       "create": {
