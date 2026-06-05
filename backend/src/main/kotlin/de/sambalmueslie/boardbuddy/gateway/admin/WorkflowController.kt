@@ -1,6 +1,9 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
 import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleAttackFrontRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleCreateFrontRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleStartRequest
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get

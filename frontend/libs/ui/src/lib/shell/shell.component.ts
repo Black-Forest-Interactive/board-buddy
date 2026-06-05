@@ -11,4 +11,5 @@ import {ShellMenuGroup} from './menu/shell-menu'
 })
 export class ShellComponent {
   readonly menuGroups = input<ShellMenuGroup[]>([])
+  readonly showFooterLinks = input(true)
 }

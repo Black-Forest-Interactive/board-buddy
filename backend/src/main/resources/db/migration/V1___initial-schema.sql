@@ -93,8 +93,8 @@ CREATE TABLE rule_set_technology
 
 CREATE TABLE rule_set_nation
 (
-    rule_set_id   BIGINT REFERENCES rule_set (id),
-    nation_id BIGINT REFERENCES nation (id),
+    rule_set_id BIGINT REFERENCES rule_set (id),
+    nation_id   BIGINT REFERENCES nation (id),
     PRIMARY KEY (rule_set_id, nation_id)
 );
 
@@ -125,6 +125,7 @@ CREATE TABLE player
 (
     id      BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('player_seq'::regclass),
     name    VARCHAR(255) NOT NULL,
+    type    VARCHAR(50)  NOT NULL,
 
     created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated TIMESTAMP WITHOUT TIME ZONE
@@ -217,19 +218,19 @@ CREATE TABLE component_nation
 
 CREATE TABLE component_technology
 (
-    entity_id BIGINT      NOT NULL PRIMARY KEY references game_entity (id),
+    entity_id    BIGINT NOT NULL PRIMARY KEY references game_entity (id),
 
-    technologies JSONB                       NOT NULL,
+    technologies JSONB  NOT NULL,
 
-    created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated   TIMESTAMP WITHOUT TIME ZONE
+    created      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated      TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE component_unit_progress
 (
     entity_id BIGINT NOT NULL PRIMARY KEY references game_entity (id),
 
-    entries   JSONB                       NOT NULL,
+    entries   JSONB  NOT NULL,
 
     created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated   TIMESTAMP WITHOUT TIME ZONE

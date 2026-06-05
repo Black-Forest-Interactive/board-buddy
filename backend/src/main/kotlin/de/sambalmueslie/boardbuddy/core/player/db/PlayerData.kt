@@ -3,10 +3,8 @@ package de.sambalmueslie.boardbuddy.core.player.db
 import de.sambalmueslie.boardbuddy.common.EntityData
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity(name = "Player")
@@ -14,12 +12,14 @@ import java.time.LocalDateTime
 data class PlayerData(
     @Id @GeneratedValue var id: Long,
     var name: String,
+    @Enumerated(EnumType.STRING) var type: PlayerType,
     var created: LocalDateTime,
     var updated: LocalDateTime? = null
 ) : EntityData {
-    fun convert() = Player(id, name)
+    fun convert() = Player(id, type, name, updated ?: created)
     fun update(request: PlayerChangeRequest, currentTime: LocalDateTime): PlayerData {
         name = request.name
+        type = request.type
         updated = currentTime
         return this
     }

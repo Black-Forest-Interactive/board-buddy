@@ -3,5 +3,6 @@ package de.sambalmueslie.boardbuddy.core.player.api
 import de.sambalmueslie.boardbuddy.common.EntityChangeRequest
 
 data class PlayerChangeRequest(
-    val name: String
+    val type: PlayerType,
+    val name: String,
 ) : EntityChangeRequest

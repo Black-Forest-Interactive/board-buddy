@@ -9,7 +9,7 @@ import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
 import de.sambalmueslie.boardbuddy.engine.storage.GameEntityStorage
 import de.sambalmueslie.boardbuddy.engine.system.*
-import de.sambalmueslie.boardbuddy.workflow.api.BattleType
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleType
 import de.sambalmueslie.boardbuddy.workflow.api.TechnologyStatus
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -26,7 +26,7 @@ class GameEngine(
     private val researchSystem: ResearchSystem,
     private val unitUpgradeSystem: UnitUpgradeSystem,
     private val componentModelService: GameComponentModelService,
-) {
+) : GameEngineAPI {
 
     companion object {
         private val logger = LoggerFactory.getLogger(GameEngine::class.java)
@@ -43,12 +43,12 @@ class GameEngine(
     private val unitProgressModel = componentModelService.get(UnitProgress::class)
 
 
-    fun <T : GameComponent> getComponent(entity: GameEntity, type: KClass<T>): T? {
+    override fun <T : GameComponent> getComponent(entity: GameEntity, type: KClass<T>): T? {
         return componentModelService.get(type).get(entity)
     }
 
 
-    fun getUnit(entity: GameEntity): GameUnit {
+   override fun getUnit(entity: GameEntity): GameUnit {
         val unitEntity = entityStorage.get(entity, GameEntityType.UNIT) ?: throw WorkflowInvalidGameEntity(entity)
         val damage = damageModel.get(unitEntity)
         val health = healthModel.get(unitEntity)
@@ -58,7 +58,7 @@ class GameEngine(
         return GameUnit(unitEntity, damage, health, level, type, counterType)
     }
 
-    fun getPlayer(entity: GameEntity): GamePlayer {
+    override fun getPlayer(entity: GameEntity): GamePlayer {
         val playerEntity = entityStorage.get(entity, GameEntityType.PLAYER) ?: throw WorkflowInvalidGameEntity(entity)
         val nation = nationModel.get(playerEntity)
         val government = governmentModel.get(playerEntity)
@@ -67,32 +67,32 @@ class GameEngine(
         return GamePlayer(playerEntity, nation, government, unitProgress, technologies)
     }
 
-    fun exists(entity: GameEntity): Boolean {
+    override fun exists(entity: GameEntity): Boolean {
         return entityStorage.exists(entity)
     }
 
-    fun delete(entity: GameEntity) {
+    override fun delete(entity: GameEntity) {
         entityStorage.delete(entity)
     }
 
-    fun createUnit(player: GameSessionPlayer, unitDefinition: UnitDefinition): GameEntity {
+    override fun createUnit(player: GameSessionPlayer, unitDefinition: UnitDefinition): GameEntity {
         val entity = createUnitSystem.create(unitDefinition)
         unitUpgradeSystem.handleCreation(player, entity)
         componentModelService.persist(entity)
         return entity
     }
 
-    fun createPlayer(nation: Nation, unitDefinitions: List<UnitDefinition>): GameEntity {
+    override fun createPlayer(nation: Nation, unitDefinitions: List<UnitDefinition>): GameEntity {
         val entity = createPlayerSystem.create(nation, unitDefinitions)
         componentModelService.persist(entity)
         return entity
     }
 
-    fun combat(attackingUnit: CombatParticipant, defendingUnit: CombatParticipant): List<CombatAction> {
+    override fun combat(attackingUnit: CombatParticipant, defendingUnit: CombatParticipant): List<CombatAction> {
         return combatSystem.combat(attackingUnit, defendingUnit)
     }
 
-    fun research(session: GameSession, player: GameSessionPlayer, technology: Technology): List<Technology> {
+    override fun research(session: GameSession, player: GameSessionPlayer, technology: Technology): List<Technology> {
         val changedTechnologies = researchSystem.research(player.entity, technology)
         unitUpgradeSystem.handleResearch(session, player, changedTechnologies)
         componentModelService.persist(player.entity)
@@ -103,15 +103,15 @@ class GameEngine(
         return researchSystem.getTechnologyStatus(player.entity, technologies)
     }
 
-    fun determineStartPlayer(attacker: GameSessionPlayer, defender: GameSessionPlayer, type: BattleType, isWalled: Boolean): GameSessionPlayer {
+    override fun determineStartPlayer(attacker: GameSessionPlayer, defender: GameSessionPlayer, type: BattleType, isWalled: Boolean): GameSessionPlayer {
         return startPlayerSystem.determine(attacker, defender, type, isWalled)
     }
 
-    fun determineAttackerUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>): List<GameEntity> {
+    override fun determineAttackerUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>): List<GameEntity> {
         return determineBattleUnits(participant, armyCount, type, units, true)
     }
 
-    fun determineDefenderUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>): List<GameEntity> {
+    override fun determineDefenderUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>): List<GameEntity> {
         return determineBattleUnits(participant, armyCount, type, units, false)
     }
 

@@ -12,9 +12,18 @@
       <mat-icon class="text-on-surface/50">shield</mat-icon>
       <div>
         <div class="text-xs text-on-surface/50">{{ 'session.battle.defender' | translate }}</div>
-        <div class="font-semibold">{{ data.defender.name }}</div>
+        <div class="font-semibold">{{ defender().name }}</div>
       </div>
     </div>
+
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'session.battle.type' | translate }}</mat-label>
+      <mat-select formControlName="battleType">
+        @for (t of battleTypes; track t) {
+          <mat-option [value]="t">{{ 'session.battle.battleType.' + t | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
     <mat-form-field class="w-full">
       <mat-label>{{ 'session.battle.attackerArmy' | translate }}</mat-label>
@@ -26,7 +35,9 @@
       <input matInput type="number" formControlName="defenderArmyCount" min="1">
     </mat-form-field>
 
-    <mat-checkbox formControlName="isWalled">{{ 'session.battle.isWalled' | translate }}</mat-checkbox>
+    @if (isCityBattle()) {
+      <mat-checkbox formControlName="isWalled">{{ 'session.battle.isWalled' | translate }}</mat-checkbox>
+    }
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

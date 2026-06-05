@@ -2,18 +2,15 @@ package de.sambalmueslie.boardbuddy.workflow
 
 import de.sambalmueslie.boardbuddy.core.nation.NationService
 import de.sambalmueslie.boardbuddy.core.nation.api.Nation
-import de.sambalmueslie.boardbuddy.core.session.GameSessionService
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.engine.GameEngine
 import de.sambalmueslie.boardbuddy.engine.api.NationReference
-
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Singleton
 class WorkflowNationService(
     private val nationService: NationService,
-    private val sessionService: GameSessionService,
     private val engine: GameEngine
 ) {
     companion object {
@@ -32,5 +29,9 @@ class WorkflowNationService(
 
     fun getNation(id: Long): Nation? {
         return nationService.get(id)
+    }
+
+    fun getAiNation(): Nation {
+        return nationService.getAiNation()
     }
 }

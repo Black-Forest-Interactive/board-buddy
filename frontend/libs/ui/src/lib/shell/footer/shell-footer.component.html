@@ -6,8 +6,10 @@
     Board Buddy {{ currentYear }}
   </a>
   <div class="flex items-center gap-4">
-    <a routerLink="/legal-notice" class="hover:text-gray-800 dark:hover:text-gray-200 hover:underline transition-colors">{{ 'footer.legalNotice' | translate }}</a>
-    <a routerLink="/privacy" class="hover:text-gray-800 dark:hover:text-gray-200 hover:underline transition-colors">{{ 'footer.privacy' | translate }}</a>
+    @if (showLegalLinks()) {
+      <a routerLink="/legal-notice" class="hover:text-gray-800 dark:hover:text-gray-200 hover:underline transition-colors">{{ 'footer.legalNotice' | translate }}</a>
+      <a routerLink="/privacy" class="hover:text-gray-800 dark:hover:text-gray-200 hover:underline transition-colors">{{ 'footer.privacy' | translate }}</a>
+    }
     <span class="text-gray-400 dark:text-gray-600">v{{ version }}</span>
   </div>
 </footer>

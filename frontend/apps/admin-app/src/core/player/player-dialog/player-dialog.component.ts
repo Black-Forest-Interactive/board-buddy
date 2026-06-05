@@ -4,14 +4,15 @@ import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
 import {MatFormFieldModule} from '@angular/material/form-field'
 import {MatInputModule} from '@angular/material/input'
+import {MatSelectModule} from '@angular/material/select'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {PlayerService} from '@board-buddy/admin'
-import {Player, PlayerChangeRequest} from '@board-buddy/core'
+import {Player, PlayerChangeRequest, PlayerType} from '@board-buddy/core'
 
 @Component({
   selector: 'admin-player-dialog',
-  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule, TranslatePipe],
+  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, TranslatePipe],
   templateUrl: './player-dialog.component.html',
 })
 export class PlayerDialogComponent {
@@ -22,13 +23,16 @@ export class PlayerDialogComponent {
 
   readonly player: Player | null = inject(MAT_DIALOG_DATA, {optional: true})
 
+  readonly playerTypes = Object.values(PlayerType)
+
   readonly form = new FormGroup({
+    type: new FormControl<PlayerType>(this.player?.type ?? PlayerType.HUMAN, Validators.required),
     name: new FormControl(this.player?.name ?? '', Validators.required),
   })
 
   submit() {
     if (this.form.invalid) return
-    const request = new PlayerChangeRequest(this.form.value.name!)
+    const request = new PlayerChangeRequest(this.form.value.type!, this.form.value.name!)
     const call = this.player ? this.service.update(this.player.id, request) : this.service.create(request)
     call.subscribe({
       next: () => {

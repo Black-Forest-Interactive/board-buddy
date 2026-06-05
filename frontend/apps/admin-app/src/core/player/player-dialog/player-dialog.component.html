@@ -3,6 +3,14 @@
 <mat-dialog-content>
   <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
     <mat-form-field>
+      <mat-label>{{ 'player.form.type' | translate }}</mat-label>
+      <mat-select formControlName="type">
+        @for (t of playerTypes; track t) {
+          <mat-option [value]="t">{{ 'player.type.' + t | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>{{ 'player.form.name' | translate }}</mat-label>
       <input matInput formControlName="name"/>
       @if (form.controls.name.hasError('required')) {

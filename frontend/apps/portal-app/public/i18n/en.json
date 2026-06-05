@@ -15,7 +15,13 @@
     "close": "Close"
   },
   "player": {
-    "title": "My Profile"
+    "title": "My Profile",
+    "property": {
+      "since": "Member since"
+    },
+    "type": {
+      "AI": "AI"
+    }
   },
   "lang": {
     "en": "English",

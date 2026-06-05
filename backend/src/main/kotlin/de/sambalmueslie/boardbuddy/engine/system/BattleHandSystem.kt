@@ -6,7 +6,7 @@ import de.sambalmueslie.boardbuddy.engine.api.GameSystem
 import de.sambalmueslie.boardbuddy.engine.api.Government
 import de.sambalmueslie.boardbuddy.engine.api.GovernmentType
 import de.sambalmueslie.boardbuddy.engine.component.GameComponentModelService
-import de.sambalmueslie.boardbuddy.workflow.api.BattleType
+import de.sambalmueslie.boardbuddy.workflow.battle.api.BattleType
 import jakarta.inject.Singleton
 
 @Singleton

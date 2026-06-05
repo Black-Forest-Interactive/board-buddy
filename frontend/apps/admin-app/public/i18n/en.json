@@ -87,13 +87,20 @@
     "title": "Players",
     "create": "New Player",
     "table": {
-      "name": "Name"
+      "name": "Name",
+      "type": "Type",
+      "timestamp": "Timestamp"
     },
     "form": {
+      "type": "Player type",
       "name": "Name",
       "error": {
         "name": "Name required"
       }
+    },
+    "type": {
+      "HUMAN": "Human",
+      "AI": "AI"
     },
     "dialog": {
       "create": {
@@ -160,7 +167,8 @@
       "name": "Name",
       "host": "Host",
       "game": "Game",
-      "participants": "Participants"
+      "participants": "Participants",
+      "timestamp": "Timestamp"
     },
     "form": {
       "name": "Name",

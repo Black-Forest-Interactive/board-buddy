@@ -5,6 +5,7 @@ import de.sambalmueslie.boardbuddy.core.event.api.EventConsumer
 import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerNameValidationFailed
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
@@ -22,7 +23,7 @@ class PlayerServiceTest {
 
 
     private val eventCollector: EventConsumer<Player> = mockk()
-    private val request = PlayerChangeRequest("name")
+    private val request = PlayerChangeRequest(PlayerType.HUMAN, "name")
 
     init {
         every { eventCollector.created(any()) } just Runs
@@ -46,7 +47,7 @@ class PlayerServiceTest {
     fun testCrudOperations() {
         // CREATE
         val response = service.create(request)
-        var reference = Player(response.id, request.name)
+        var reference = Player(response.id, PlayerType.HUMAN, request.name, response.timestamp)
         assertEquals(reference, response)
         verify { eventCollector.created(reference) }
 
@@ -55,9 +56,10 @@ class PlayerServiceTest {
         assertEquals(listOf(reference), service.getAll(Pageable.from(0)).content)
 
         // UPDATE
-        val update = PlayerChangeRequest("name-update")
-        reference = Player(response.id, update.name)
-        assertEquals(reference, service.update(reference.id, update))
+        val update = PlayerChangeRequest(PlayerType.HUMAN, "name-update")
+        val updateResult = service.update(reference.id, update)
+        reference = Player(response.id, PlayerType.HUMAN, update.name, updateResult.timestamp)
+        assertEquals(reference, updateResult)
         verify { eventCollector.updated(reference) }
 
         // DELETE
@@ -77,17 +79,17 @@ class PlayerServiceTest {
         service.create(request)
 
         val updateResponse = service.update(99, request)
-        val updateReference = Player(updateResponse.id, request.name)
+        val updateReference = Player(updateResponse.id, PlayerType.HUMAN, request.name, updateResponse.timestamp)
         assertEquals(updateReference, updateResponse)
         verify { eventCollector.created(updateReference) }
     }
 
     @Test
     fun testValidation() {
-        assertThrows<PlayerNameValidationFailed> { service.create(PlayerChangeRequest("")) }
+        assertThrows<PlayerNameValidationFailed> { service.create(PlayerChangeRequest(PlayerType.HUMAN, "")) }
 
         val response = service.create(request)
-        assertThrows<PlayerNameValidationFailed> { service.update(response.id, PlayerChangeRequest("")) }
+        assertThrows<PlayerNameValidationFailed> { service.update(response.id, PlayerChangeRequest(PlayerType.HUMAN, "")) }
         service.delete(response.id)
     }
 

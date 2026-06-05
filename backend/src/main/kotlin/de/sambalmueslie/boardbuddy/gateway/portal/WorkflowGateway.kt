@@ -4,6 +4,10 @@ import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattle
 import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattleOpponent
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
 import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.battle.api.Battle
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleAttackFrontRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleCreateFrontRequest
+import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleStartRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import jakarta.inject.Singleton

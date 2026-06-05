@@ -155,7 +155,8 @@ export class SessionLobbyComponent {
     const key = this.sessionKey()
     const attacker = this.myParticipant()
     if (!key || !attacker) return
-    this.dialog.open(SessionBattleStartDialogComponent, {data: {sessionKey: key, attacker: attacker.player, defender: defender.player}, maxWidth: '95vw', width: '480px'})
+    const participants = this.participants().map(p => p.player)
+    this.dialog.open(SessionBattleStartDialogComponent, {data: {sessionKey: key, attacker: attacker.player, defender: defender.player, participants}, maxWidth: '95vw', width: '480px'})
       .afterClosed().subscribe(saved => { if (saved) this.reloadAll() })
   }
 

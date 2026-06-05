@@ -23,6 +23,7 @@ micronaut:
           jwks:
             keycloak:
               url: https://auth.blackforrestdevelopment.de/realms/board-buddy/protocol/openid-connect/certs
+#               url: http://localhost:8081/realms/board-buddy/protocol/openid-connect/certs
     intercept-url-map:
       - access: isAnonymous()
         pattern: /swagger/**
