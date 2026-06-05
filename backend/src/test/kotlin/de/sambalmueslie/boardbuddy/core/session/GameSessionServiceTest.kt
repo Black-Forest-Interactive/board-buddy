@@ -6,6 +6,7 @@ import de.sambalmueslie.boardbuddy.core.game.GameService
 import de.sambalmueslie.boardbuddy.core.game.api.GameChangeRequest
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
+import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import de.sambalmueslie.boardbuddy.core.ruleset.RuleSetService
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
@@ -77,8 +78,8 @@ class GameSessionServiceTest {
         val ruleSet = ruleSetService.create(RuleSetChangeRequest("rule-set"))
         game = gameService.assignRuleSet(game, ruleSet)!!
 
-        val host = playerService.create(PlayerChangeRequest("host"))
-        val player = playerService.create(PlayerChangeRequest("player"))
+        val host = playerService.create(PlayerChangeRequest(PlayerType.HUMAN, "host"))
+        val player = playerService.create(PlayerChangeRequest(PlayerType.HUMAN, "player"))
         val hostNation = nationService.create(NationChangeRequest("host-nation", "desc", ""))
         val hostEntity = engine.createPlayer(hostNation, ruleSet.unitDefinitions)
 
