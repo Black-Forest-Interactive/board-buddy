@@ -14,6 +14,7 @@ import de.sambalmueslie.boardbuddy.core.session.db.GameSessionRepository
 import de.sambalmueslie.boardbuddy.engine.api.GameEntity
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
 import java.util.*
 
 @Singleton
@@ -128,6 +129,15 @@ class GameSessionService(
         val ids = sessionPlayerService.getSessionIdsByPlayer(playerId).toSet()
         if (ids.isEmpty()) return emptyList()
         return repository.findByIdIn(ids).map { convert(it) }
+    }
+
+    fun findInactiveSince(cutoff: LocalDateTime): List<GameSession> {
+        return repository.findInactiveSince(cutoff).map { convert(it) }
+    }
+
+    fun getAllEntities(sessionId: Long): List<GameEntity> {
+        val data = repository.findByIdOrNull(sessionId) ?: return emptyList()
+        return sessionEntityService.getAll(data) + sessionPlayerService.getAllEntityIds(data)
     }
 
 }

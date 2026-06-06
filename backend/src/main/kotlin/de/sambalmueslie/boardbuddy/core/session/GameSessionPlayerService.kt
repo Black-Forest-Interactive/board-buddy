@@ -61,6 +61,10 @@ class GameSessionPlayerService(
         }
     }
 
+    internal fun getAllEntityIds(data: GameSessionData): List<GameEntity> {
+        return repository.findByGameSessionId(data.id).map { it.entityId }
+    }
+
     internal fun revokeAll(data: GameSessionData) {
         repository.deleteByGameSessionId(data.id)
     }

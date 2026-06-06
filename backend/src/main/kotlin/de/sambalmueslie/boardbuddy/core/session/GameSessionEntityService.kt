@@ -54,6 +54,10 @@ class GameSessionEntityService(
         return relations.map { it.entityId }
     }
 
+    internal fun getAll(data: GameSessionData): List<GameEntity> {
+        return repository.findByGameSessionId(data.id).map { it.entityId }
+    }
+
     internal fun revokeAll(data: GameSessionData) {
         repository.deleteByGameSessionId(data.id)
     }
