@@ -16,6 +16,8 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Singleton
 class WorkflowGateway(
@@ -35,23 +37,27 @@ class WorkflowGateway(
         val workflow = runCatching { service.get(id) }.getOrNull()
             ?: return HttpResponse.notFound()
         val baseUrl = "https://blackforrestdevelopment.de"
-        val joinUrl = "$baseUrl/session/join?key=$id"
+        val encodedId = URLEncoder.encode(id, StandardCharsets.UTF_8)
+        val joinUrl = "$baseUrl/session/join?key=$encodedId"
+        val name = htmlEscape(workflow.name)
+        val hostName = htmlEscape(workflow.host.name)
+        val gameName = htmlEscape(workflow.game.name)
         val participantCount = workflow.participants.size
-        val description = "${workflow.host.name} invites you to join \"${workflow.name}\" " +
-                "(${workflow.game.name}) — $participantCount player${if (participantCount == 1) "" else "s"} already in."
+        val description = "$hostName invites you to join \"$name\" " +
+                "($gameName) — $participantCount player${if (participantCount == 1) "" else "s"} already in."
         val content = """
             <!DOCTYPE html>
             <html>
             <head>
               <meta charset="utf-8">
-              <title>${workflow.name} — Board Buddy</title>
+              <title>$name — Board Buddy</title>
               <meta property="og:type" content="website">
-              <meta property="og:title" content="${workflow.name} — Board Buddy">
+              <meta property="og:title" content="$name — Board Buddy">
               <meta property="og:description" content="$description">
               <meta property="og:image" content="$baseUrl/img/og-preview.png">
-              <meta property="og:url" content="$baseUrl/api/portal/workflow/$id/og-preview">
+              <meta property="og:url" content="$baseUrl/api/portal/workflow/$encodedId/og-preview">
               <meta name="twitter:card" content="summary">
-              <meta name="twitter:title" content="${workflow.name} — Board Buddy">
+              <meta name="twitter:title" content="$name — Board Buddy">
               <meta name="twitter:description" content="$description">
               <meta http-equiv="refresh" content="0;url=$joinUrl">
             </head>
@@ -62,6 +68,13 @@ class WorkflowGateway(
         """.trimIndent()
         return HttpResponse.ok(content).contentType(MediaType.TEXT_HTML)
     }
+
+    private fun htmlEscape(value: String): String = value
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&#39;")
 
     fun getAvailableNations(id: String) = service.getAvailableNations(id)
     fun getTechnologyStatus(id: String, playerId: Long) = service.getTechnologyStatus(id, playerId)
