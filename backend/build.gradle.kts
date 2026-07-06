@@ -9,9 +9,9 @@ plugins {
     id("org.sonarqube") version "7.3.1.8318"
     id("net.researchgate.release") version "3.1.0"
     id("com.google.cloud.tools.jib") version "3.5.3"
-    id("io.micronaut.application") version "5.0.1"
-    id("io.micronaut.test-resources") version "5.0.1"
-    id("io.micronaut.aot") version "5.0.1"
+    id("io.micronaut.application") version "5.0.2"
+    id("io.micronaut.test-resources") version "5.0.2"
+    id("io.micronaut.aot") version "5.0.2"
     id("maven-publish")
     id("jacoco")
 }
@@ -29,11 +29,11 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.5.34")
+    implementation("ch.qos.logback:logback-classic:1.5.37")
     runtimeOnly("org.yaml:snakeyaml")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.1")
     // jackson
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut:micronaut-jackson-databind")
@@ -109,7 +109,7 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
 
     // opensearch
-    implementation("com.jillesvangurp:search-client:2.8.7")
+    implementation("com.jillesvangurp:search-client:2.9.0")
     // jsoup
     implementation("org.jsoup:jsoup:1.22.2")
 }
