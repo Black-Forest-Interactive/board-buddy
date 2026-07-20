@@ -1,17 +1,17 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "2.4.0"
-    kotlin("plugin.allopen") version "2.4.0"
-    kotlin("plugin.jpa") version "2.4.0"
-    kotlin("plugin.serialization") version "2.4.0"
-    id("com.google.devtools.ksp") version "2.3.9"
+    kotlin("jvm") version "2.4.10"
+    kotlin("plugin.allopen") version "2.4.10"
+    kotlin("plugin.jpa") version "2.4.10"
+    kotlin("plugin.serialization") version "2.4.10"
+    id("com.google.devtools.ksp") version "2.3.10"
     id("org.sonarqube") version "7.3.1.8318"
     id("net.researchgate.release") version "3.1.0"
-    id("com.google.cloud.tools.jib") version "3.5.3"
-    id("io.micronaut.application") version "5.0.1"
-    id("io.micronaut.test-resources") version "5.0.1"
-    id("io.micronaut.aot") version "5.0.1"
+    id("com.google.cloud.tools.jib") version "3.5.4"
+    id("io.micronaut.application") version "5.0.2"
+    id("io.micronaut.test-resources") version "5.0.2"
+    id("io.micronaut.aot") version "5.0.2"
     id("maven-publish")
     id("jacoco")
 }
@@ -29,11 +29,11 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.5.34")
+    implementation("ch.qos.logback:logback-classic:1.5.38")
     runtimeOnly("org.yaml:snakeyaml")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.2")
     // jackson
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut:micronaut-jackson-databind")
@@ -60,13 +60,13 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.security:micronaut-security-oauth2")
-    aotPlugins("io.micronaut.security:micronaut-security-aot:5.2.0")
+    aotPlugins("io.micronaut.security:micronaut-security-aot:5.3.1")
 
     // kotlin
     implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.10")
 
     // caching
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
@@ -109,7 +109,7 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
 
     // opensearch
-    implementation("com.jillesvangurp:search-client:2.8.7")
+    implementation("com.jillesvangurp:search-client:2.9.0")
     // jsoup
     implementation("org.jsoup:jsoup:1.22.2")
 }
