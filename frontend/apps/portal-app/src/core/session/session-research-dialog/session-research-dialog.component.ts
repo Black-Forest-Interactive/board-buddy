@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
@@ -16,6 +16,7 @@ const TIERS = [1, 2, 3, 4, 5]
   selector: 'portal-session-research-dialog',
   imports: [MatDialogModule, MatButtonModule, MatIconModule, MatTooltipModule, MatChipsModule, TranslatePipe],
   templateUrl: './session-research-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionResearchDialogComponent {
   private workflowService = inject(PortalWorkflowService)

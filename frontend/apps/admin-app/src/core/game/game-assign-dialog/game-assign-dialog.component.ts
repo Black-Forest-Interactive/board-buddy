@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
 import {MatListModule} from '@angular/material/list'
@@ -13,6 +13,7 @@ import {toPromise} from '@board-buddy/shared'
   selector: 'admin-game-assign-dialog',
   imports: [MatDialogModule, MatListModule, MatButtonModule, MatIconModule, TranslatePipe],
   templateUrl: './game-assign-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameAssignDialogComponent {
   private gameService = inject(GameService)

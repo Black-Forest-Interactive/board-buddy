@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatIconModule } from '@angular/material/icon'
 import { MatButtonModule } from '@angular/material/button'
@@ -20,6 +20,7 @@ import { ShellMenuGroup } from '../menu/shell-menu'
   ],
   templateUrl: './shell-content.component.html',
   styleUrl: './shell-content.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellContentComponent {
   readonly menuGroups = input<ShellMenuGroup[]>([])

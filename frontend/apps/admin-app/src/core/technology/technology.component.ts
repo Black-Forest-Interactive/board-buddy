@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {RouterModule} from '@angular/router'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
@@ -18,6 +18,7 @@ import {TechnologyDialogComponent} from './technology-dialog/technology-dialog.c
   selector: 'admin-technology',
   imports: [MainContentComponent, RouterModule, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe],
   templateUrl: './technology.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TechnologyComponent {
   private service = inject(TechnologyService)

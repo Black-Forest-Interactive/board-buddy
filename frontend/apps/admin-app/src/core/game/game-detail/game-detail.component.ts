@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute} from '@angular/router'
 import {map} from 'rxjs'
@@ -19,6 +19,7 @@ import {GameAssignDialogComponent} from '../game-assign-dialog/game-assign-dialo
   selector: 'admin-game-detail',
   imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './game-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameDetailComponent {
   private service = inject(GameService)

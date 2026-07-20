@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute, Router} from '@angular/router'
 import {catchError, EMPTY, map} from 'rxjs'
@@ -17,6 +17,7 @@ import {toPromise} from '@board-buddy/shared'
   selector: 'portal-session-army',
   imports: [MatButtonModule, MatIconModule, MatCardModule, MatTooltipModule, TranslatePipe, MainContentComponent],
   templateUrl: './session-army.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionArmyComponent {
   private workflowService = inject(PortalWorkflowService)

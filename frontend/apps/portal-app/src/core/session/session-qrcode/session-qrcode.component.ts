@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core'
+import {ChangeDetectionStrategy, Component, input} from '@angular/core'
 import {MatCardModule} from '@angular/material/card'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
@@ -9,6 +9,7 @@ import {TranslatePipe} from '@ngx-translate/core'
   selector: 'portal-session-qrcode',
   imports: [MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './session-qrcode.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionQrcodeComponent {
   readonly sessionId = input.required<string>()

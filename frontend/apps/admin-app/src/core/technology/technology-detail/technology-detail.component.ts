@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute} from '@angular/router'
 import {map} from 'rxjs'
@@ -19,6 +19,7 @@ import {TechnologyEffectDialogComponent} from '../technology-effect-dialog/techn
   selector: 'admin-technology-detail',
   imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './technology-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TechnologyDetailComponent {
   private service = inject(TechnologyService)

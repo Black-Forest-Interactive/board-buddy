@@ -14,9 +14,6 @@
       "options": {
         "outputPath": "dist/apps/portal-app",
         "browser": "apps/portal-app/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
         "tsConfig": "apps/portal-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [

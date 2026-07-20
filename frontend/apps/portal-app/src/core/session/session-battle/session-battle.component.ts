@@ -1,4 +1,4 @@
-import {Component, input, output} from '@angular/core'
+import {ChangeDetectionStrategy, Component, input, output} from '@angular/core'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
@@ -10,6 +10,7 @@ import {PortalBattle} from '@board-buddy/portal'
   selector: 'portal-session-battle',
   imports: [MatButtonModule, MatIconModule, MatCardModule, TranslatePipe],
   templateUrl: './session-battle.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionBattleComponent {
   readonly battle = input.required<PortalBattle>()

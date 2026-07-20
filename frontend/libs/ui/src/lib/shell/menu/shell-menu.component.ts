@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core'
+import {ChangeDetectionStrategy, Component, input, signal} from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { MatDividerModule } from '@angular/material/divider'
 import { RouterLink, RouterLinkActive } from '@angular/router'
@@ -20,6 +20,7 @@ import { ShellMenuGroup } from './shell-menu'
   ],
   templateUrl: './shell-menu.component.html',
   styleUrl: './shell-menu.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellMenuComponent {
   readonly menuGroups = input<ShellMenuGroup[]>([])

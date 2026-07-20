@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import { MatButton, MatIconButton } from '@angular/material/button'
 import { MatIcon } from '@angular/material/icon'
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu'
@@ -24,6 +24,7 @@ import { ShellService } from '../shell.service'
   ],
   templateUrl: './shell-toolbar.component.html',
   styleUrl: './shell-toolbar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellToolbarComponent {
   protected readonly service = inject(ShellService)

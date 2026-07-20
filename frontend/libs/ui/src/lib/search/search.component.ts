@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core'
+import {ChangeDetectionStrategy, Component, input, output} from '@angular/core'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { TranslatePipe } from '@ngx-translate/core'
 import { MatIconModule } from '@angular/material/icon'
@@ -13,6 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   styles: [':host { display: block }'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent {
   readonly label = input('')

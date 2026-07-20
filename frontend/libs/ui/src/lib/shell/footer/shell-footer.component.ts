@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core'
+import {ChangeDetectionStrategy, Component, input} from '@angular/core'
 import {RouterLink} from '@angular/router'
 import {TranslatePipe} from '@ngx-translate/core'
 import packageJson from '../../../../../../package.json'
@@ -8,6 +8,7 @@ import packageJson from '../../../../../../package.json'
   imports: [RouterLink, TranslatePipe],
   templateUrl: './shell-footer.component.html',
   styleUrl: './shell-footer.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellFooterComponent {
   readonly showLegalLinks = input(true)

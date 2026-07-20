@@ -1,4 +1,4 @@
-import {Component, computed, DestroyRef, inject, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal} from '@angular/core'
 import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop'
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout'
 import {ActivatedRoute, Router, RouterModule} from '@angular/router'
@@ -21,6 +21,7 @@ import {SessionQrcodeDialogComponent} from '../session-qrcode-dialog/session-qrc
   selector: 'portal-session-lobby',
   imports: [RouterModule, MatButtonModule, MatIconModule, MatDialogModule, MatTooltipModule, TranslatePipe, MainContentComponent, SessionBattleComponent, SessionContentComponent],
   templateUrl: './session-lobby.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionLobbyComponent {
   private workflowService = inject(PortalWorkflowService)

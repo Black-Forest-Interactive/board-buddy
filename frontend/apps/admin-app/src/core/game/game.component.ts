@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
 import {MatTooltipModule} from '@angular/material/tooltip'
@@ -18,6 +18,7 @@ import {GameDialogComponent} from './game-dialog/game-dialog.component'
   selector: 'admin-game',
   imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe],
   templateUrl: './game.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameComponent {
   private service = inject(GameService)

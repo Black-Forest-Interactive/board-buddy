@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute, Router} from '@angular/router'
 import {catchError, EMPTY, map} from 'rxjs'
@@ -20,6 +20,7 @@ const TIERS = [1, 2, 3, 4, 5]
   selector: 'portal-session-research',
   imports: [MatButtonModule, MatIconModule, MatCardModule, MatChipsModule, MatTooltipModule, TranslatePipe, MainContentComponent],
   templateUrl: './session-research.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionResearchComponent {
   private workflowService = inject(PortalWorkflowService)

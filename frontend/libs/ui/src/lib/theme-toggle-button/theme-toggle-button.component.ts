@@ -1,4 +1,4 @@
-import {Component, effect, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, signal} from '@angular/core';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
@@ -8,6 +8,7 @@ import {MatIconModule} from "@angular/material/icon";
   imports: [MatIconModule, MatButtonModule, MatTooltipModule],
   templateUrl: './theme-toggle-button.component.html',
   styleUrl: './theme-toggle-button.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThemeToggleButtonComponent {
   isDarkMode = signal<boolean>(false);

@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
@@ -14,6 +14,7 @@ import {Player, PlayerChangeRequest, PlayerType} from '@board-buddy/core'
   selector: 'admin-player-dialog',
   imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, TranslatePipe],
   templateUrl: './player-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerDialogComponent {
   private service = inject(PlayerService)

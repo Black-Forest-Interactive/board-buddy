@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, effect, inject, resource, signal} from '@angular/core'
 import {NavigationEnd, Router} from '@angular/router'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {filter, map} from 'rxjs'
@@ -13,6 +13,7 @@ const SESSION_KEY_STORAGE = 'portal-session-key'
   selector: 'portal-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   private router = inject(Router)

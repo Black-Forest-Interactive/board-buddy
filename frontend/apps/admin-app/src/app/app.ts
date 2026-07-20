@@ -1,4 +1,4 @@
-import {Component} from '@angular/core'
+import {ChangeDetectionStrategy, Component} from '@angular/core'
 import {ShellComponent, ShellMenuGroup} from '@board-buddy/ui'
 
 @Component({
@@ -6,6 +6,7 @@ import {ShellComponent, ShellMenuGroup} from '@board-buddy/ui'
   selector: 'admin-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   readonly menuGroups: ShellMenuGroup[] = [

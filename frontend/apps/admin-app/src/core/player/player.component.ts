@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {DatePipe} from '@angular/common'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
@@ -18,6 +18,7 @@ import {PlayerDialogComponent} from './player-dialog/player-dialog.component'
   selector: 'admin-player',
   imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe, DatePipe],
   templateUrl: './player.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerComponent {
   private service = inject(PlayerService)

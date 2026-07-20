@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {Router} from '@angular/router'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
@@ -19,6 +19,7 @@ import {RuleSetDialogComponent} from './rule-set-dialog/rule-set-dialog.componen
   imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe],
   templateUrl: './rule-set.component.html',
   styleUrl: './rule-set.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RuleSetComponent {
   private service = inject(RuleSetService)
