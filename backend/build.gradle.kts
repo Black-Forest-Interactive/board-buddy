@@ -102,7 +102,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-postgresql:2.0.5")
     testImplementation("org.opensearch:opensearch-testcontainers:4.1.0")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
-    testImplementation("io.fusionauth:fusionauth-jwt:6.0.0")
+    testImplementation("io.fusionauth:fusionauth-jwt:7.0.0")
     testImplementation("io.mockk:mockk:1.14.11")
 
     implementation("jakarta.annotation:jakarta.annotation-api")
