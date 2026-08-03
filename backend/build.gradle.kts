@@ -29,7 +29,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.6.0")
+    implementation("ch.qos.logback:logback-classic:1.6.1")
     runtimeOnly("org.yaml:snakeyaml")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.2")
@@ -111,7 +111,7 @@ dependencies {
     // opensearch
     implementation("com.jillesvangurp:search-client:2.9.0")
     // jsoup
-    implementation("org.jsoup:jsoup:1.22.2")
+    implementation("org.jsoup:jsoup:1.23.1")
 }
 
 
