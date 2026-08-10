@@ -3,16 +3,16 @@
   <div class="flex flex-col gap-4 pt-2" [formGroup]="form">
 
     <div class="flex items-center gap-3 px-1">
-      <mat-icon class="text-on-surface/50">gps_fixed</mat-icon>
+      <mat-icon class="text-bb-brass">gps_fixed</mat-icon>
       <div>
-        <div class="text-xs text-on-surface/50">{{ 'session.battle.attacker' | translate }}</div>
-        <div class="font-semibold">{{ data.attacker.name }}</div>
+        <div class="text-xs text-bb-muted">{{ 'session.battle.attacker' | translate }}</div>
+        <div class="font-display text-bb-ink">{{ data.attacker.name }}</div>
       </div>
-      <mat-icon class="mx-2 text-on-surface/30">arrow_forward</mat-icon>
-      <mat-icon class="text-on-surface/50">shield</mat-icon>
+      <mat-icon class="mx-2 text-bb-muted-2">arrow_forward</mat-icon>
+      <mat-icon class="text-bb-danger">shield</mat-icon>
       <div>
-        <div class="text-xs text-on-surface/50">{{ 'session.battle.defender' | translate }}</div>
-        <div class="font-semibold">{{ defender().name }}</div>
+        <div class="text-xs text-bb-muted">{{ 'session.battle.defender' | translate }}</div>
+        <div class="font-display text-bb-ink">{{ defender().name }}</div>
       </div>
     </div>
 
@@ -42,5 +42,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button matButton matDialogClose>{{ 'action.cancel' | translate }}</button>
-  <button matButton="filled" (click)="submit()" [disabled]="form.invalid">{{ 'session.action.startBattle' | translate }}</button>
+  <button matButton="filled" color="warn" (click)="submit()" [disabled]="form.invalid">{{ 'session.action.startBattle' | translate }}</button>
 </mat-dialog-actions>

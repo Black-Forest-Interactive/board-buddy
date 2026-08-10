@@ -1,7 +1,17 @@
 @reference "tailwindcss";
 
 .menu-link {
-  @apply flex items-center gap-3 px-4 py-3 text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-700 border transition-colors cursor-pointer;
+  @apply flex items-center gap-3 px-4 py-3 border border-transparent transition-colors cursor-pointer;
+  border-radius: 20px;
+  color: var(--bb-ink);
+
+  &:hover {
+    background-color: color-mix(in srgb, currentColor 6%, transparent);
+  }
+
+  &:active {
+    background-color: color-mix(in srgb, currentColor 15%, transparent);
+  }
 }
 
 .menu-link span {
@@ -9,5 +19,10 @@
 }
 
 .active-nav-link {
-  @apply bg-green-200 text-green-700 border-green-400 hover:bg-green-300 hover:border-green-500;
+  background-color: var(--bb-brass-soft);
+  color: var(--bb-brass-dark);
+
+  &:hover {
+    background-color: var(--bb-brass-soft);
+  }
 }

@@ -1,53 +1,71 @@
-<ui-main-content [title]="'home.title' | translate" containerClass="p-6 flex flex-col items-center gap-6">
+<ui-main-content [title]="'home.title' | translate" containerClass="p-4 md:p-6 flex flex-col items-center gap-6">
 
   <div actions class="flex items-center gap-1">
     <button matIconButton (click)="startTour()" [matTooltip]="'tour.action' | translate"><mat-icon>help_outline</mat-icon></button>
     <button matIconButton (click)="reload()"><mat-icon>refresh</mat-icon></button>
   </div>
 
-  <div class="w-full max-w-sm flex flex-col gap-4 mt-4">
-    <mat-card id="tour-home-create" appearance="raised" class="cursor-pointer hover:shadow-lg transition-shadow" (click)="createSession()">
-      <div class="flex flex-col items-center gap-3 p-4 md:p-8">
-        <mat-icon class="!text-3xl !w-8 !h-8 md:!text-5xl md:!w-12 md:!h-12 text-primary">add_circle</mat-icon>
-        <div class="text-center">
-          <div class="text-base md:text-lg font-bold">{{ 'home.action.createSession' | translate }}</div>
-          <div class="text-xs md:text-sm text-on-surface/60 mt-1">{{ 'home.action.createSessionHint' | translate }}</div>
-        </div>
-      </div>
-    </mat-card>
+  <div class="w-full max-w-[740px] flex flex-col gap-6">
 
-    <mat-card id="tour-home-join" appearance="raised" class="cursor-pointer hover:shadow-lg transition-shadow" (click)="joinSession()">
-      <div class="flex flex-col items-center gap-3 p-4 md:p-8">
-        <mat-icon class="!text-3xl !w-8 !h-8 md:!text-5xl md:!w-12 md:!h-12 text-secondary">login</mat-icon>
-        <div class="text-center">
-          <div class="text-base md:text-lg font-bold">{{ 'home.action.joinSession' | translate }}</div>
-          <div class="text-xs md:text-sm text-on-surface/60 mt-1">{{ 'home.action.joinSessionHint' | translate }}</div>
-        </div>
-      </div>
-    </mat-card>
-  </div>
+    <!-- Onboarding banner -->
+    <div class="flex items-center gap-3 rounded-2xl bg-bb-brass-soft text-bb-brass-dark px-4 py-3">
+      <mat-icon class="shrink-0">info</mat-icon>
+      <div class="flex-1 text-sm">{{ 'home.banner.text' | translate }}</div>
+      <button matButton (click)="startTour()" class="!text-bb-brass-dark shrink-0">{{ 'home.banner.action' | translate }}</button>
+    </div>
 
-  <div id="tour-home-sessions" class="w-full max-w-sm flex flex-col gap-2">
-    <h3 class="text-sm font-semibold text-on-surface/60 uppercase tracking-wide px-1">{{ 'home.mySessions' | translate }}</h3>
-    @if (sessions().length === 0) {
-      <p class="text-sm text-on-surface/50 px-1">{{ 'home.noSessions' | translate }}</p>
-    } @else {
-      @for (s of sessions(); track s.id) {
-        <mat-card appearance="outlined" class="cursor-pointer hover:shadow-md transition-shadow" (click)="goToSession(s.id)">
-          <div class="flex items-center gap-3 px-4 py-3">
-            <mat-icon class="text-on-surface/50 shrink-0">casino</mat-icon>
-            <div class="flex-1 min-w-0">
-              <div class="font-medium truncate">{{ s.name }}</div>
-              <div class="text-xs text-on-surface/50 truncate">{{ s.game.name }}</div>
-            </div>
-            @if (s.activeBattle) {
-              <mat-icon class="text-error shrink-0">swords</mat-icon>
-            }
-            <mat-icon class="text-on-surface/30 shrink-0">chevron_right</mat-icon>
+    <!-- Action cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <mat-card id="tour-home-create" appearance="raised" class="!bg-bb-navy !text-white cursor-pointer hover:shadow-lg transition-shadow" (click)="createSession()">
+        <div class="flex flex-col items-start gap-3 p-5">
+          <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-bb-gold text-bb-navy">
+            <mat-icon>add_circle</mat-icon>
           </div>
-        </mat-card>
+          <div>
+            <div class="font-display text-base">{{ 'home.action.createSession' | translate }}</div>
+            <div class="text-sm text-white/70 mt-1">{{ 'home.action.createSessionHint' | translate }}</div>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card id="tour-home-join" appearance="raised" class="!bg-bb-card-bg cursor-pointer hover:shadow-lg transition-shadow" (click)="joinSession()">
+        <div class="flex flex-col items-start gap-3 p-5">
+          <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-bb-brass-soft text-bb-brass-dark">
+            <mat-icon>login</mat-icon>
+          </div>
+          <div>
+            <div class="font-display text-base text-bb-ink">{{ 'home.action.joinSession' | translate }}</div>
+            <div class="text-sm text-bb-muted mt-1">{{ 'home.action.joinSessionHint' | translate }}</div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Sessions -->
+    <div id="tour-home-sessions" class="flex flex-col gap-2">
+      <h3 class="text-[11px] font-semibold text-bb-muted-2 uppercase tracking-[.14em] px-1">{{ 'home.mySessions' | translate }}</h3>
+      @if (sessions().length === 0) {
+        <p class="text-sm text-bb-muted px-1">{{ 'home.noSessions' | translate }}</p>
+      } @else {
+        @for (s of sessions(); track s.id) {
+          <mat-card appearance="outlined" class="!bg-bb-card-bg cursor-pointer hover:shadow-md hover:border-bb-brass transition-shadow" (click)="goToSession(s.id)">
+            <div class="flex items-center gap-3 px-4 py-3">
+              <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-bb-navy text-white shrink-0">
+                <mat-icon>casino</mat-icon>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="font-display text-[15px] text-bb-ink truncate">{{ s.name }}</div>
+                <div class="text-xs text-bb-muted truncate">{{ s.participants.length }} {{ 'home.session.players' | translate }} · {{ s.timestamp | date:'short' }}</div>
+              </div>
+              @if (s.activeBattle) {
+                <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-bb-success-soft text-bb-success shrink-0">{{ 'home.session.active' | translate }}</span>
+              }
+              <mat-icon class="text-bb-muted-2 shrink-0">chevron_right</mat-icon>
+            </div>
+          </mat-card>
+        }
       }
-    }
+    </div>
   </div>
 
   <div class="mt-auto pt-4">

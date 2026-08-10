@@ -55,7 +55,7 @@ export class SessionArmyComponent {
       this.workflowService.getSessionEvents(key).pipe(
         catchError(() => EMPTY),
         takeUntilDestroyed(),
-      ).subscribe(e => { if (e.type === 'BATTLE_STARTED') this.router.navigate(['/session', key]) })
+      ).subscribe(e => { if (e.type === 'BATTLE_STARTED') this.router.navigate(['/session', key, 'battle']) })
     }
   }
 

@@ -1,0 +1,11 @@
+<nav class="flex items-stretch h-16 bg-bb-sidenav-bg border-t border-bb-border shrink-0">
+  @for (item of items(); track item.routerLink) {
+    <a [routerLink]="item.routerLink"
+       routerLinkActive="bottom-nav-active"
+       [routerLinkActiveOptions]="{exact: item.exact ?? false}"
+       class="bottom-nav-link flex-1 flex flex-col items-center justify-center gap-0.5 text-bb-muted-2">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span class="text-[10px] font-medium uppercase tracking-wide truncate px-1">{{ item.text | translate }}</span>
+    </a>
+  }
+</nav>

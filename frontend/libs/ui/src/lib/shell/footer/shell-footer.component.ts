@@ -1,6 +1,7 @@
-import {ChangeDetectionStrategy, Component, input} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
 import {RouterLink} from '@angular/router'
 import {TranslatePipe} from '@ngx-translate/core'
+import {ShellService} from '../shell.service'
 import packageJson from '../../../../../../package.json'
 
 @Component({
@@ -12,6 +13,7 @@ import packageJson from '../../../../../../package.json'
 })
 export class ShellFooterComponent {
   readonly showLegalLinks = input(true)
+  protected readonly service = inject(ShellService)
   version = packageJson.version
   currentYear = new Date().getFullYear()
 }

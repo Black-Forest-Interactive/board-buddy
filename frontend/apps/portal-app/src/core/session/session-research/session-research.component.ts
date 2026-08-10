@@ -5,7 +5,7 @@ import {catchError, EMPTY, map} from 'rxjs'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
-import {MatChipsModule} from '@angular/material/chips'
+import {MatTabsModule} from '@angular/material/tabs'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
@@ -18,7 +18,7 @@ const TIERS = [1, 2, 3, 4, 5]
 
 @Component({
   selector: 'portal-session-research',
-  imports: [MatButtonModule, MatIconModule, MatCardModule, MatChipsModule, MatTooltipModule, TranslatePipe, MainContentComponent],
+  imports: [MatButtonModule, MatIconModule, MatCardModule, MatTabsModule, MatTooltipModule, TranslatePipe, MainContentComponent],
   templateUrl: './session-research.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -75,14 +75,13 @@ export class SessionResearchComponent {
       this.workflowService.getSessionEvents(key).pipe(
         catchError(() => EMPTY),
         takeUntilDestroyed(),
-      ).subscribe(e => { if (e.type === 'BATTLE_STARTED') this.router.navigate(['/session', key]) })
+      ).subscribe(e => { if (e.type === 'BATTLE_STARTED') this.router.navigate(['/session', key, 'battle']) })
     }
   }
 
   startTour() { this.tourService.startResearchTour() }
   back() { this.router.navigate(['/session', this.sessionKey()]) }
   reload() { this.myInfoResource.reload(); this.technologyStatusResource.reload() }
-  scrollToTier(tier: number) { document.getElementById('tier-' + tier)?.scrollIntoView({behavior: 'smooth', block: 'start'}) }
 
   isDiscovered(tech: Technology): boolean { return this.researchedIds().has(tech.id) }
   isResearchable(tech: Technology): boolean { return this.availableIds().has(tech.id) }

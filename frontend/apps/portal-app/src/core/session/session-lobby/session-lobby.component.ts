@@ -1,25 +1,29 @@
-import {ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, DestroyRef, inject, resource, signal} from '@angular/core'
 import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop'
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout'
 import {ActivatedRoute, Router, RouterModule} from '@angular/router'
 import {catchError, combineLatest, EMPTY, interval, map, of, startWith, switchMap} from 'rxjs'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
+import {MatCardModule} from '@angular/material/card'
 import {MatDialog, MatDialogModule} from '@angular/material/dialog'
+import {MatProgressBarModule} from '@angular/material/progress-bar'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {GameSessionPlayer, GameUnit, Nation, Workflow, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowParticipantInfo} from '@board-buddy/core'
+import {GameSessionPlayer, GameUnit, Nation, PlayerType, UnitDefinition, Workflow, WorkflowCreateUnitRequest, WorkflowParticipantInfo} from '@board-buddy/core'
 import {MainContentComponent} from '@board-buddy/ui'
 import {PlayerService, PortalBattle, PortalWorkflowService, TourService} from '@board-buddy/portal'
+import {toPromise} from '@board-buddy/shared'
 import {SessionBattleStartDialogComponent} from '../session-battle-start-dialog/session-battle-start-dialog.component'
-import {SessionBattleComponent} from '../session-battle/session-battle.component'
 import {SessionContentComponent} from '../session-content/session-content.component'
 import {SessionQrcodeDialogComponent} from '../session-qrcode-dialog/session-qrcode-dialog.component'
 
+const UNIT_TYPE_ORDER: Record<string, number> = {INFANTRY: 0, MOUNTED: 1, ARTILLERY: 2, AIRCRAFT: 3}
+
 @Component({
   selector: 'portal-session-lobby',
-  imports: [RouterModule, MatButtonModule, MatIconModule, MatDialogModule, MatTooltipModule, TranslatePipe, MainContentComponent, SessionBattleComponent, SessionContentComponent],
+  imports: [RouterModule, MatButtonModule, MatIconModule, MatCardModule, MatDialogModule, MatProgressBarModule, MatTooltipModule, TranslatePipe, MainContentComponent, SessionContentComponent],
   templateUrl: './session-lobby.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -60,7 +64,10 @@ export class SessionLobbyComponent {
       government: this.infoByPlayerId().get(p.player.id)?.government ?? null
     })).sort((a, b) => (b.participant.player.id === pid ? 1 : 0) - (a.participant.player.id === pid ? 1 : 0))
   })
-  readonly opponentNation = computed(() => this.participantsEnriched().find(e => e.participant.player.id !== this.playerId())?.nation ?? null)
+  readonly myEnriched = computed(() => this.participantsEnriched().find(e => e.participant.player.id === this.playerId()))
+  readonly opponentEnriched = computed(() => this.participantsEnriched().find(e => e.participant.player.id !== this.playerId()))
+  readonly opponentNation = computed(() => this.opponentEnriched()?.nation ?? null)
+  readonly opponentIsAi = computed(() => this.opponentEnriched()?.participant.player.type === PlayerType.AI)
   readonly isHost = computed(() => this.workflow()?.host.id === this.playerId())
   readonly hasBattle = computed(() => !!this.workflow()?.activeBattle)
   readonly battle = computed(() => this.battleData())
@@ -68,9 +75,15 @@ export class SessionLobbyComponent {
   readonly battleFinished = computed(() => this.battleStatus() === 'FINISHED' || this.battleStatus() === 'CANCELED')
   readonly activePlayerId = computed(() => this.battle()?.activePlayer.player.id ?? null)
   readonly isMyTurn = computed(() => this.activePlayerId() === this.playerId())
-  readonly battleWinner = computed(() => this.battle()?.winner ?? null)
   readonly fronts = computed(() => this.battle()?.fronts ?? [])
-  readonly selectedUnit = signal<GameUnit | null>(null)
+  // Backend doesn't expose a round counter — a battle alternates single-unit turns, so two log entries make up one round.
+  readonly battleRound = computed(() => Math.floor((this.battle()?.logEntries.length ?? 0) / 2) + 1)
+  readonly reserveCount = computed(() => {
+    const mine = this.battle()?.myInfo
+    if (!mine) return 0
+    const onFront = new Set(this.fronts().flatMap(f => f.units.filter(fu => fu.player.player.id === this.playerId()).map(fu => fu.unit.entity)))
+    return mine.units.filter(u => !onFront.has(u.entity)).length
+  })
 
   readonly joinUrl = computed(() => {
     const key = this.sessionId()
@@ -83,21 +96,31 @@ export class SessionLobbyComponent {
     return url ? `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(url)}` : ''
   })
 
-  readonly reserveUnits = computed(() => {
-    const mine = this.battle()?.myInfo
-    if (!mine) return []
-    const onFront = new Set(this.fronts().flatMap(f => f.units.filter(fu => fu.player.player.id === this.playerId()).map(fu => fu.unit.entity)))
-    return mine.units.filter(u => !onFront.has(u.entity))
+  private myInfoResource = resource({
+    params: this.sessionKey,
+    loader: (p) => p.params ? toPromise(this.workflowService.getMyInfo(p.params), p.abortSignal) : Promise.resolve(undefined)
   })
 
-  readonly attackableFronts = computed(() => {
-    const battle = this.battle()
-    if (!battle || !this.isMyTurn()) return new Set<number>()
-    const onFront = new Set(this.fronts().flatMap(f => f.units.filter(fu => fu.player.player.id === this.playerId()).map(fu => fu.unit.entity)))
-    if (!battle.myInfo.units.some(u => !onFront.has(u.entity))) return new Set<number>()
-    return new Set(this.fronts().filter(f =>
-      f.units.some(fu => fu.player.player.id !== this.playerId()) && !f.units.some(fu => fu.player.player.id === this.playerId())
-    ).map(f => f.index))
+  private technologyStatusResource = resource({
+    params: this.sessionKey,
+    loader: (p) => p.params ? toPromise(this.workflowService.getTechnologyStatus(p.params), p.abortSignal) : Promise.resolve(undefined)
+  })
+
+  readonly unitDefinitions = computed<UnitDefinition[]>(() => {
+    const defs = this.workflow()?.ruleSet.unitDefinitions ?? []
+    return [...defs].sort((a, b) => (UNIT_TYPE_ORDER[a.unitType] ?? 99) - (UNIT_TYPE_ORDER[b.unitType] ?? 99))
+  })
+  readonly myUnits = computed(() => this.myInfoResource.value()?.units ?? [])
+  readonly unitLevel = computed(() => this.myInfoResource.value()?.unitLevel ?? {})
+  readonly researchedCount = computed(() => this.technologyStatusResource.value()?.researched.length ?? 0)
+  readonly totalTechCount = computed(() => {
+    const s = this.technologyStatusResource.value()
+    return s ? s.researched.length + s.available.length + s.blocked.length : 0
+  })
+  // "Zeitalter" isn't tracked as its own field — it's the furthest tier the player has researched into.
+  readonly age = computed(() => {
+    const tiers = (this.technologyStatusResource.value()?.researched ?? []).map(t => t.tier)
+    return tiers.length ? Math.max(...tiers) : 1
   })
 
   constructor() {
@@ -116,7 +139,12 @@ export class SessionLobbyComponent {
       this.workflowService.getSessionEvents(key).pipe(
         catchError(() => EMPTY),
         takeUntilDestroyed(this.destroyRef),
-      ).subscribe(() => this.reloadAll())
+      ).subscribe(e => {
+        if (e.type === 'BATTLE_STARTED') { this.router.navigate(['/session', key, 'battle']); return }
+        this.reloadAll()
+        this.myInfoResource.reload()
+        this.technologyStatusResource.reload()
+      })
     }
   }
 
@@ -149,8 +177,30 @@ export class SessionLobbyComponent {
   openQrDialog() { this.dialog.open(SessionQrcodeDialogComponent, {data: {sessionId: this.sessionId(), qrUrl: this.qrUrl()}}) }
   copyLink() { navigator.clipboard.writeText(this.joinUrl()) }
   back() { this.router.navigate(['/home']) }
-  reload() { this.reloadAll() }
-  selectUnit(unit: GameUnit) { this.selectedUnit.set(this.selectedUnit()?.entity === unit.entity ? null : unit) }
+  reload() { this.reloadAll(); this.myInfoResource.reload(); this.technologyStatusResource.reload() }
+
+  unitsOfType(unitType: string): GameUnit[] {
+    return this.myUnits().filter(u => u.type?.kind === unitType)
+  }
+
+  unitImagePath(kind: string | null | undefined): string | null {
+    if (!kind) return null
+    const map: Record<string, string> = {INFANTRY: '/img/unit/infantry2_mini.jpg', MOUNTED: '/img/unit/cavalry2_mini.jpg', ARTILLERY: '/img/unit/artillery2_mini.jpg', AIRCRAFT: '/img/unit/plane2_mini.jpg'}
+    return map[kind] ?? null
+  }
+
+  createUnit(unitDef: UnitDefinition) {
+    const key = this.sessionKey()
+    const pid = this.playerId()
+    if (!key || !pid) return
+    this.workflowService.createUnit(key, new WorkflowCreateUnitRequest(pid, unitDef.id)).subscribe({
+      next: () => {
+        this.translate.get('session.message.unitCreated').subscribe(t => this.toast.success(t))
+        this.myInfoResource.reload()
+      },
+      error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
+    })
+  }
 
   attackPlayer(defender: GameSessionPlayer) {
     const key = this.sessionKey()
@@ -158,53 +208,6 @@ export class SessionLobbyComponent {
     if (!key || !attacker) return
     const participants = this.participants().map(p => p.player)
     this.dialog.open(SessionBattleStartDialogComponent, {data: {sessionKey: key, attacker: attacker.player, defender: defender.player, participants}, maxWidth: '95vw', width: '480px'})
-      .afterClosed().subscribe(saved => { if (saved) this.reloadAll() })
-  }
-
-  createFront(unit: GameUnit) {
-    const key = this.sessionKey()
-    const pid = this.playerId()
-    if (!key || !pid) return
-    this.workflowService.battleCreateFront(key, new WorkflowBattleCreateFrontRequest(pid, unit.entity)).subscribe({
-      next: (battle) => { this.battleData.set(battle); this.selectedUnit.set(null) },
-      error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
-    })
-  }
-
-  attackFront(frontIndex: number) {
-    const key = this.sessionKey()
-    const unit = this.selectedUnit()
-    const pid = this.playerId()
-    const battle = this.battle()
-    if (!key || !unit || !pid || !battle) return
-    const opponentId = battle.opponentInfo.player.player.id
-    this.workflowService.battleAttackFront(key, new WorkflowBattleAttackFrontRequest(pid, opponentId, unit.entity, frontIndex)).subscribe({
-      next: (result) => {
-        this.translate.get('session.battle.attacked').subscribe(t => this.toast.success(t))
-        this.battleData.set(result)
-        this.selectedUnit.set(null)
-      },
-      error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
-    })
-  }
-
-  finishBattle() {
-    const key = this.sessionKey()
-    if (!key) return
-    this.workflowService.battleFinish(key).subscribe({
-      next: () => { this.battleData.set(null); this.reloadAll() },
-      error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
-    })
-  }
-
-  cancelBattle() {
-    const key = this.sessionKey()
-    if (!key) return
-    this.workflowService.battleCancel(key).subscribe({
-      next: () => {
-        this.workflowService.getBattle(key).subscribe(battle => this.battleData.set(battle))
-      },
-      error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
-    })
+      .afterClosed().subscribe(saved => { if (saved) this.router.navigate(['/session', key, 'battle']) })
   }
 }

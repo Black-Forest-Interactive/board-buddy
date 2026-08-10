@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, input} from '@angular/core'
 import {ShellToolbarComponent} from './toolbar/shell-toolbar.component'
 import {ShellContentComponent} from './content/shell-content.component'
 import {ShellFooterComponent} from './footer/shell-footer.component'
-import {ShellMenuGroup} from './menu/shell-menu'
+import {ShellMenuGroup, ShellMenuItem} from './menu/shell-menu'
 
 @Component({
   selector: 'ui-shell',
@@ -12,5 +12,6 @@ import {ShellMenuGroup} from './menu/shell-menu'
 })
 export class ShellComponent {
   readonly menuGroups = input<ShellMenuGroup[]>([])
+  readonly bottomNavItems = input<ShellMenuItem[]>([])
   readonly showFooterLinks = input(true)
 }

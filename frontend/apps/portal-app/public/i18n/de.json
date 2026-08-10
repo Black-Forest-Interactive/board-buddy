@@ -74,6 +74,14 @@
       "createSessionHint": "Neue Spielsitzung erstellen und andere einladen.",
       "joinSession": "Session beitreten",
       "joinSessionHint": "Einer bestehenden Sitzung per Key oder QR-Code beitreten."
+    },
+    "banner": {
+      "text": "Neu bei Board Buddy? Die Anleitung zeigt dir alle wichtigen Funktionen.",
+      "action": "Anleitung ansehen"
+    },
+    "session": {
+      "players": "Spieler",
+      "active": "aktiv"
     }
   },
   "session": {
@@ -114,10 +122,27 @@
     "myArmy": "Meine Armee",
     "myTechnologies": "Meine Technologien",
     "units": "Einh.",
+    "army": {
+      "inStock": "Einheiten im Bestand"
+    },
+    "dashboard": {
+      "age": "Zeitalter {{n}}",
+      "realm": "Reich",
+      "unitsTotal": "Einheiten gesamt",
+      "round": "Runde {{n}}",
+      "battleOngoing": "Gefecht läuft",
+      "noBattle": "Kein Gefecht",
+      "opponent": "Gegner",
+      "details": "Details",
+      "airLocked": "Freischalten mit Fliegerei (Zeitalter 4)",
+      "frontsReserveMeta": "{{fronts}} Fronten · {{reserve}} in Reserve",
+      "noActiveBattle": "Kein aktives Gefecht. Greife unten einen Gegner an, um eins zu starten."
+    },
     "action": {
       "research": "Forschen",
       "produceUnit": "Produzieren",
       "startBattle": "Gefecht starten",
+      "continueBattle": "Gefecht fortsetzen",
       "showQr": "Beitritts-QR anzeigen",
       "hideQr": "Beitritts-QR ausblenden",
       "copyLink": "Link kopieren"
@@ -131,9 +156,15 @@
     "research": {
       "tier": "Zeitalter",
       "hideDiscovered": "Erforschte ausblenden",
-      "showDiscovered": "Alle anzeigen"
+      "showDiscovered": "Alle anzeigen",
+      "discovered": "Erforscht",
+      "unlocks": "Schaltet {{unit}} (Lv. {{level}}) frei",
+      "noneInTier": "Keine Technologien in diesem Zeitalter."
     },
     "battle": {
+      "title": "Gefecht",
+      "counterAdvantage": "Vorteil: dein Konter",
+      "selected": "Ausgewählt",
       "yourTurn": "Du bist dran!",
       "opponentTurn": "Am Zug",
       "unitsInHand": "Einh. auf Hand",

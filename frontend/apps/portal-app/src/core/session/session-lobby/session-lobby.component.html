@@ -1,6 +1,7 @@
 <ui-main-content [title]="sessionName()" containerClass="p-1 md:p-2 lg:p-4 flex flex-col gap-4 pb-8" [showBack]="true" (back)="back()">
 
   <div actions class="flex items-center gap-1">
+    <span class="hidden sm:inline-flex items-center rounded-full bg-bb-brass-soft text-bb-brass-dark text-xs font-semibold px-3 py-1 mr-1">{{ 'session.dashboard.age' | translate:{n: age()} }}</span>
     @if (isHost() && !hasBattle()) {
       @if (isMobile()) {
         <button id="tour-lobby-share" matIconButton (click)="openQrDialog()" [matTooltip]="'session.action.showQr' | translate"><mat-icon>qr_code_2</mat-icon></button>
@@ -14,12 +15,144 @@
     <button matIconButton (click)="reload()" [matTooltip]="'action.reload' | translate"><mat-icon>refresh</mat-icon></button>
   </div>
 
-  @if (!hasBattle()) {
-    <portal-session-content id="tour-lobby-participants" [participants]="participantsEnriched()" [playerId]="playerId()" [hostId]="hostId()" [sessionId]="sessionId()" (attackPlayer)="attackPlayer($event)"/>
-  }
+  <!-- Status strip -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div class="flex items-center gap-3 rounded-2xl bg-bb-card-bg border border-bb-border px-3 py-2.5">
+      <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-bb-brass-soft text-bb-brass-dark shrink-0"><mat-icon>public</mat-icon></div>
+      <div class="min-w-0">
+        <div class="font-bold text-sm text-bb-ink truncate">{{ myEnriched()?.nation?.name ?? '—' }}</div>
+        <div class="text-[11px] text-bb-muted truncate">{{ myEnriched()?.government ? ('government.type.' + myEnriched()!.government!.type | translate) : ('session.dashboard.realm' | translate) }}</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 rounded-2xl bg-bb-card-bg border border-bb-border px-3 py-2.5">
+      <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-bb-brass-soft text-bb-brass-dark shrink-0"><mat-icon>military_tech</mat-icon></div>
+      <div class="min-w-0">
+        <div class="font-mono font-bold text-sm text-bb-ink">{{ myUnits().length }}</div>
+        <div class="text-[11px] text-bb-muted truncate">{{ 'session.dashboard.unitsTotal' | translate }}</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 rounded-2xl bg-bb-card-bg border border-bb-border px-3 py-2.5">
+      <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-bb-brass-soft text-bb-brass-dark shrink-0"><mat-icon>flag</mat-icon></div>
+      <div class="min-w-0">
+        @if (hasBattle()) {
+          <div class="font-bold text-sm text-bb-ink truncate">{{ 'session.dashboard.round' | translate:{n: battleRound()} }}</div>
+          <div class="text-[11px] text-bb-muted truncate">{{ 'session.dashboard.battleOngoing' | translate }}</div>
+        } @else {
+          <div class="font-bold text-sm text-bb-ink truncate">—</div>
+          <div class="text-[11px] text-bb-muted truncate">{{ 'session.dashboard.noBattle' | translate }}</div>
+        }
+      </div>
+    </div>
+    <div class="flex items-center gap-3 rounded-2xl bg-bb-card-bg border border-bb-border px-3 py-2.5">
+      <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-bb-brass-soft text-bb-brass-dark shrink-0"><mat-icon>shield</mat-icon></div>
+      <div class="min-w-0">
+        <div class="font-bold text-sm text-bb-ink truncate">{{ opponentEnriched()?.participant?.player?.name ?? '—' }}</div>
+        <div class="text-[11px] truncate" [class.text-bb-ai-badge]="opponentIsAi()" [class.text-bb-muted]="!opponentIsAi()">
+          {{ (opponentIsAi() ? 'player.type.AI' : 'session.dashboard.opponent') | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
 
-  @if (hasBattle() && battle()) {
-    <portal-session-battle [battle]="battle()!" [fronts]="fronts()" [reserveUnits]="reserveUnits()" [playerId]="playerId()" [isMyTurn]="isMyTurn()" [battleFinished]="battleFinished()" [battleWinner]="battleWinner()" [attackableFronts]="attackableFronts()" [isHost]="isHost()" [selectedUnit]="selectedUnit()" [opponentNation]="opponentNation()" (finishBattle)="finishBattle()" (cancelBattle)="cancelBattle()" (selectUnit)="selectUnit($event)" (createFront)="createFront($event)" (attackFront)="attackFront($event)"/>
-  }
+  <!-- Command center -->
+  <div class="grid grid-cols-1 gap-4 lg:[grid-template-columns:1.12fr_.88fr]">
+
+    <!-- Meine Armee -->
+    <mat-card appearance="raised" class="!bg-bb-card-bg">
+      <div class="flex items-center justify-between px-4 pt-4 pb-2">
+        <span class="font-display text-lg text-bb-ink">{{ 'session.myArmy' | translate }}</span>
+        <button matButton [routerLink]="['/session', sessionId(), 'army']">{{ 'session.dashboard.details' | translate }}</button>
+      </div>
+
+      <div class="flex flex-col gap-2 px-4">
+        @for (def of unitDefinitions(); track def.id) {
+          @let progress = unitLevel()[def.unitType];
+          <div class="flex items-center gap-3 rounded-xl bg-bb-row-bg border border-bb-border px-3 py-2" [class.opacity-50]="!progress">
+            @let img = unitImagePath(def.unitType);
+            @if (img) {
+              <img [src]="img" [alt]="def.unitType" class="w-11 h-11 rounded-lg object-cover shrink-0">
+            } @else {
+              <div class="w-11 h-11 rounded-lg bg-bb-navy/10 flex items-center justify-center shrink-0"><mat-icon class="text-bb-muted">military_tech</mat-icon></div>
+            }
+            <div class="min-w-0 flex-1">
+              <div class="font-display text-sm text-bb-ink truncate">{{ 'unit-definition.type.' + def.unitType | translate }}</div>
+              @if (def.counterType) {
+                <div class="text-[11px] text-bb-brass truncate">{{ 'unit-definition.type.' + def.counterType | translate }}</div>
+              }
+            </div>
+            @if (progress) {
+              <div class="flex flex-col items-end text-[11px] text-bb-muted shrink-0">
+                <span class="flex items-center gap-0.5"><mat-icon inline class="text-bb-success">favorite</mat-icon>{{ progress.minHealthPoints }}–{{ progress.maxHealthPoints }}</span>
+                <span class="flex items-center gap-0.5"><mat-icon inline class="text-bb-danger">bolt</mat-icon>{{ progress.minDamagePoints }}–{{ progress.maxDamagePoints }}</span>
+              </div>
+            }
+            <span class="font-mono font-bold text-sm text-bb-ink shrink-0 w-6 text-center">{{ unitsOfType(def.unitType).length }}</span>
+            @if (progress) {
+              <button matButton="filled" class="shrink-0" (click)="createUnit(def)">
+                <mat-icon>add</mat-icon>{{ 'session.action.produceUnit' | translate }}
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Locked Luftwaffe row -->
+        @if (!unitLevel()['AIRCRAFT']) {
+          <div class="flex items-center gap-3 rounded-xl border border-dashed border-bb-border px-3 py-2 opacity-60">
+            <div class="w-11 h-11 rounded-lg bg-bb-navy/10 flex items-center justify-center shrink-0"><mat-icon class="text-bb-muted">lock</mat-icon></div>
+            <div class="min-w-0 flex-1">
+              <div class="font-display text-sm text-bb-ink truncate">{{ 'unit-definition.type.AIRCRAFT' | translate }}</div>
+              <div class="text-[11px] text-bb-muted truncate">{{ 'session.dashboard.airLocked' | translate }}</div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="flex items-center gap-3 px-4 py-4 mt-2">
+        <mat-progress-bar mode="determinate" [value]="totalTechCount() ? (researchedCount() / totalTechCount() * 100) : 0" class="flex-1 rounded-full !h-1.5"/>
+        <span class="text-xs font-mono text-bb-muted shrink-0">{{ researchedCount() }}/{{ totalTechCount() }}</span>
+        <button matButton [routerLink]="['/session', sessionId(), 'research']">
+          <mat-icon>science</mat-icon>{{ 'MENU.Research' | translate }}
+        </button>
+      </div>
+    </mat-card>
+
+    <!-- Gefecht -->
+    <mat-card appearance="raised" class="!bg-bb-card-bg">
+      <div class="px-4 pt-4 pb-2">
+        <span class="font-display text-lg text-bb-ink">{{ 'session.battle.fronts' | translate }}</span>
+      </div>
+
+      @if (hasBattle()) {
+        <div class="flex flex-col gap-3 px-4 pb-4">
+          <span class="inline-flex self-start items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold" [class.bg-bb-success-soft]="isMyTurn()" [class.text-bb-success]="isMyTurn()" [class.bg-bb-brass-soft]="!isMyTurn()" [class.text-bb-brass-dark]="!isMyTurn()">
+            {{ (isMyTurn() ? 'session.battle.yourTurn' : 'session.battle.opponentTurn') | translate }} · {{ 'session.dashboard.round' | translate:{n: battleRound()} }}
+          </span>
+
+          <div class="flex items-center justify-center gap-4">
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white" style="background:linear-gradient(160deg,#2b3550,#0f1a30)"><mat-icon>public</mat-icon></div>
+              <span class="text-xs text-bb-muted">{{ 'session.battle.me' | translate }}</span>
+            </div>
+            <span class="font-display text-bb-muted-2">VS</span>
+            <div class="flex flex-col items-center gap-1">
+              <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white" style="background:linear-gradient(160deg,#3a241c,#1a0f0a)"><mat-icon>public</mat-icon></div>
+              <span class="text-xs text-bb-muted">{{ opponentEnriched()?.participant?.player?.name }}</span>
+            </div>
+          </div>
+
+          <div class="text-center text-xs text-bb-muted">{{ 'session.dashboard.frontsReserveMeta' | translate:{fronts: fronts().length, reserve: reserveCount()} }}</div>
+
+          <button matButton="filled" color="warn" class="w-full rounded-[24px]" [routerLink]="['/session', sessionId(), 'battle']">
+            <mat-icon>swords</mat-icon>{{ 'session.action.continueBattle' | translate }}
+          </button>
+        </div>
+      } @else {
+        <div class="px-4 pb-4">
+          <p class="text-sm text-bb-muted mb-3">{{ 'session.dashboard.noActiveBattle' | translate }}</p>
+          <portal-session-content id="tour-lobby-participants" [participants]="participantsEnriched()" [playerId]="playerId()" [hostId]="hostId()" [sessionId]="sessionId()" (attackPlayer)="attackPlayer($event)"/>
+        </div>
+      }
+    </mat-card>
+  </div>
 
 </ui-main-content>
