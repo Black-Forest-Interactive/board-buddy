@@ -38,8 +38,8 @@ dependencies {
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut:micronaut-jackson-databind")
 //    implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("tools.jackson.module:jackson-module-kotlin")
+    // java.time (JSR-310) support is built into jackson-databind since Jackson 3, no separate module needed
 
     // http
     ksp("io.micronaut:micronaut-http-validation")
