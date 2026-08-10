@@ -14,9 +14,6 @@
       "options": {
         "outputPath": "dist/apps/admin-app",
         "browser": "apps/admin-app/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
         "tsConfig": "apps/admin-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [

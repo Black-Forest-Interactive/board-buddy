@@ -74,6 +74,14 @@
       "createSessionHint": "Create a new game session and invite others.",
       "joinSession": "Join session",
       "joinSessionHint": "Join an existing session via key or QR code."
+    },
+    "banner": {
+      "text": "New to Board Buddy? The guide walks you through all the key features.",
+      "action": "View guide"
+    },
+    "session": {
+      "players": "players",
+      "active": "active"
     }
   },
   "session": {
@@ -114,10 +122,27 @@
     "myArmy": "My army",
     "myTechnologies": "My technologies",
     "units": "units",
+    "army": {
+      "inStock": "Units in stock"
+    },
+    "dashboard": {
+      "age": "Age {{n}}",
+      "realm": "Realm",
+      "unitsTotal": "Units total",
+      "round": "Round {{n}}",
+      "battleOngoing": "Battle ongoing",
+      "noBattle": "No battle",
+      "opponent": "Opponent",
+      "details": "Details",
+      "airLocked": "Unlock with Aviation (Age 4)",
+      "frontsReserveMeta": "{{fronts}} fronts · {{reserve}} in reserve",
+      "noActiveBattle": "No active battle. Attack an opponent below to start one."
+    },
     "action": {
       "research": "Research",
       "produceUnit": "Produce",
       "startBattle": "Start battle",
+      "continueBattle": "Continue battle",
       "showQr": "Show join QR",
       "hideQr": "Hide join QR",
       "copyLink": "Copy link"
@@ -131,9 +156,15 @@
     "research": {
       "tier": "Age",
       "hideDiscovered": "Hide researched",
-      "showDiscovered": "Show all"
+      "showDiscovered": "Show all",
+      "discovered": "Discovered",
+      "unlocks": "Unlocks {{unit}} (Lv. {{level}})",
+      "noneInTier": "No technologies in this age."
     },
     "battle": {
+      "title": "Battle",
+      "counterAdvantage": "Advantage: your counter",
+      "selected": "Selected",
       "yourTurn": "It's your turn!",
       "opponentTurn": "Active player",
       "unitsInHand": "units in hand",

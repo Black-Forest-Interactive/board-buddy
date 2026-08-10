@@ -1,4 +1,4 @@
-import {Component, input, output} from '@angular/core'
+import {ChangeDetectionStrategy, Component, input, output} from '@angular/core'
 import {RouterModule} from '@angular/router'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
@@ -16,6 +16,7 @@ export interface EnrichedParticipant {
   selector: 'portal-session-content',
   imports: [RouterModule, MatButtonModule, MatIconModule, MatCardModule, TranslatePipe],
   templateUrl: './session-content.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionContentComponent {
   readonly participants = input.required<EnrichedParticipant[]>()

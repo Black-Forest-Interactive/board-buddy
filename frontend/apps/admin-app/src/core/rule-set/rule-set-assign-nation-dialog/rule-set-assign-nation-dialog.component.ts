@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
 import {MatListModule} from '@angular/material/list'
@@ -13,6 +13,7 @@ import {toPromise} from '@board-buddy/shared'
   selector: 'admin-rule-set-assign-nation-dialog',
   imports: [MatDialogModule, MatListModule, MatButtonModule, MatIconModule, TranslatePipe],
   templateUrl: './rule-set-assign-nation-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RuleSetAssignNationDialogComponent {
   private ruleSetService = inject(RuleSetService)

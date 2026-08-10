@@ -1,16 +1,12 @@
-<mat-toolbar class="h-16 sm:h-20 px-3 sm:px-6 !bg-[var(--mat-sys-primary)] !text-[var(--mat-sys-on-primary)]">
+<mat-toolbar class="h-14 sm:h-[58px] px-3 sm:px-6 !bg-[var(--mat-sys-primary)] !text-[var(--mat-sys-on-primary)] shadow-[0_2px_4px_rgba(0,0,0,.24)]">
   <div class="flex w-full items-center gap-2 sm:gap-4">
 
-    @if (service.isHandset()) {
-      <button matIconButton routerLink="/" aria-label="Home" class="flex-shrink-0">
-        <mat-icon>home</mat-icon>
-      </button>
-    } @else {
-      <button matButton="filled" routerLink="/" aria-label="Go to home page" class="flex-shrink-0">
-        <mat-icon>home</mat-icon>
-        {{ 'MENU.Home' | translate }}
-      </button>
-    }
+    <a routerLink="/" aria-label="Go to home page" class="flex items-center gap-2 flex-shrink-0 cursor-pointer">
+      <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-bb-brass text-bb-navy font-bold text-sm shrink-0">BB</span>
+      @if (!service.isHandset()) {
+        <span class="font-display text-bb-gold text-lg tracking-[.06em]">Board Buddy</span>
+      }
+    </a>
 
     <div class="flex-1"></div>
 

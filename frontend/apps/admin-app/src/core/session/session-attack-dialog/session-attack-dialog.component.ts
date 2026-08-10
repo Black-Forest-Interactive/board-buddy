@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
@@ -13,6 +13,7 @@ import {Battle, GameUnit, WorkflowBattleAttackFrontRequest} from '@board-buddy/c
   selector: 'admin-session-attack-dialog',
   imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatSelectModule, MatButtonModule, TranslatePipe],
   templateUrl: './session-attack-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionAttackDialogComponent {
   private service = inject(WorkflowService)

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core'
+import {ChangeDetectionStrategy, Component} from '@angular/core'
 import {RouterLink} from '@angular/router'
 import {TranslatePipe} from '@ngx-translate/core'
 import {MatCardModule} from '@angular/material/card'
@@ -10,5 +10,6 @@ import {MainContentComponent} from '@board-buddy/ui'
   selector: 'admin-home',
   imports: [MainContentComponent, RouterLink, TranslatePipe, MatCardModule, MatIconModule, MatButtonModule],
   templateUrl: './home.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {}

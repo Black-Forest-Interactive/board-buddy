@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {Location} from '@angular/common'
 import {MainContentComponent} from '@board-buddy/ui'
 import {LEGAL} from '../legal/legal.config'
@@ -7,6 +7,7 @@ import {LEGAL} from '../legal/legal.config'
   selector: 'portal-privacy',
   imports: [MainContentComponent],
   templateUrl: './privacy.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrivacyComponent {
   private location = inject(Location)

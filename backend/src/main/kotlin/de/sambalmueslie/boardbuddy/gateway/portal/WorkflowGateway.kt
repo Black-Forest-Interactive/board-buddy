@@ -2,8 +2,12 @@ package de.sambalmueslie.boardbuddy.gateway.portal
 
 import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattle
 import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattleOpponent
+import de.sambalmueslie.boardbuddy.infrastructure.ProtocolService
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
-import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowPlayerJoinRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowResearchRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.Battle
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleAttackFrontRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleCreateFrontRequest
@@ -12,38 +16,48 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Singleton
 class WorkflowGateway(
-    private val service: WorkflowService
+    private val service: WorkflowService,
+    private val protocolService: ProtocolService
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(WorkflowGateway::class.java)
     }
 
-    fun get(id: String) = service.get(id)
+    private val protocol = protocolService.getProtocol("portal", "Workflow")
+
+    fun get(id: String) =  service.get(id)
 
     fun getOgPreview(id: String): HttpResponse<String> {
+        protocol.log("[$id] get og preview")
         val workflow = runCatching { service.get(id) }.getOrNull()
             ?: return HttpResponse.notFound()
         val baseUrl = "https://blackforrestdevelopment.de"
-        val joinUrl = "$baseUrl/session/join?key=$id"
+        val encodedId = URLEncoder.encode(id, StandardCharsets.UTF_8)
+        val joinUrl = "$baseUrl/session/join?key=$encodedId"
+        val name = htmlEscape(workflow.name)
+        val hostName = htmlEscape(workflow.host.name)
+        val gameName = htmlEscape(workflow.game.name)
         val participantCount = workflow.participants.size
-        val description = "${workflow.host.name} invites you to join \"${workflow.name}\" " +
-            "(${workflow.game.name}) — $participantCount player${if (participantCount == 1) "" else "s"} already in."
+        val description = "$hostName invites you to join \"$name\" " +
+                "($gameName) — $participantCount player${if (participantCount == 1) "" else "s"} already in."
         val content = """
             <!DOCTYPE html>
             <html>
             <head>
               <meta charset="utf-8">
-              <title>${workflow.name} — Board Buddy</title>
+              <title>$name — Board Buddy</title>
               <meta property="og:type" content="website">
-              <meta property="og:title" content="${workflow.name} — Board Buddy">
+              <meta property="og:title" content="$name — Board Buddy">
               <meta property="og:description" content="$description">
               <meta property="og:image" content="$baseUrl/img/og-preview.png">
-              <meta property="og:url" content="$baseUrl/api/portal/workflow/$id/og-preview">
+              <meta property="og:url" content="$baseUrl/api/portal/workflow/$encodedId/og-preview">
               <meta name="twitter:card" content="summary">
-              <meta name="twitter:title" content="${workflow.name} — Board Buddy">
+              <meta name="twitter:title" content="$name — Board Buddy">
               <meta name="twitter:description" content="$description">
               <meta http-equiv="refresh" content="0;url=$joinUrl">
             </head>
@@ -54,15 +68,23 @@ class WorkflowGateway(
         """.trimIndent()
         return HttpResponse.ok(content).contentType(MediaType.TEXT_HTML)
     }
+
+    private fun htmlEscape(value: String): String = value
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&#39;")
+
     fun getAvailableNations(id: String) = service.getAvailableNations(id)
     fun getTechnologyStatus(id: String, playerId: Long) = service.getTechnologyStatus(id, playerId)
-    fun create(request: WorkflowCreateRequest) = service.create(request)
-    fun join(id: String, request: WorkflowPlayerJoinRequest) = service.join(id, request)
-    fun createUnit(id: String, request: WorkflowCreateUnitRequest) = service.createUnit(id, request)
-    fun research(id: String, request: WorkflowResearchRequest) = service.research(id, request)
-    fun battleStart(id: String, request: WorkflowBattleStartRequest) = service.battleStart(id, request)
-    fun battleCancel(id: String) = service.battleCancel(id)
-    fun battleFinish(id: String) = service.battleFinish(id)
+    fun create(request: WorkflowCreateRequest) = protocol.log("Create ${request.name}", request) { service.create(request) }
+    fun join(id: String, request: WorkflowPlayerJoinRequest) = protocol.log("[$id] join ${request.name}", request) { service.join(id, request) }
+    fun createUnit(id: String, request: WorkflowCreateUnitRequest) = protocol.log("[$id] ${request.playerId} create unit ${request.unitTypeId}", request) { service.createUnit(id, request) }
+    fun research(id: String, request: WorkflowResearchRequest) = protocol.log("[$id] ${request.playerId} research ${request.technologyId}", request) { service.research(id, request) }
+    fun battleStart(id: String, request: WorkflowBattleStartRequest) = protocol.log("[$id] battle start ${request.attacker.id} vs ${request.defender.id}", request) { service.battleStart(id, request) }
+    fun battleCancel(id: String) = protocol.log("[$id] battle cancel") { service.battleCancel(id) }
+    fun battleFinish(id: String) = protocol.log("[$id] battle finish") { service.battleFinish(id) }
     fun getParticipantsInfo(id: String) = service.getParticipantsInfo(id)
 
     fun getMyInfo(id: String, playerId: Long) =
@@ -74,12 +96,14 @@ class WorkflowGateway(
     }
 
     fun battleCreateFront(id: String, request: WorkflowBattleCreateFrontRequest, playerId: Long): PortalBattle {
+        protocol.log("[$id] battle $playerId create front ${request.entityId}", request)
         service.battleCreateFront(id, request)
         val battle = service.getBattleInfo(id) ?: throw IllegalStateException("No active battle after createFront")
         return convertToPortalBattle(battle, playerId)
     }
 
     fun battleAttackFront(id: String, request: WorkflowBattleAttackFrontRequest, playerId: Long): PortalBattle {
+        protocol.log("[$id] battle $playerId attack front ${request.frontIndex}", request)
         val battle = service.battleAttackFront(id, request)
         return convertToPortalBattle(battle, playerId)
     }

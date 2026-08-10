@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
@@ -14,6 +14,7 @@ import {UnitType, TechnologyEffectUnitUnlockRequest} from '@board-buddy/core'
   selector: 'admin-technology-effect-dialog',
   imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, TranslatePipe],
   templateUrl: './technology-effect-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TechnologyEffectDialogComponent {
   private service = inject(TechnologyService)

@@ -1,4 +1,4 @@
-import {ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZoneChangeDetection} from '@angular/core'
+import {ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection} from '@angular/core'
 import {provideRouter, withComponentInputBinding} from '@angular/router'
 import {appRoutes} from './app.routes'
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter'
@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({eventCoalescing: true}),
+    provideZonelessChangeDetection(),
     provideLuxonDateAdapter(),
     {provide: MAT_DATE_LOCALE, useValue: 'de-DE'},
     {provide: LOCALE_ID, useValue: 'de-DE'},

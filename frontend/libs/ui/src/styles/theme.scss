@@ -1,80 +1,131 @@
 @use "@angular/material" as mat;
+@use "./theme-colors";
 
 @include mat.core();
 
-// Gültiges Basis-Theme für den Compiler
+// Board Buddy Basis-Theme: echte Navy/Brass/Danger-Paletten (siehe _theme-colors.scss) statt
+// Material-Standardfarben — sonst backen Komponenten (Buttons etc.) Indigo/Lila als Literal-Werte
+// ein, die von den `theme-overrides` weiter unten nicht mehr erreicht werden.
+// `use-system-variables: true` lässt alle Komponenten-Tokens auf `var(--mat-sys-*)` verweisen,
+// statt Literalwerte einzubacken — erst dadurch greifen die `theme-overrides` unten überall.
 $theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$blue-palette,
-    tertiary: mat.$green-palette,
+    primary: theme-colors.$primary-palette,
+    tertiary: theme-colors.$tertiary-palette,
+    use-system-variables: true,
   )
 ));
 
 html {
   @include mat.all-component-themes($theme);
+  @include mat.color-variants-backwards-compatibility($theme);
 }
 
 // ==========================================================================
-// LIGHT THEME OVERRIDES
+// LIGHT THEME OVERRIDES — Navy & Brass
 // ==========================================================================
 :root, :host {
   @include mat.theme-overrides((
     // Globale Farbrollen definieren
-    primary: #3C3C3C,
+    primary: #12203a,
     on-primary: #ffffff,
-    primary-container: #3C3C3C,
+    primary-container: #12203a,
     on-primary-container: #ffffff,
 
-    secondary: #EAEAEA,
-    on-secondary: #3C3C3C,
-    secondary-container: #EAEAEA,
-    on-secondary-container: #3C3C3C,
+    secondary: #f0e6cd,
+    on-secondary: #8a6413,
+    secondary-container: #f0e6cd,
+    on-secondary-container: #8a6413,
 
-    tertiary: #FFD700,
-    on-tertiary: #3C3C3C,
-    tertiary-container: #FFD700,
-    on-tertiary-container: #3C3C3C,
+    tertiary: #b8862f,
+    on-tertiary: #ffffff,
+    tertiary-container: #f0e6cd,
+    on-tertiary-container: #8a6413,
 
-    background: #ffffff,
-    on-background: #3C3C3C,
-    surface: #ffffff,
-    surface-container: #F5F5F5,
-    on-surface: #3C3C3C,
-    outline: #3C3C3C,
+    background: #e9e6df,
+    on-background: #17233a,
+    surface: #fbfaf6,
+    surface-container: #ffffff,
+    on-surface: #17233a,
+    outline: rgba(23, 35, 58, .3),
+
+    // "Danger/Gefecht" — nie Material-Rot, immer unser Orange (color="warn")
+    error: #c96a1f,
+    on-error: #ffffff,
+    error-container: #c96a1f,
+    on-error-container: #ffffff,
   ));
 
   // ------------------------------------------------------------------------
-  // BUTTON-TOKENS HARDCODEN (Das killt das giftige Violett/Blau endgültig!)
+  // Board Buddy Design-Tokens (Navy & Brass) — als CSS-Variablen, roh
   // ------------------------------------------------------------------------
+  --bb-app-bg: #e9e6df;
+  --bb-sidenav-bg: #e3ddcf;
+  --bb-card-bg: #fbfaf6;
+  --bb-row-bg: #ffffff;
+  --bb-ink: #17233a;
+  --bb-muted: #6a6e78;
+  --bb-muted-2: #948b78;
+  --bb-border: rgba(23, 35, 58, .12);
+  --bb-navy: #12203a;
+  --bb-brass: #b8862f;
+  --bb-brass-dark: #8a6413;
+  --bb-brass-soft: #f0e6cd;
+  --bb-gold: #e8c37a;
+  --bb-danger: #c96a1f;
+  --bb-success: #3f7d4f;
+  --bb-success-soft: #e4efdd;
+  --bb-hp-pip-empty: #d6e6d8;
+  --bb-dmg-pip-empty: #ecd9c6;
+  --bb-snackbar-bg: #2c3038;
+  --bb-ai-badge: #8a3b2a;
 
-  // 1. Für Standard-Buttons (mat-filled-button) -> Sattes Anthrazit
-  --mat-filled-button-container-color: #3C3C3C;
-  --mat-filled-button-label-text-color: #ffffff;
+  // Dialog-Radius & Overlay-Backdrop
+  --mdc-dialog-container-shape: 18px;
 
-  // 2. Für Tonal-Buttons (mat-filled-tonal-button) -> DEIN HELLGRAU
-  --mat-filled-tonal-button-container-color: #EAEAEA;
-  --mat-filled-tonal-button-label-text-color: #3C3C3C;
+  // Tab-Ink-Bar in Brass
+  --mat-tab-active-indicator-color: #b8862f;
+  --mat-tab-active-focus-indicator-color: #b8862f;
+  --mat-tab-active-hover-indicator-color: #b8862f;
+}
 
-  // 3. Für Outlined-Buttons (mat-outlined-button) -> Anthrazitfarbener Text/Rahmen
-  --mat-outlined-button-label-text-color: #3C3C3C;
-  --mat-outlined-button-outline-color: #3C3C3C;
+// ------------------------------------------------------------------------
+// BUTTON-TOKENS (unthemed = kein `color`-Input gesetzt)
+// ------------------------------------------------------------------------
+// Gefüllte Buttons ohne `color` sind bereits korrekt Navy (= primary, siehe oben).
+// Sekundäre (outlined) Buttons sollen NICHT primary-farbig wirken -> neutral/ink.
+// Reine Text-Buttons (Links wie „Details"/„Forschen") -> Brass.
+.mat-mdc-outlined-button.mat-unthemed {
+  --mat-button-outlined-label-text-color: var(--bb-ink);
+  --mat-button-outlined-outline-color: var(--bb-border);
+}
 
-  // Toolbar-Hintergrund auf dein dunkles Anthrazit zementieren
-  --mat-toolbar-container-background-color: #3C3C3C;
+.mat-mdc-button.mat-unthemed {
+  --mat-button-text-label-text-color: var(--bb-brass);
+}
+
+// Toolbar: Buttons/Icons ohne `color` sind Gold auf Navy statt Navy-auf-Navy.
+mat-toolbar {
+  --mat-toolbar-container-background-color: var(--bb-navy);
   --mat-toolbar-container-text-color: #ffffff;
 
-  // Spezial-Regel: Wenn Buttons INNERHALB der Toolbar liegen
-  mat-toolbar {
-    // Hier werden die Rahmen-Buttons in der Toolbar sauber weiß
-    --mat-outlined-button-label-text-color: #ffffff;
-    --mat-outlined-button-outline-color: #ffffff;
-
-    // Icons in den Buttons weiß färben
-    .mat-icon {
-      color: inherit !important;
-    }
+  .mat-mdc-unelevated-button.mat-unthemed {
+    --mat-button-filled-container-color: transparent;
+    --mat-button-filled-label-text-color: var(--bb-gold);
   }
+
+  .mat-mdc-icon-button.mat-unthemed {
+    --mat-icon-button-icon-color: var(--bb-gold);
+  }
+
+  .mat-icon {
+    color: inherit !important;
+  }
+}
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(18, 32, 58, .5);
 }
 
 // ==========================================================================
@@ -82,33 +133,53 @@ html {
 // ==========================================================================
 .dark, .dark-theme, html[data-theme="dark"] {
   @include mat.theme-overrides((
-    primary: #FFD700,
-    on-primary: #141313,
-    primary-container: #3C3C3C,
-    on-primary-container: #FFD700,
+    primary: #d1a44a,
+    on-primary: #1a1206,
+    primary-container: #12203a,
+    on-primary-container: #e8c37a,
 
-    secondary: #2D2D2D,
-    on-secondary: #ffffff,
-    secondary-container: #2D2D2D,
-    on-secondary-container: #ffffff,
+    secondary: #2a3348,
+    on-secondary: #e9e6df,
+    secondary-container: #2a3348,
+    on-secondary-container: #e9e6df,
 
-    background: #141313,
-    on-background: #e5e2e1,
-    surface: #141313,
-    surface-container: #201f1f,
-    on-surface: #e5e2e1,
+    tertiary: #d1a44a,
+    on-tertiary: #1a1206,
+    tertiary-container: rgba(184, 134, 47, .22),
+    on-tertiary-container: #e8c37a,
+
+    background: #141a26,
+    on-background: #e9e6df,
+    surface: #141a26,
+    surface-container: #1c2434,
+    on-surface: #e9e6df,
+
+    error: #e08a45,
+    on-error: #1a1206,
+    error-container: #e08a45,
+    on-error-container: #1a1206,
   ));
 
-  // Button-Anpassungen für den Darkmode (Grau/Gold statt Blau)
-  --mat-filled-button-container-color: #FFD700;
-  --mat-filled-button-label-text-color: #141313;
-  --mat-filled-tonal-button-container-color: #2D2D2D;
-  --mat-filled-tonal-button-label-text-color: #ffffff;
-  --mat-outlined-button-label-text-color: #e5e2e1;
-  --mat-outlined-button-outline-color: #e5e2e1;
-
-  --mat-toolbar-container-background-color: #201f1f;
-  --mat-toolbar-container-text-color: #e5e2e1;
+  --bb-app-bg: #141a26;
+  --bb-sidenav-bg: #12203a;
+  --bb-card-bg: #1c2434;
+  --bb-row-bg: #212b3d;
+  --bb-ink: #e9e6df;
+  --bb-muted: #a7abb5;
+  --bb-muted-2: #b8a98a;
+  --bb-border: rgba(233, 230, 223, .14);
+  --bb-navy: #0d1626;
+  --bb-brass: #d1a44a;
+  --bb-brass-dark: #f0e6cd;
+  --bb-brass-soft: rgba(184, 134, 47, .22);
+  --bb-gold: #e8c37a;
+  --bb-danger: #e08a45;
+  --bb-success: #5fae72;
+  --bb-success-soft: rgba(63, 125, 79, .25);
+  --bb-hp-pip-empty: rgba(214, 230, 216, .18);
+  --bb-dmg-pip-empty: rgba(236, 217, 198, .18);
+  --bb-snackbar-bg: #2c3038;
+  --bb-ai-badge: #a8523c;
 }
 
 // ==========================================================================

@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {RouterModule} from '@angular/router'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
@@ -18,6 +18,7 @@ import {NationDialogComponent} from './nation-dialog/nation-dialog.component'
   selector: 'admin-nation',
   imports: [MainContentComponent, RouterModule, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe],
   templateUrl: './nation.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NationComponent {
   private service = inject(NationService)

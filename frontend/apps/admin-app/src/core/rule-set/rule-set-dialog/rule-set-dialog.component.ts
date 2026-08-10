@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
@@ -20,6 +20,7 @@ import {RuleSet, RuleSetChangeRequest} from '@board-buddy/core'
     TranslatePipe,
   ],
   templateUrl: './rule-set-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RuleSetDialogComponent {
   private service = inject(RuleSetService)

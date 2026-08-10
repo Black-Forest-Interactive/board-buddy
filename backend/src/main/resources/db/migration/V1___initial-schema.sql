@@ -267,3 +267,25 @@ CREATE TABLE game_session_entity
     entity_id       BIGINT REFERENCES game_entity (id),
     PRIMARY KEY (game_session_id, player_id, entity_id)
 );
+
+
+-- protocol
+CREATE SEQUENCE protocol_seq;
+CREATE TABLE protocol
+(
+    id        BIGINT       NOT NULL PRIMARY KEY DEFAULT nextval('protocol_seq'::regclass),
+    app       VARCHAR(255) NOT NULL,
+    resource  VARCHAR(255) NOT NULL,
+    timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    UNIQUE (app, resource)
+);
+
+CREATE SEQUENCE protocol_entry_seq;
+CREATE TABLE protocol_entry
+(
+    id          BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('protocol_entry_seq'::regclass),
+    protocol_id BIGINT NOT NULL REFERENCES protocol (id),
+    message     TEXT   NOT NULL,
+    payload     JSONB,
+    timestamp   TIMESTAMP WITHOUT TIME ZONE NOT NULL
+);

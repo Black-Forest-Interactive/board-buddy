@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute} from '@angular/router'
 import {map} from 'rxjs'
@@ -41,6 +41,7 @@ import {SessionResearchDialogComponent} from '../session-research-dialog/session
   ],
   templateUrl: './session-detail.component.html',
   styleUrl: './session-detail.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionDetailComponent {
   private sessionService = inject(SessionService)

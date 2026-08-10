@@ -22,7 +22,7 @@ export class ShellService {
 
   readonly lang = toSignal(
     this.translateService.onLangChange.pipe(map(e => e.lang)),
-    { initialValue: this.translateService.currentLang ?? 'en' }
+    { initialValue: this.translateService.currentLang() ?? 'en' }
   )
 
   constructor() {

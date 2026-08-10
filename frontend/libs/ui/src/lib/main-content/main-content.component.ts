@@ -1,4 +1,4 @@
-import {Component, input, output, ViewEncapsulation} from '@angular/core'
+import {ChangeDetectionStrategy, Component, input, output, ViewEncapsulation} from '@angular/core'
 import {MatCardModule} from '@angular/material/card'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
@@ -10,7 +10,8 @@ import {MatToolbar} from '@angular/material/toolbar'
   imports: [MatCardModule, MatButtonModule, MatIconModule, SearchComponent, MatToolbar],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainContentComponent {
   readonly title = input('')

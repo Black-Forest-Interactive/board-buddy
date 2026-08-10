@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, effect, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
@@ -16,6 +16,7 @@ import {toPromise} from '@board-buddy/shared'
   selector: 'admin-session-dialog',
   imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, TranslatePipe],
   templateUrl: './session-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionDialogComponent {
   private workflowService = inject(WorkflowService)

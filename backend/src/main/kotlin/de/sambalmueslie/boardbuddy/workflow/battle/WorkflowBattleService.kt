@@ -1,5 +1,7 @@
 package de.sambalmueslie.boardbuddy.workflow.battle
 
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
@@ -12,6 +14,7 @@ import de.sambalmueslie.boardbuddy.workflow.battle.cmd.*
 import de.sambalmueslie.boardbuddy.workflow.battle.db.BattleData
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
+import java.util.concurrent.TimeUnit
 
 @Singleton
 class WorkflowBattleService(
@@ -28,14 +31,16 @@ class WorkflowBattleService(
     }
 
 
-    private val activeBattles = mutableMapOf<String, BattleData>()
+    private val activeBattles: Cache<String, BattleData> = Caffeine.newBuilder()
+        .expireAfterWrite(12, TimeUnit.HOURS)
+        .build()
 
     override fun get(session: GameSession): Battle? {
         return getData(session)?.let { converter.convert(it) }
     }
 
     private fun getData(session: GameSession): BattleData? {
-        return activeBattles[session.key]
+        return activeBattles.getIfPresent(session.key)
     }
 
 
@@ -44,7 +49,7 @@ class WorkflowBattleService(
         val defender = getAndValidatePlayer(session, request.defender.id)
 
         val battle = actionFactory.execute(BattleCmdStart(session, request, attacker, defender))
-        activeBattles[session.key] = battle
+        activeBattles.put(session.key, battle)
         considerAiMove(session, battle)
         return converter.convert(battle)
     }
@@ -57,7 +62,11 @@ class WorkflowBattleService(
 
     override fun finish(session: GameSession) {
         actionFactory.execute(BattleCmdFinish(session, session.getBattle()))
-        activeBattles.remove(session.key)
+        activeBattles.invalidate(session.key)
+    }
+
+    fun cleanup(sessionKey: String) {
+        activeBattles.invalidate(sessionKey)
     }
 
 

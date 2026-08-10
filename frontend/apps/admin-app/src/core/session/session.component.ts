@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {DatePipe} from '@angular/common'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
@@ -19,6 +19,7 @@ import {SessionDialogComponent} from './session-dialog/session-dialog.component'
   selector: 'admin-session',
   imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe, DatePipe],
   templateUrl: './session.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionComponent {
   private service = inject(SessionService)

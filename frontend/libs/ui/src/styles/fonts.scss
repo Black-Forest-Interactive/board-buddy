@@ -23,6 +23,40 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/fonts/roboto-v51-latin-700.woff2') format('woff2');
+  font-display: swap;
+}
+
+/* CINZEL (display font — headings, wordmark) */
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/cinzel-v26-latin-600.woff2') format('woff2');
+  font-display: swap;
+}
+
+/* ROBOTO MONO (numeric values — counts, session key) */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/robotomono-v31-latin.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/robotomono-v31-latin.woff2') format('woff2');
+  font-display: swap;
+}
+
 /* MATERIAL ICONS */
 @font-face {
   font-family: 'Material Icons';

@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, effect, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {Router} from '@angular/router'
@@ -18,6 +18,7 @@ import {toPromise} from '@board-buddy/shared'
   selector: 'portal-session-create',
   imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, MatCardModule, TranslatePipe],
   templateUrl: './session-create.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionCreateComponent {
   private sessionService = inject(PortalSessionService)

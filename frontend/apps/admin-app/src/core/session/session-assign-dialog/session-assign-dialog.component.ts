@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
 import {MatListModule} from '@angular/material/list'
@@ -15,6 +15,7 @@ import {toPromise} from '@board-buddy/shared'
   selector: 'admin-session-assign-dialog',
   imports: [MatDialogModule, MatListModule, MatButtonModule, MatIconModule, MatSelectModule, MatFormFieldModule, TranslatePipe],
   templateUrl: './session-assign-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionAssignDialogComponent {
   private workflowService = inject(WorkflowService)

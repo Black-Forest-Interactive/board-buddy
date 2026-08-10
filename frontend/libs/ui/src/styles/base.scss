@@ -28,6 +28,30 @@ html, body {
 // Map Material M3 system tokens to Tailwind color utilities.
 // Usage: bg-primary, text-on-primary, bg-surface-low, border-primary-container, …
 @theme inline {
+  --font-display: 'Cinzel', serif;
+  --font-mono: 'Roboto Mono', ui-monospace, monospace;
+
+  // Board Buddy Design-Tokens (Navy & Brass) — usage: bg-bb-brass-soft, text-bb-ink, border-bb-border, …
+  --color-bb-app-bg:        var(--bb-app-bg);
+  --color-bb-sidenav-bg:    var(--bb-sidenav-bg);
+  --color-bb-card-bg:       var(--bb-card-bg);
+  --color-bb-row-bg:        var(--bb-row-bg);
+  --color-bb-ink:           var(--bb-ink);
+  --color-bb-muted:         var(--bb-muted);
+  --color-bb-muted-2:       var(--bb-muted-2);
+  --color-bb-border:        var(--bb-border);
+  --color-bb-navy:          var(--bb-navy);
+  --color-bb-brass:         var(--bb-brass);
+  --color-bb-brass-dark:    var(--bb-brass-dark);
+  --color-bb-brass-soft:    var(--bb-brass-soft);
+  --color-bb-gold:          var(--bb-gold);
+  --color-bb-danger:        var(--bb-danger);
+  --color-bb-success:       var(--bb-success);
+  --color-bb-success-soft:  var(--bb-success-soft);
+  --color-bb-hp-pip-empty:  var(--bb-hp-pip-empty);
+  --color-bb-dmg-pip-empty: var(--bb-dmg-pip-empty);
+  --color-bb-ai-badge:      var(--bb-ai-badge);
+
   --color-primary:                  var(--mat-sys-primary);
   --color-on-primary:               var(--mat-sys-on-primary);
   --color-primary-container:        var(--mat-sys-primary-container);

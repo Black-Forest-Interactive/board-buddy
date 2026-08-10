@@ -1,4 +1,5 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
+import {DatePipe} from '@angular/common'
 import {Router} from '@angular/router'
 import {MatButtonModule} from '@angular/material/button'
 import {MatCardModule} from '@angular/material/card'
@@ -12,8 +13,9 @@ import {toPromise} from '@board-buddy/shared'
 
 @Component({
   selector: 'portal-home',
-  imports: [MatButtonModule, MatCardModule, MatIconModule, MatDividerModule, MatTooltipModule, TranslatePipe, MainContentComponent],
+  imports: [MatButtonModule, MatCardModule, MatIconModule, MatDividerModule, MatTooltipModule, TranslatePipe, DatePipe, MainContentComponent],
   templateUrl: './home.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
   private playerService = inject(PlayerService)

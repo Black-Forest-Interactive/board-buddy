@@ -1,6 +1,9 @@
 package de.sambalmueslie.boardbuddy.gateway.portal
 
-import de.sambalmueslie.boardbuddy.workflow.api.*
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowPlayerJoinRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowResearchRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleAttackFrontRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleCreateFrontRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleStartRequest

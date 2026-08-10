@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource, signal} from '@angular/core'
 import {MatTableModule} from '@angular/material/table'
 import {MatButtonModule} from '@angular/material/button'
 import {MatTooltipModule} from '@angular/material/tooltip'
@@ -17,6 +17,7 @@ import {UnitDefinitionDialogComponent} from './unit-definition-dialog/unit-defin
   selector: 'admin-unit-definition',
   imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, MatPaginatorModule, TranslatePipe],
   templateUrl: './unit-definition.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UnitDefinitionComponent {
   private service = inject(UnitDefinitionService)

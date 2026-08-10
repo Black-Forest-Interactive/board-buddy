@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, effect, inject} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
@@ -16,6 +16,7 @@ import {BattleParticipantRequest, BattleType, Player, WorkflowBattleStartRequest
   selector: 'admin-session-battle-start-dialog',
   imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatSelectModule, MatButtonModule, TranslatePipe],
   templateUrl: './session-battle-start-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionBattleStartDialogComponent {
   private service = inject(WorkflowService)

@@ -1,8 +1,8 @@
-import {Component, computed, effect, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, effect, inject, resource, signal} from '@angular/core'
 import {NavigationEnd, Router} from '@angular/router'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {filter, map} from 'rxjs'
-import {ShellComponent, ShellMenuGroup, ShellService} from '@board-buddy/ui'
+import {ShellComponent, ShellMenuGroup, ShellMenuItem, ShellService} from '@board-buddy/ui'
 import {PlayerService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
@@ -13,6 +13,7 @@ const SESSION_KEY_STORAGE = 'portal-session-key'
   selector: 'portal-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   private router = inject(Router)
@@ -70,5 +71,22 @@ export class App {
       ]
     })
     return groups
+  })
+
+  readonly bottomNavItems = computed<ShellMenuItem[]>(() => {
+    const key = this.sessionKey()
+    const items: ShellMenuItem[] = [
+      {routerLink: '/home', icon: 'home', text: 'MENU.Home', exact: true},
+    ]
+    if (key) {
+      items.push(
+        {routerLink: `/session/${key}`, icon: 'casino', text: 'MENU.Session', exact: true},
+        {routerLink: `/session/${key}/army`, icon: 'military_tech', text: 'MENU.Army', exact: true},
+        {routerLink: `/session/${key}/research`, icon: 'science', text: 'MENU.Research', exact: true},
+      )
+    } else {
+      items.push({routerLink: '/player', icon: 'person', text: 'MENU.Player', exact: true})
+    }
+    return items
   })
 }

@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {ActivatedRoute, Router} from '@angular/router'
@@ -17,6 +17,7 @@ import {toPromise} from '@board-buddy/shared'
   selector: 'portal-session-join',
   imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, MatCardModule, TranslatePipe],
   templateUrl: './session-join.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionJoinComponent {
   private sessionService = inject(PortalSessionService)

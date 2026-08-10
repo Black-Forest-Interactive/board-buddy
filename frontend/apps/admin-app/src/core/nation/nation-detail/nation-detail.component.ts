@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute} from '@angular/router'
 import {map} from 'rxjs'
@@ -19,6 +19,7 @@ import {NationEffectDialogComponent} from '../nation-effect-dialog/nation-effect
   selector: 'admin-nation-detail',
   imports: [MainContentComponent, MatTableModule, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './nation-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NationDetailComponent {
   private service = inject(NationService)

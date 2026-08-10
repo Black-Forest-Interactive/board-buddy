@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute} from '@angular/router'
 import {map} from 'rxjs'
@@ -22,6 +22,7 @@ import {RuleSetAssignNationDialogComponent} from '../rule-set-assign-nation-dial
   selector: 'admin-rule-set-detail',
   imports: [MainContentComponent, MatTableModule, MatTabsModule, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './rule-set-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RuleSetDetailComponent {
   private service = inject(RuleSetService)

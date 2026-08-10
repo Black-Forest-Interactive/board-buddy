@@ -21,7 +21,11 @@
       "@board-buddy/admin": ["./libs/admin/src/index.ts"],
       "@board-buddy/ui": ["./libs/ui/src/index.ts"],
       "@board-buddy/shared": ["./libs/shared/src/index.ts"]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false
   },
   "exclude": ["node_modules", "tmp"]
 }

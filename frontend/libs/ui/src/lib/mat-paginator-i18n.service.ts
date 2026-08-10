@@ -1,6 +1,6 @@
 import {MatPaginatorIntl} from "@angular/material/paginator";
 import {TranslateService} from "@ngx-translate/core";
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 
 const ITEMS_PER_PAGE = 'paginator.items';
 const NEXT_PAGE = 'paginator.next';
@@ -13,7 +13,9 @@ const LAST_PAGE = 'paginator.last';
 })
 export class MatPaginatorI18nService extends MatPaginatorIntl {
 
-  public constructor(private translate: TranslateService) {
+  private translate = inject(TranslateService)
+
+  public constructor() {
     super()
 
     this.translate.onLangChange.subscribe(

@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms'
 import {Router} from '@angular/router'
 import {MatFormFieldModule} from '@angular/material/form-field'
@@ -14,6 +14,7 @@ import {CreatePlayerRequest, PlayerService} from '@board-buddy/portal'
   selector: 'portal-register',
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatCardModule, MatIconModule, TranslatePipe],
   templateUrl: './register.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   private playerService = inject(PlayerService)

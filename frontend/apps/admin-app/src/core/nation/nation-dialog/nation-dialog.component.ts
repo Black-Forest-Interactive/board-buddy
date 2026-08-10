@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog'
@@ -13,6 +13,7 @@ import {Nation, NationChangeRequest} from '@board-buddy/core'
   selector: 'admin-nation-dialog',
   imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule, TranslatePipe],
   templateUrl: './nation-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NationDialogComponent {
   private service = inject(NationService)

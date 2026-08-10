@@ -1,11 +1,6 @@
 package de.sambalmueslie.boardbuddy
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.KotlinFeature
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.micronaut.context.event.BeanCreatedEvent
 import io.micronaut.context.event.BeanCreatedEventListener
 import io.micronaut.runtime.Micronaut
@@ -14,6 +9,10 @@ import io.swagger.v3.oas.annotations.info.*
 import jakarta.inject.Singleton
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.cfg.DateTimeFeature
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.module.kotlin.KotlinFeature
+import tools.jackson.module.kotlin.KotlinModule
 
 @OpenAPIDefinition(
     info = Info(
@@ -37,23 +36,23 @@ class BoardBuddyApplication {
     }
 
     @Singleton
-    internal class ObjectMapperBeanEventListener : BeanCreatedEventListener<ObjectMapper> {
-        override fun onCreated(event: BeanCreatedEvent<ObjectMapper>): ObjectMapper {
-            val mapper: ObjectMapper = event.bean
-            mapper.registerModule(JavaTimeModule())
-            mapper.registerModule(
-                KotlinModule.Builder()
-                    .withReflectionCacheSize(512)
-                    .configure(KotlinFeature.NullToEmptyCollection, true)
-                    .configure(KotlinFeature.NullToEmptyMap, true)
-                    .configure(KotlinFeature.NullIsSameAsDefault, true)
-                    .configure(KotlinFeature.StrictNullChecks, false)
-                    .build()
-            )
-            mapper.setSerializationInclusion(JsonInclude.Include.ALWAYS)
-            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            mapper.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
-            return mapper
+    internal class ObjectMapperBuilderBeanEventListener : BeanCreatedEventListener<JsonMapper.Builder> {
+        override fun onCreated(event: BeanCreatedEvent<JsonMapper.Builder>): JsonMapper.Builder {
+            // Jackson 3's ObjectMapper is immutable once built, so customization now happens on the
+            // JsonMapper.Builder bean before Micronaut calls build() on it (java.time support is built
+            // into jackson-databind since Jackson 3, so no separate JavaTimeModule is needed anymore).
+            return event.bean
+                .addModule(
+                    KotlinModule.Builder()
+                        .withReflectionCacheSize(512)
+                        .configure(KotlinFeature.NullToEmptyCollection, true)
+                        .configure(KotlinFeature.NullToEmptyMap, true)
+                        .configure(KotlinFeature.NullIsSameAsDefault, true)
+                        .configure(KotlinFeature.StrictNullChecks, false)
+                        .build()
+                )
+                .changeDefaultPropertyInclusion { value -> value.withValueInclusion(JsonInclude.Include.ALWAYS) }
+                .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS, DateTimeFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
         }
     }
 }

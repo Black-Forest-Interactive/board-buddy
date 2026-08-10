@@ -1,4 +1,4 @@
-import {ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZoneChangeDetection} from '@angular/core'
+import {ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection} from '@angular/core'
 import {provideRouter, withComponentInputBinding, withRouterConfig} from '@angular/router'
 import {appRoutes} from './app.routes'
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter'
@@ -18,13 +18,12 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimationsAsync(),
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({eventCoalescing: true}),
+    provideZonelessChangeDetection(),
     provideLuxonDateAdapter(),
     {provide: MAT_DATE_LOCALE, useValue: 'de-DE'},
     {provide: LOCALE_ID, useValue: 'de-DE'},
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
     provideToastConfig(),
-    provideZoneChangeDetection({eventCoalescing: true}),
     provideHttpClient(),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
