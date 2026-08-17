@@ -29,7 +29,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.6.1")
+    implementation("ch.qos.logback:logback-classic:1.6.2")
     runtimeOnly("org.yaml:snakeyaml")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.3")
@@ -91,9 +91,9 @@ dependencies {
     implementation("com.google.zxing:javase:3.5.4")
 
     // mail
-    implementation("org.simplejavamail:simple-java-mail:9.2.0")
-    implementation("org.simplejavamail:batch-module:9.2.0")
-    implementation("org.simplejavamail:authenticated-socks-module:9.2.0")
+    implementation("org.simplejavamail:simple-java-mail:9.3.1")
+    implementation("org.simplejavamail:batch-module:9.3.1")
+    implementation("org.simplejavamail:authenticated-socks-module:9.3.1")
 
     // test
     testImplementation("io.micronaut:micronaut-http-client")
