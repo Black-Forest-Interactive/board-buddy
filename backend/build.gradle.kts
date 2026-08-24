@@ -29,7 +29,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.6.2")
+    implementation("ch.qos.logback:logback-classic:1.6.3")
     runtimeOnly("org.yaml:snakeyaml")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.3")
@@ -60,7 +60,7 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.security:micronaut-security-oauth2")
-    aotPlugins("io.micronaut.security:micronaut-security-aot:5.3.1")
+    aotPlugins("io.micronaut.security:micronaut-security-aot:5.3.2")
 
     // kotlin
     implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
@@ -91,9 +91,9 @@ dependencies {
     implementation("com.google.zxing:javase:3.5.4")
 
     // mail
-    implementation("org.simplejavamail:simple-java-mail:9.3.1")
-    implementation("org.simplejavamail:batch-module:9.3.1")
-    implementation("org.simplejavamail:authenticated-socks-module:9.3.1")
+    implementation("org.simplejavamail:simple-java-mail:9.3.2")
+    implementation("org.simplejavamail:batch-module:9.3.2")
+    implementation("org.simplejavamail:authenticated-socks-module:9.3.2")
 
     // test
     testImplementation("io.micronaut:micronaut-http-client")
