@@ -111,7 +111,7 @@ dependencies {
     // opensearch
     implementation("com.jillesvangurp:search-client:2.9.0")
     // jsoup
-    implementation("org.jsoup:jsoup:1.23.1")
+    implementation("org.jsoup:jsoup:1.23.2")
 }
 
 
