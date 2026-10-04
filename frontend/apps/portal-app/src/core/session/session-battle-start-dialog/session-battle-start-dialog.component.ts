@@ -35,6 +35,8 @@ export class SessionBattleStartDialogComponent {
     battleType: new FormControl<BattleType>(BattleType.ARMY_VS_ARMY, Validators.required),
     attackerArmyCount: new FormControl<number>(1, [Validators.required, Validators.min(1)]),
     defenderArmyCount: new FormControl<number>(1, [Validators.required, Validators.min(1)]),
+    attackerBonusPoints: new FormControl<number>(0, [Validators.required, Validators.min(0)]),
+    defenderBonusPoints: new FormControl<number>(0, [Validators.required, Validators.min(0)]),
     isWalled: new FormControl<boolean>(false),
   })
 
@@ -65,8 +67,8 @@ export class SessionBattleStartDialogComponent {
     const battleType = this.battleType() ?? BattleType.ARMY_VS_ARMY
     const defenderArmyCount = this.isBarbarianBattle() ? 1 : v.defenderArmyCount!
     const request = new WorkflowBattleStartRequest(
-      new BattleParticipantRequest(this.data.attacker.id, v.attackerArmyCount!),
-      new BattleParticipantRequest(this.defender().id, defenderArmyCount),
+      new BattleParticipantRequest(this.data.attacker.id, v.attackerArmyCount!, v.attackerBonusPoints ?? 0),
+      new BattleParticipantRequest(this.defender().id, defenderArmyCount, v.defenderBonusPoints ?? 0),
       battleType,
       this.isCityBattle() ? (v.isWalled ?? false) : false,
     )

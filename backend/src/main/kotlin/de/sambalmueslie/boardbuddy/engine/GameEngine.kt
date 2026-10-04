@@ -107,16 +107,16 @@ class GameEngine(
         return startPlayerSystem.determine(attacker, defender, type, isWalled)
     }
 
-    override fun determineAttackerUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>): List<GameEntity> {
-        return determineBattleUnits(participant, armyCount, type, units, true)
+    override fun determineAttackerUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>, bonusPoints: Int): List<GameEntity> {
+        return determineBattleUnits(participant, armyCount, type, units, true, bonusPoints)
     }
 
-    override fun determineDefenderUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>): List<GameEntity> {
-        return determineBattleUnits(participant, armyCount, type, units, false)
+    override fun determineDefenderUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>, bonusPoints: Int): List<GameEntity> {
+        return determineBattleUnits(participant, armyCount, type, units, false, bonusPoints)
     }
 
-    private fun determineBattleUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>, isAttacker: Boolean): List<GameEntity> {
-        return battleHandSystem.determine(participant, armyCount, type, units, isAttacker)
+    private fun determineBattleUnits(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>, isAttacker: Boolean, bonusPoints: Int): List<GameEntity> {
+        return battleHandSystem.determine(participant, armyCount, type, units, isAttacker, bonusPoints)
     }
 
 

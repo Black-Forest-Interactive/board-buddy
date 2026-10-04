@@ -24,6 +24,7 @@ export interface PortalBattle {
   fronts: BattleFront[]
   logEntries: BattleLogEntry[]
   winner: GameSessionPlayer | null
+  spectator: boolean
 }
 
 export class PortalWorkflowCreateRequest {

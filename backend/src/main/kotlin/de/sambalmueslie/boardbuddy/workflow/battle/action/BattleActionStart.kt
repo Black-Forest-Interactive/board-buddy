@@ -32,9 +32,9 @@ class BattleActionStart(
         val defender = cmd.defender
 
         val battleType = request.type
-        val attackerUnits = determineUnits(session, attacker, request.attacker.armyCount, battleType)
+        val attackerUnits = determineUnits(session, attacker, request.attacker.armyCount, request.attacker.bonusPoints, battleType, true)
         if (attackerUnits.isEmpty()) throw WorkflowBattleStartFailed(session.id)
-        val defenderUnits = determineUnits(session, defender, request.defender.armyCount, battleType)
+        val defenderUnits = determineUnits(session, defender, request.defender.armyCount, request.defender.bonusPoints, battleType, false)
 
         val startPlayer = engine.determineStartPlayer(attacker, defender, battleType, request.isWalled)
 
@@ -45,9 +45,10 @@ class BattleActionStart(
         return BattleData(participants, battleType, startPlayer, BattleStatus.INIT)
     }
 
-    private fun determineUnits(session: GameSession, player: GameSessionPlayer, armyCount: Int, battleType: BattleType): MutableList<GameEntity> {
+    private fun determineUnits(session: GameSession, player: GameSessionPlayer, armyCount: Int, bonusPoints: Int, battleType: BattleType, isAttacker: Boolean): MutableList<GameEntity> {
         val entities = sessionService.getAssignedEntities(session, player)
-        val units = engine.determineAttackerUnits(player, armyCount, battleType, entities)
+        val units = if (isAttacker) engine.determineAttackerUnits(player, armyCount, battleType, entities, bonusPoints)
+        else engine.determineDefenderUnits(player, armyCount, battleType, entities, bonusPoints)
         if (player.player.type == PlayerType.HUMAN) return units.toMutableList()
 
         val definitions = session.ruleSet.unitDefinitions

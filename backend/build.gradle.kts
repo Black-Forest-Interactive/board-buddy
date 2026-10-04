@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "2.4.10"
-    kotlin("plugin.allopen") version "2.4.10"
-    kotlin("plugin.jpa") version "2.4.10"
-    kotlin("plugin.serialization") version "2.4.10"
-    id("com.google.devtools.ksp") version "2.3.11"
-    id("org.sonarqube") version "7.4.0.8496"
-    id("net.researchgate.release") version "3.1.0"
+    kotlin("jvm") version "2.4.20"
+    kotlin("plugin.allopen") version "2.4.20"
+    kotlin("plugin.jpa") version "2.4.20"
+    kotlin("plugin.serialization") version "2.4.20"
+    id("com.google.devtools.ksp") version "2.3.12"
+    id("org.sonarqube") version "7.5.0.8588"
+    id("net.researchgate.release") version "3.2.0"
     id("com.google.cloud.tools.jib") version "3.5.4"
     id("io.micronaut.application") version "5.0.2"
     id("io.micronaut.test-resources") version "5.0.2"
@@ -29,7 +29,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.6.1")
+    implementation("ch.qos.logback:logback-classic:1.6.5")
     runtimeOnly("org.yaml:snakeyaml")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.3")
@@ -60,16 +60,16 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.security:micronaut-security-oauth2")
-    aotPlugins("io.micronaut.security:micronaut-security-aot:5.3.1")
+    aotPlugins("io.micronaut.security:micronaut-security-aot:5.4.0")
 
     // kotlin
     implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.10")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.10")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.20")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.20")
 
     // caching
-    implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.3.0")
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
@@ -91,9 +91,9 @@ dependencies {
     implementation("com.google.zxing:javase:3.5.4")
 
     // mail
-    implementation("org.simplejavamail:simple-java-mail:9.2.0")
-    implementation("org.simplejavamail:batch-module:9.2.0")
-    implementation("org.simplejavamail:authenticated-socks-module:9.2.0")
+    implementation("org.simplejavamail:simple-java-mail:9.3.5")
+    implementation("org.simplejavamail:batch-module:9.3.5")
+    implementation("org.simplejavamail:authenticated-socks-module:9.3.5")
 
     // test
     testImplementation("io.micronaut:micronaut-http-client")
@@ -111,7 +111,7 @@ dependencies {
     // opensearch
     implementation("com.jillesvangurp:search-client:2.9.0")
     // jsoup
-    implementation("org.jsoup:jsoup:1.23.1")
+    implementation("org.jsoup:jsoup:1.23.2")
 }
 
 

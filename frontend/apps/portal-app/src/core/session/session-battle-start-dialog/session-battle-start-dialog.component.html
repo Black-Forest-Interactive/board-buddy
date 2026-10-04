@@ -35,6 +35,18 @@
       <input matInput type="number" formControlName="defenderArmyCount" min="1">
     </mat-form-field>
 
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'session.battle.attackerBonus' | translate }}</mat-label>
+      <input matInput type="number" formControlName="attackerBonusPoints" min="0">
+      <mat-hint>{{ 'session.battle.bonusHint' | translate }}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'session.battle.defenderBonus' | translate }}</mat-label>
+      <input matInput type="number" formControlName="defenderBonusPoints" min="0">
+      <mat-hint>{{ 'session.battle.bonusHint' | translate }}</mat-hint>
+    </mat-form-field>
+
     @if (isCityBattle()) {
       <mat-checkbox formControlName="isWalled">{{ 'session.battle.isWalled' | translate }}</mat-checkbox>
     }

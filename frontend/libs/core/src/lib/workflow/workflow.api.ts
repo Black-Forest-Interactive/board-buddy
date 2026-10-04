@@ -148,6 +148,7 @@ export class BattleParticipantRequest {
   constructor(
     public id: number,
     public armyCount: number,
+    public bonusPoints: number = 0,
   ) {}
 }
 
