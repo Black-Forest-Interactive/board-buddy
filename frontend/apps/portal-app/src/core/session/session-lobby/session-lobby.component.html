@@ -125,13 +125,14 @@
       @if (hasBattle()) {
         <div class="flex flex-col gap-3 px-4 pb-4">
           <span class="inline-flex self-start items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold" [class.bg-bb-success-soft]="isMyTurn()" [class.text-bb-success]="isMyTurn()" [class.bg-bb-brass-soft]="!isMyTurn()" [class.text-bb-brass-dark]="!isMyTurn()">
+            @if (isSpectator()) { <mat-icon class="!text-base !w-4 !h-4">visibility</mat-icon>{{ 'session.battle.spectating' | translate }} · }
             {{ (isMyTurn() ? 'session.battle.yourTurn' : 'session.battle.opponentTurn') | translate }} · {{ 'session.dashboard.round' | translate:{n: battleRound()} }}
           </span>
 
           <div class="flex items-center justify-center gap-4">
             <div class="flex flex-col items-center gap-1">
               <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white" style="background:linear-gradient(160deg,#2b3550,#0f1a30)"><mat-icon>public</mat-icon></div>
-              <span class="text-xs text-bb-muted">{{ 'session.battle.me' | translate }}</span>
+              <span class="text-xs text-bb-muted">{{ isSpectator() ? battleSides()?.left?.name : ('session.battle.me' | translate) }}</span>
             </div>
             <span class="font-display text-bb-muted-2">VS</span>
             <div class="flex flex-col items-center gap-1">

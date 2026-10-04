@@ -21,10 +21,10 @@ class BattleHandSystem(
 
     private val governmentModel = componentModelService.get(Government::class)
 
-    fun determine(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>, isAttacker: Boolean): List<GameEntity> {
+    fun determine(participant: GameSessionPlayer, armyCount: Int, type: BattleType, units: List<GameEntity>, isAttacker: Boolean, bonusPoints: Int = 0): List<GameEntity> {
         val isDefendingCity = type == BattleType.ARMY_VS_CITY && !isAttacker
         val isFundamentalism = getGovernment(participant).type == GovernmentType.FUNDAMENTALISM
-        val handSize = calculateBattleHandSize(armyCount, isDefendingCity, isFundamentalism)
+        val handSize = calculateBattleHandSize(armyCount, isDefendingCity, isFundamentalism, bonusPoints)
         return units.shuffled().take(handSize)
     }
 
@@ -32,11 +32,12 @@ class BattleHandSystem(
         return governmentModel.get(participant.entity) ?: DEFAULT_GOVERNMENT
     }
 
-    private fun calculateBattleHandSize(armyCount: Int, isDefendingCity: Boolean, isFundamentalism: Boolean): Int {
+    private fun calculateBattleHandSize(armyCount: Int, isDefendingCity: Boolean, isFundamentalism: Boolean, bonusPoints: Int): Int {
         var handSize = INITIAL_HAND_SIZE
         handSize += (armyCount - 1) * 2
         if (isDefendingCity) handSize += 3
         if (isFundamentalism) handSize += 1
-        return handSize
+        handSize += bonusPoints
+        return handSize.coerceAtLeast(1)
     }
 }

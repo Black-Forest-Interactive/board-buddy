@@ -4,7 +4,9 @@ import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattle
 import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattleOpponent
 import de.sambalmueslie.boardbuddy.infrastructure.ProtocolService
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
+import de.sambalmueslie.boardbuddy.workflow.api.Workflow
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowPlayerActionForbidden
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowPlayerJoinRequest
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowResearchRequest
@@ -82,9 +84,27 @@ class WorkflowGateway(
     fun join(id: String, request: WorkflowPlayerJoinRequest) = protocol.log("[$id] join ${request.name}", request) { service.join(id, request) }
     fun createUnit(id: String, request: WorkflowCreateUnitRequest) = protocol.log("[$id] ${request.playerId} create unit ${request.unitTypeId}", request) { service.createUnit(id, request) }
     fun research(id: String, request: WorkflowResearchRequest) = protocol.log("[$id] ${request.playerId} research ${request.technologyId}", request) { service.research(id, request) }
-    fun battleStart(id: String, request: WorkflowBattleStartRequest) = protocol.log("[$id] battle start ${request.attacker.id} vs ${request.defender.id}", request) { service.battleStart(id, request) }
-    fun battleCancel(id: String) = protocol.log("[$id] battle cancel") { service.battleCancel(id) }
-    fun battleFinish(id: String) = protocol.log("[$id] battle finish") { service.battleFinish(id) }
+    fun battleStart(id: String, request: WorkflowBattleStartRequest, playerId: Long): Workflow {
+        val allowed = setOf(request.attacker.id, request.defender.id, service.get(id).host.id)
+        if (playerId !in allowed) throw WorkflowPlayerActionForbidden(playerId)
+        return protocol.log("[$id] battle start ${request.attacker.id} vs ${request.defender.id}", request) { service.battleStart(id, request) }
+    }
+
+    fun battleCancel(id: String, playerId: Long) = protocol.log("[$id] battle cancel") {
+        checkBattleAccess(id, playerId)
+        service.battleCancel(id)
+    }
+
+    fun battleFinish(id: String, playerId: Long) = protocol.log("[$id] battle finish") {
+        checkBattleAccess(id, playerId)
+        service.battleFinish(id)
+    }
+
+    private fun checkBattleAccess(id: String, playerId: Long) {
+        val workflow = service.get(id)
+        val inBattle = workflow.activeBattle?.participant?.any { it.player.player.id == playerId } ?: false
+        if (!inBattle && workflow.host.id != playerId) throw WorkflowPlayerActionForbidden(playerId)
+    }
     fun getParticipantsInfo(id: String) = service.getParticipantsInfo(id)
 
     fun getMyInfo(id: String, playerId: Long) =
@@ -109,10 +129,11 @@ class WorkflowGateway(
     }
 
     private fun convertToPortalBattle(battle: Battle, playerId: Long): PortalBattle {
-        val myParticipant = battle.participant.find { it.player.player.id == playerId }
-            ?: battle.participant.first()
-        val opponentParticipant = battle.participant.find { it.player.player.id != playerId }
-            ?: battle.participant.last()
+        val own = battle.participant.find { it.player.player.id == playerId }
+        val spectator = own == null
+        val myParticipant = (own ?: battle.participant.first()).let { if (spectator) it.copy(units = emptyList()) else it }
+        val opponentParticipant = if (spectator) battle.participant.last()
+        else battle.participant.first { it.player.player.id != playerId }
 
         val deployedByOpponent = battle.fronts.flatMap { f ->
             f.units.filter { it.player.player.id == opponentParticipant.player.player.id }.map { it.unit.entity }
@@ -133,6 +154,7 @@ class WorkflowGateway(
             fronts = battle.fronts,
             logEntries = battle.logEntries,
             winner = battle.winner,
+            spectator = spectator,
         )
     }
 
