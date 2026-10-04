@@ -14,4 +14,5 @@ data class PortalBattle(
     val fronts: List<BattleFront>,
     val logEntries: List<BattleLogEntry>,
     val winner: GameSessionPlayer?,
+    val spectator: Boolean = false,
 )

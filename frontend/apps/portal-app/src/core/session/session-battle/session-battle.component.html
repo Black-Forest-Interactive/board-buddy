@@ -25,7 +25,10 @@
         </div>
       } @else {
         <div id="tour-battle-banner" class="flex items-center gap-3 p-3 md:p-4 rounded-xl text-white" [class.bg-bb-navy]="isMyTurn()" [class.bg-bb-muted]="!isMyTurn()">
-          @if (isMyTurn()) {
+          @if (isSpectator()) {
+            <mat-icon>visibility</mat-icon>
+            <span>{{ 'session.battle.spectating' | translate }} · {{ 'session.battle.opponentTurn' | translate }}: <strong>{{ b.activePlayer.player.name }}</strong></span>
+          } @else if (isMyTurn()) {
             <span class="relative flex h-2.5 w-2.5 shrink-0">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-bb-success opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-bb-success"></span>
@@ -132,7 +135,7 @@
       }
 
       <!-- My reserve units -->
-      @if (!battleFinished()) {
+      @if (!battleFinished() && !isSpectator()) {
         <div id="tour-battle-reserve">
           <p class="text-[11px] font-semibold text-bb-muted-2 uppercase tracking-[.14em] mb-2 px-1">{{ 'session.battle.myReserve' | translate }}</p>
           @if (reserveUnits().length === 0) {

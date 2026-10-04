@@ -17,6 +17,7 @@ import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
 import de.sambalmueslie.boardbuddy.engine.api.*
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowAssignPlayerRequest
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowBattleAlreadyActive
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateRequest
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.*
@@ -24,6 +25,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 
 @MicronautTest()
@@ -100,6 +102,12 @@ class WorkflowServiceTest {
         workflow = service.battleStart(workflow.id, WorkflowBattleStartRequest(BattleParticipantRequest(p1.id, 1), BattleParticipantRequest(p2.id, 1), BattleType.ARMY_VS_ARMY, false))
         val battle = workflow.activeBattle
         assertNotNull(battle)
+
+        // a second battle (e.g. started by the third player) must be rejected while one is active
+        assertThrows(WorkflowBattleAlreadyActive::class.java) {
+            service.battleStart(workflow.id, WorkflowBattleStartRequest(BattleParticipantRequest(p3.id, 1), BattleParticipantRequest(p1.id, 1), BattleType.ARMY_VS_ARMY, false))
+        }
+        assertEquals(p1.id, service.get(workflow.id).activeBattle!!.participant.first().player.player.id)
 
         // defender (p2) goes first for ARMY_VS_ARMY
         assertEquals(p2.id, battle!!.activePlayer.player.id)

@@ -6,6 +6,7 @@ import de.sambalmueslie.boardbuddy.core.player.PlayerService
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import de.sambalmueslie.boardbuddy.core.session.api.GameSession
 import de.sambalmueslie.boardbuddy.core.session.api.GameSessionPlayer
+import de.sambalmueslie.boardbuddy.workflow.api.WorkflowBattleAlreadyActive
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowBattleInvalidPlayer
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowBattleNotExisting
 import de.sambalmueslie.boardbuddy.workflow.battle.action.BattleActionFactory
@@ -45,11 +46,12 @@ class WorkflowBattleService(
 
 
     override fun start(session: GameSession, request: WorkflowBattleStartRequest): Battle {
+        if (getData(session) != null) throw WorkflowBattleAlreadyActive(session.key)
         val attacker = getAndValidatePlayer(session, request.attacker.id)
         val defender = getAndValidatePlayer(session, request.defender.id)
 
         val battle = actionFactory.execute(BattleCmdStart(session, request, attacker, defender))
-        activeBattles.put(session.key, battle)
+        if (activeBattles.asMap().putIfAbsent(session.key, battle) != null) throw WorkflowBattleAlreadyActive(session.key)
         considerAiMove(session, battle)
         return converter.convert(battle)
     }

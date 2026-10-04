@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, computed, DestroyRef, inject, resour
 import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop'
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout'
 import {ActivatedRoute, Router, RouterModule} from '@angular/router'
-import {catchError, combineLatest, EMPTY, interval, map, of, startWith, switchMap} from 'rxjs'
+import {catchError, combineLatest, EMPTY, interval, map, merge, of, startWith, Subject, switchMap} from 'rxjs'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
@@ -46,6 +46,7 @@ export class SessionLobbyComponent {
   private readonly workflowData = signal<Workflow | undefined>(undefined)
   private readonly participantsData = signal<WorkflowParticipantInfo[]>([])
   private readonly battleData = signal<PortalBattle | null>(null)
+  private readonly reload$ = new Subject<void>()
 
   readonly workflow = computed(() => this.workflowData())
   readonly sessionName = computed(() => this.workflow()?.name ?? '')
@@ -65,7 +66,18 @@ export class SessionLobbyComponent {
     })).sort((a, b) => (b.participant.player.id === pid ? 1 : 0) - (a.participant.player.id === pid ? 1 : 0))
   })
   readonly myEnriched = computed(() => this.participantsEnriched().find(e => e.participant.player.id === this.playerId()))
-  readonly opponentEnriched = computed(() => this.participantsEnriched().find(e => e.participant.player.id !== this.playerId()))
+  readonly isSpectator = computed(() => this.battle()?.spectator ?? false)
+  // in a running battle the opponent is whoever fights me (or the attacker/defender for a spectator), not simply the first other participant
+  readonly battleSides = computed(() => {
+    const b = this.battle()
+    if (!b) return null
+    return {left: b.myInfo.player.player, right: b.opponentInfo.player.player}
+  })
+  readonly opponentEnriched = computed(() => {
+    const sides = this.battleSides()
+    if (sides) return this.participantsEnriched().find(e => e.participant.player.id === sides.right.id)
+    return this.participantsEnriched().find(e => e.participant.player.id !== this.playerId())
+  })
   readonly opponentNation = computed(() => this.opponentEnriched()?.nation ?? null)
   readonly opponentIsAi = computed(() => this.opponentEnriched()?.participant.player.type === PlayerType.AI)
   readonly isHost = computed(() => this.workflow()?.host.id === this.playerId())
@@ -124,8 +136,8 @@ export class SessionLobbyComponent {
   })
 
   constructor() {
-    interval(30000).pipe(
-      startWith(0),
+    // poll and event-triggered reloads share one pipeline, so an older response can never overwrite a newer one
+    merge(interval(30000).pipe(startWith(0)), this.reload$).pipe(
       switchMap(() => this.fetchSessionData()),
       takeUntilDestroyed(this.destroyRef),
     ).subscribe(data => {
@@ -140,7 +152,7 @@ export class SessionLobbyComponent {
         catchError(() => EMPTY),
         takeUntilDestroyed(this.destroyRef),
       ).subscribe(e => {
-        if (e.type === 'BATTLE_STARTED') { this.router.navigate(['/session', key, 'battle']); return }
+        if (e.type === 'BATTLE_STARTED') { this.enterBattleIfInvolved(key); return }
         this.reloadAll()
         this.myInfoResource.reload()
         this.technologyStatusResource.reload()
@@ -166,10 +178,14 @@ export class SessionLobbyComponent {
   }
 
   private reloadAll() {
-    this.fetchSessionData().subscribe(data => {
-      this.workflowData.set(data.workflow)
-      this.participantsData.set(data.participants)
-      this.battleData.set(data.battle)
+    this.reload$.next()
+  }
+
+  // only the two fighting players are taken to the battle view, everybody else stays in the lobby as spectator
+  private enterBattleIfInvolved(key: string) {
+    this.workflowService.getBattle(key).pipe(catchError(() => of(null))).subscribe(battle => {
+      if (battle && !battle.spectator) this.router.navigate(['/session', key, 'battle'])
+      else this.reloadAll()
     })
   }
 

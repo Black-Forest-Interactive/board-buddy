@@ -24,3 +24,4 @@ class WorkflowBattleInvalidFrontIndex(value: Int) : WorkflowException(i++, "Batt
 class WorkflowBattleFrontAttackInvalid(value: Int) : WorkflowException(i++, "Battle front attack is invalid $value")
 class WorkflowBattleStartFailed(value: Long) : WorkflowException(i++, "Battle start failed $value")
 
+class WorkflowBattleAlreadyActive(value: String) : WorkflowException(i++, "Battle is already active for workflow $value")

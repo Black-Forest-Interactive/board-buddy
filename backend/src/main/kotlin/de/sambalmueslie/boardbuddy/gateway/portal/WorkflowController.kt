@@ -45,10 +45,11 @@ class WorkflowController(private val gateway: WorkflowGateway) {
     fun research(id: String, @Body request: WorkflowResearchRequest) = gateway.research(id, request)
 
     @Post("{id}/battle/start")
-    fun battleStart(id: String, @Body request: WorkflowBattleStartRequest) = gateway.battleStart(id, request)
+    fun battleStart(@CookieValue("player-id") playerId: Long, id: String, @Body request: WorkflowBattleStartRequest) =
+        gateway.battleStart(id, request, playerId)
 
     @Post("{id}/battle/cancel")
-    fun battleCancel(id: String) = gateway.battleCancel(id)
+    fun battleCancel(@CookieValue("player-id") playerId: Long, id: String) = gateway.battleCancel(id, playerId)
 
     @Post("{id}/battle/front")
     fun battleCreateFront(@CookieValue("player-id") playerId: Long, id: String, @Body request: WorkflowBattleCreateFrontRequest) =
@@ -59,7 +60,7 @@ class WorkflowController(private val gateway: WorkflowGateway) {
         gateway.battleAttackFront(id, request, playerId)
 
     @Post("{id}/battle/finish")
-    fun battleFinish(id: String) = gateway.battleFinish(id)
+    fun battleFinish(@CookieValue("player-id") playerId: Long, id: String) = gateway.battleFinish(id, playerId)
 
     @Get("{id}/participants")
     fun getParticipantsInfo(id: String) = gateway.getParticipantsInfo(id)

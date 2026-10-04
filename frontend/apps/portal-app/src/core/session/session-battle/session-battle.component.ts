@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal} from '@angular/core'
 import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop'
 import {ActivatedRoute, Router} from '@angular/router'
-import {catchError, EMPTY, interval, map, startWith, switchMap} from 'rxjs'
+import {catchError, EMPTY, interval, map, merge, of, startWith, Subject, switchMap} from 'rxjs'
 import {MatButtonModule} from '@angular/material/button'
 import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
@@ -38,6 +38,8 @@ export class SessionBattleComponent {
   readonly workflow = computed(() => this.workflowData())
   readonly sessionName = computed(() => this.workflow()?.name ?? '')
   readonly isHost = computed(() => this.workflow()?.host.id === this.playerId())
+  readonly isSpectator = computed(() => this.battle()?.spectator ?? false)
+  private readonly reload$ = new Subject<void>()
   private nationById = computed(() => new Map<number, Nation>((this.workflow()?.ruleSet.nations ?? []).map(n => [n.id, n])))
   private infoByPlayerId = computed(() => new Map<number, WorkflowParticipantInfo>(this.participantsData().map(i => [i.player.id, i])))
   readonly opponentNation = computed(() => {
@@ -73,11 +75,13 @@ export class SessionBattleComponent {
   })
 
   constructor() {
-    interval(15000).pipe(
-      startWith(0),
-      switchMap(() => this.fetchBattleData()),
+    // poll and event-triggered reloads share one pipeline, so an older response can never overwrite a newer one
+    merge(interval(15000).pipe(startWith(0)), this.reload$).pipe(
+      switchMap(() => this.fetchBattleData().pipe(catchError(() => of(undefined)))),
       takeUntilDestroyed(this.destroyRef),
     ).subscribe(data => {
+      if (data === undefined) return
+      if (data === null) { this.router.navigate(['/session', this.sessionKey()]); return }
       this.workflowData.set(data.workflow)
       this.participantsData.set(data.participants)
       this.battleData.set(data.battle)
@@ -100,7 +104,7 @@ export class SessionBattleComponent {
     if (!key) return EMPTY
     return this.workflowService.getWorkflow(key).pipe(
       switchMap(workflow => {
-        if (!workflow.activeBattle) return EMPTY
+        if (!workflow.activeBattle) return of(null)
         return this.workflowService.getParticipantsInfo(key).pipe(
           switchMap(participants => this.workflowService.getBattle(key).pipe(
             map(battle => ({workflow, participants, battle}))
@@ -111,14 +115,7 @@ export class SessionBattleComponent {
   }
 
   private reload() {
-    this.fetchBattleData().subscribe({
-      next: (data) => {
-        this.workflowData.set(data.workflow)
-        this.participantsData.set(data.participants)
-        this.battleData.set(data.battle)
-      },
-      error: () => this.router.navigate(['/session', this.sessionKey()])
-    })
+    this.reload$.next()
   }
 
   startTour() { this.tourService.startBattleTour() }
@@ -185,11 +182,11 @@ export class SessionBattleComponent {
   }
 
   getFrontUnitForMe(front: BattleFront): BattleFrontUnit | undefined {
-    return front.units.find(fu => fu.player.player.id === this.playerId())
+    return front.units.find(fu => fu.player.player.id === this.battle()?.myInfo.player.player.id)
   }
 
   getFrontUnitForOpponent(front: BattleFront): BattleFrontUnit | undefined {
-    return front.units.find(fu => fu.player.player.id !== this.playerId())
+    return front.units.find(fu => fu.player.player.id === this.battle()?.opponentInfo.player.player.id)
   }
 
   hasCounterAdvantage(front: BattleFront): boolean {
