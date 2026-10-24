@@ -8,9 +8,8 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/admin-app",
         "browser": "apps/admin-app/src/main.ts",
@@ -58,12 +57,19 @@
           "extractLicenses": false,
           "sourceMap": true
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "readyWhen": {
+        "signal": true
+      },
+      "options": {
+        "proxyConfig": "apps/admin-app/proxy.conf.json",
+        "port": 4201
+      },
       "configurations": {
         "production": {
           "buildTarget": "admin-app:build:production"
@@ -71,25 +77,18 @@
         "development": {
           "buildTarget": "admin-app:build:development"
         }
-      },
-      "defaultConfiguration": "development",
-      "options": {
-        "proxyConfig": "apps/admin-app/proxy.conf.json",
-        "port": 4201
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
-      "options": {
-        "jestConfig": "apps/admin-app/jest.config.cts",
-        "tsConfig": "apps/admin-app/tsconfig.spec.json"
-      }
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     },
     "serve-static": {
       "continuous": true,
@@ -99,7 +98,11 @@
         "port": 4200,
         "staticFilePath": "dist/apps/admin-app/browser",
         "spa": true
-      }
+      },
+      "readyWhen": {
+        "signal": true
+      },
+      "dependsOn": ["build"]
     }
   }
 }
