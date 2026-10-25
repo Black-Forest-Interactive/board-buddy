@@ -7,14 +7,24 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/libs/portal"
+      ],
       "options": {
-        "reportsDirectory": "coverage/libs/portal"
+        "coverage.reportsDirectory": "../../coverage/libs/portal"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

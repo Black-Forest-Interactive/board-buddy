@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "2.4.20"
-    kotlin("plugin.allopen") version "2.4.20"
-    kotlin("plugin.jpa") version "2.4.20"
-    kotlin("plugin.serialization") version "2.4.20"
+    kotlin("jvm") version "2.4.21"
+    kotlin("plugin.allopen") version "2.4.21"
+    kotlin("plugin.jpa") version "2.4.21"
+    kotlin("plugin.serialization") version "2.4.21"
     id("com.google.devtools.ksp") version "2.3.12"
     id("org.sonarqube") version "7.5.0.8588"
     id("net.researchgate.release") version "3.2.0"
@@ -60,16 +60,16 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security")
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.security:micronaut-security-oauth2")
-    aotPlugins("io.micronaut.security:micronaut-security-aot:5.4.0")
+    aotPlugins("io.micronaut.security:micronaut-security-aot:5.5.0")
 
     // kotlin
     implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.20")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.20")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.21")
 
     // caching
-    implementation("com.github.ben-manes.caffeine:caffeine:3.3.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.3.1")
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
@@ -91,9 +91,9 @@ dependencies {
     implementation("com.google.zxing:javase:3.5.4")
 
     // mail
-    implementation("org.simplejavamail:simple-java-mail:9.3.5")
-    implementation("org.simplejavamail:batch-module:9.3.5")
-    implementation("org.simplejavamail:authenticated-socks-module:9.3.5")
+    implementation("org.simplejavamail:simple-java-mail:9.3.8")
+    implementation("org.simplejavamail:batch-module:9.3.8")
+    implementation("org.simplejavamail:authenticated-socks-module:9.3.8")
 
     // test
     testImplementation("io.micronaut:micronaut-http-client")
