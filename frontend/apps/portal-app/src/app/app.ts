@@ -1,10 +1,9 @@
-import {ChangeDetectionStrategy, Component, computed, effect, inject, resource, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, computed, effect, inject, signal} from '@angular/core'
 import {NavigationEnd, Router} from '@angular/router'
 import {toSignal} from '@angular/core/rxjs-interop'
 import {filter, map} from 'rxjs'
 import {ShellComponent, ShellMenuGroup, ShellMenuItem, ShellService} from '@board-buddy/ui'
-import {PlayerService} from '@board-buddy/portal'
-import {toPromise} from '@board-buddy/shared'
+import {CurrentPlayerService} from '@board-buddy/portal'
 
 const SESSION_KEY_STORAGE = 'portal-session-key'
 
@@ -18,13 +17,7 @@ const SESSION_KEY_STORAGE = 'portal-session-key'
 export class App {
   private router = inject(Router)
   private shellService = inject(ShellService)
-  private playerService = inject(PlayerService)
-
-  private playerId = computed(() => this.playerService.getPlayerId())
-  private playerResource = resource({
-    params: this.playerId,
-    loader: (p) => p.params ? toPromise(this.playerService.getPlayer(p.params), p.abortSignal) : Promise.resolve(undefined)
-  })
+  private playerService = inject(CurrentPlayerService)
 
   private currentUrl = toSignal(
     this.router.events.pipe(filter(e => e instanceof NavigationEnd), map(e => (e as NavigationEnd).urlAfterRedirects)),
@@ -50,7 +43,7 @@ export class App {
       }
     })
     effect(() => {
-      const name = this.playerResource.value()?.name ?? ''
+      const name = this.playerService.player()?.name ?? ''
       this.shellService.setPlayerName(name)
     })
   }

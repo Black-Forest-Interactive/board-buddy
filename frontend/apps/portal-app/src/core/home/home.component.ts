@@ -8,7 +8,7 @@ import {MatDividerModule} from '@angular/material/divider'
 import {TranslatePipe} from '@ngx-translate/core'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {MainContentComponent} from '@board-buddy/ui'
-import {PlayerService, PortalSessionService, TourService} from '@board-buddy/portal'
+import {CurrentPlayerService, PortalSessionService, TourService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 @Component({
@@ -18,33 +18,27 @@ import {toPromise} from '@board-buddy/shared'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  private playerService = inject(PlayerService)
+  private playerService = inject(CurrentPlayerService)
   private sessionService = inject(PortalSessionService)
   private tourService = inject(TourService)
   private router = inject(Router)
-
-  private playerId = computed(() => this.playerService.getPlayerId())
-
-  private playerResource = resource({
-    params: this.playerId,
-    loader: (p) => p.params ? toPromise(this.playerService.getPlayer(p.params), p.abortSignal) : Promise.resolve(undefined)
-  })
 
   private sessionsResource = resource({
     loader: (p) => toPromise(this.sessionService.getSessions(), p.abortSignal)
   })
 
-  readonly playerName = computed(() => this.playerResource.value()?.name ?? '')
+  readonly playerName = computed(() => this.playerService.player()?.name ?? '')
   readonly sessions = computed(() => this.sessionsResource.value() ?? [])
 
   startTour() { this.tourService.startHomeTour() }
-  reload() { this.playerResource.reload(); this.sessionsResource.reload() }
+  reload() { this.playerService.load(); this.sessionsResource.reload() }
   createSession() { this.router.navigate(['/session', 'new']) }
   joinSession() { this.router.navigate(['/session', 'join']) }
   goToSession(key: string) { this.router.navigate(['/session', key]) }
 
   logout() {
-    this.playerService.clearPlayerId()
-    this.router.navigate(['/register'])
+    this.playerService.logout().subscribe({
+      complete: () => this.router.navigate(['/register'])
+    })
   }
 }

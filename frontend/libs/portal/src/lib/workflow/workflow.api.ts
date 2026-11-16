@@ -44,3 +44,24 @@ export interface SessionEvent {
   sessionKey: string
   type: 'BATTLE_STARTED' | 'BATTLE_FRONT_CREATED' | 'BATTLE_FRONT_ATTACKED' | 'BATTLE_FINISHED'
 }
+
+// Portal requests never carry the acting player id, the backend derives it from the session cookie.
+
+export class PortalCreateUnitRequest {
+  constructor(public unitTypeId: number) {}
+}
+
+export class PortalResearchRequest {
+  constructor(public technologyId: number) {}
+}
+
+export class PortalBattleCreateFrontRequest {
+  constructor(public entityId: number) {}
+}
+
+export class PortalBattleAttackFrontRequest {
+  constructor(
+    public entityId: number,
+    public frontIndex: number,
+  ) {}
+}

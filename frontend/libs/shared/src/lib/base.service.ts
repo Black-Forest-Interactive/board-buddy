@@ -76,7 +76,6 @@ export abstract class BaseService {
   }
 
   protected put<T>(suffix: string, body: any, params: HttpParams = new HttpParams()): Observable<T> {
-    this.logger.info("[PUT] " + JSON.stringify(body));
     const url = this.createUrl(suffix);
     console.debug("Put '" + url + "'")
     const observable = this.http.put<T>(url, body, {params: params});
@@ -84,7 +83,6 @@ export abstract class BaseService {
   }
 
   protected post<T>(suffix: string, body: any, params: HttpParams = new HttpParams()): Observable<T> {
-    this.logger.info("[POST] " + JSON.stringify(body));
     const url = this.createUrl(suffix);
     console.debug("Post '" + url + "'")
     const observable = this.http.post<T>(url, body, {params: params})
@@ -92,7 +90,6 @@ export abstract class BaseService {
   }
 
   protected patch<T>(suffix: string, body: any): Observable<T> {
-    this.logger.info("[PATCH] " + JSON.stringify(body));
     const url = this.createUrl(suffix);
     console.debug("Patch '" + url + "'")
     const observable = this.http.patch<T>(url, body);

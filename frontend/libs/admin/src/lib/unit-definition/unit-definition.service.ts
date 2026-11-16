@@ -5,7 +5,7 @@ import {UnitDefinition, UnitDefinitionChangeRequest} from '@board-buddy/core'
 
 @Injectable({providedIn: 'root'})
 export class UnitDefinitionService extends BaseService {
-  constructor() { super('portal/unit-type') }
+  constructor() { super('admin/unit-type') }
 
   getUnitDefinitions(page = 0, size = 20): Observable<Page<UnitDefinition>> {
     return this.getPaged<UnitDefinition>('', page, size)

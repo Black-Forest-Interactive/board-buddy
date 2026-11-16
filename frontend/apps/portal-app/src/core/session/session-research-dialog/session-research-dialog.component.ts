@@ -6,8 +6,8 @@ import {MatTooltipModule} from '@angular/material/tooltip'
 import {MatChipsModule} from '@angular/material/chips'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {PortalWorkflowService, PortalParticipantInfo} from '@board-buddy/portal'
-import {Technology, WorkflowResearchRequest} from '@board-buddy/core'
+import {PortalParticipantInfo, PortalResearchRequest, PortalWorkflowService} from '@board-buddy/portal'
+import {Technology} from '@board-buddy/core'
 import {toPromise} from '@board-buddy/shared'
 
 const TIERS = [1, 2, 3, 4, 5]
@@ -53,7 +53,7 @@ export class SessionResearchDialogComponent {
   isResearchable(tech: Technology): boolean { return this.availableIds().has(tech.id) }
 
   research(tech: Technology) {
-    const request = new WorkflowResearchRequest(this.data.participantInfo.player.id, tech.id)
+    const request = new PortalResearchRequest(tech.id)
     this.workflowService.research(this.data.sessionKey, request).subscribe({
       next: () => {
         this.translate.get('session.message.technologyResearched').subscribe(t => this.toast.success(t))

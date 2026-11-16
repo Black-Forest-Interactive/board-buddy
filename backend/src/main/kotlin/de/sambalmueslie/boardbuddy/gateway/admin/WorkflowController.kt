@@ -1,5 +1,7 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
+import de.sambalmueslie.boardbuddy.gateway.admin.security.AdminRole
+import io.micronaut.security.annotation.Secured
 import de.sambalmueslie.boardbuddy.workflow.api.*
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleAttackFrontRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleCreateFrontRequest
@@ -11,6 +13,7 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.QueryValue
 import io.swagger.v3.oas.annotations.tags.Tag
 
+@Secured(AdminRole.ADMIN)
 @Controller(value = "/api/admin/workflow")
 @Tag(name = "Admin Workflow API")
 class WorkflowController(private val gateway: WorkflowGateway) {

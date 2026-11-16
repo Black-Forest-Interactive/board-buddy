@@ -11,7 +11,7 @@ import {MatCardModule} from '@angular/material/card'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
 import {Nation, RuleSet} from '@board-buddy/core'
-import {PlayerService, PortalCreateSessionRequest, PortalSessionService} from '@board-buddy/portal'
+import {CurrentPlayerService, PortalCreateSessionRequest, PortalSessionService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 @Component({
@@ -22,7 +22,7 @@ import {toPromise} from '@board-buddy/shared'
 })
 export class SessionCreateComponent {
   private sessionService = inject(PortalSessionService)
-  private playerService = inject(PlayerService)
+  private playerService = inject(CurrentPlayerService)
   private router = inject(Router)
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)

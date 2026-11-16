@@ -1,11 +1,14 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
+import de.sambalmueslie.boardbuddy.gateway.admin.security.AdminRole
+import io.micronaut.security.annotation.Secured
 import de.sambalmueslie.boardbuddy.core.unit.api.UnitDefinitionChangeRequest
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.annotation.*
 import io.swagger.v3.oas.annotations.tags.Tag
 
-@Controller(value = "/api/portal/unit-type")
+@Secured(AdminRole.ADMIN)
+@Controller(value = "/api/admin/unit-type")
 @Tag(name = "Admin Unit Type API")
 class UnitDefinitionController(private val gateway: UnitDefinitionGateway) {
 

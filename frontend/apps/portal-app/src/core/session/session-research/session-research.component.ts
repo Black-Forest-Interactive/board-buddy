@@ -9,9 +9,9 @@ import {MatTabsModule} from '@angular/material/tabs'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {Technology, WorkflowResearchRequest} from '@board-buddy/core'
+import {Technology} from '@board-buddy/core'
 import {MainContentComponent} from '@board-buddy/ui'
-import {PortalWorkflowService, TourService} from '@board-buddy/portal'
+import {PortalResearchRequest, PortalWorkflowService, TourService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 const TIERS = [1, 2, 3, 4, 5]
@@ -90,7 +90,7 @@ export class SessionResearchComponent {
     const key = this.sessionKey()
     const info = this.myInfo()
     if (!key || !info) return
-    this.workflowService.research(key, new WorkflowResearchRequest(info.player.id, tech.id)).subscribe({
+    this.workflowService.research(key, new PortalResearchRequest(tech.id)).subscribe({
       next: () => {
         this.translate.get('session.message.technologyResearched').subscribe(t => this.toast.success(t))
         this.myInfoResource.reload()
