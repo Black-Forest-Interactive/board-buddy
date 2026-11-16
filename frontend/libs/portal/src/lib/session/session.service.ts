@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core'
 import {Observable} from 'rxjs'
 import {BaseService} from '@board-buddy/shared'
-import {Game, GameSession, Workflow} from '@board-buddy/core'
+import {Game, Workflow} from '@board-buddy/core'
 import {PortalCreateSessionRequest, PortalJoinSessionRequest} from './session.api'
 
 @Injectable({providedIn: 'root'})
@@ -10,10 +10,6 @@ export class PortalSessionService extends BaseService {
 
   getSessions(): Observable<Workflow[]> {
     return this.getAll<Workflow>('')
-  }
-
-  getSessionByKey(key: string): Observable<GameSession> {
-    return this.get<GameSession>(`by-key/${key}`)
   }
 
   getGames(): Observable<Game[]> {

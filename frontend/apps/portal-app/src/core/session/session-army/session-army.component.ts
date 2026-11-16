@@ -7,10 +7,10 @@ import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {GameUnit, UnitDefinition, WorkflowCreateUnitRequest} from '@board-buddy/core'
+import {GameUnit, UnitDefinition} from '@board-buddy/core'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {MainContentComponent} from '@board-buddy/ui'
-import {PlayerService, PortalWorkflowService, TourService} from '@board-buddy/portal'
+import {CurrentPlayerService, PortalCreateUnitRequest, PortalWorkflowService, TourService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 @Component({
@@ -21,7 +21,7 @@ import {toPromise} from '@board-buddy/shared'
 })
 export class SessionArmyComponent {
   private workflowService = inject(PortalWorkflowService)
-  private playerService = inject(PlayerService)
+  private playerService = inject(CurrentPlayerService)
   private tourService = inject(TourService)
   private router = inject(Router)
   private toast = inject(HotToastService)
@@ -67,7 +67,7 @@ export class SessionArmyComponent {
     const key = this.sessionKey()
     const pid = this.playerId()
     if (!key || !pid) return
-    this.workflowService.createUnit(key, new WorkflowCreateUnitRequest(pid, unitDef.id)).subscribe({
+    this.workflowService.createUnit(key, new PortalCreateUnitRequest(unitDef.id)).subscribe({
       next: () => {
         this.translate.get('session.message.unitCreated').subscribe(t => this.toast.success(t))
         this.myInfoResource.reload()

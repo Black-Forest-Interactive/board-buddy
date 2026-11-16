@@ -1,4 +1,4 @@
-import {ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection} from '@angular/core'
+import {ApplicationConfig, inject, LOCALE_ID, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection} from '@angular/core'
 import {provideRouter, withComponentInputBinding, withRouterConfig} from '@angular/router'
 import {appRoutes} from './app.routes'
 import {provideLuxonDateAdapter} from '@angular/material-luxon-adapter'
@@ -11,6 +11,7 @@ import {registerLocaleData} from '@angular/common'
 import de from '@angular/common/locales/de'
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async'
 import {provideToastConfig} from "@board-buddy/ui"
+import {CurrentPlayerService} from '@board-buddy/portal'
 
 registerLocaleData(de)
 
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
     provideToastConfig(),
     provideHttpClient(),
+    provideAppInitializer(() => inject(CurrentPlayerService).load()),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: '/i18n/',

@@ -11,9 +11,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {GameSessionPlayer, GameUnit, Nation, PlayerType, UnitDefinition, Workflow, WorkflowCreateUnitRequest, WorkflowParticipantInfo} from '@board-buddy/core'
+import {GameSessionPlayer, GameUnit, Nation, PlayerType, UnitDefinition, Workflow, WorkflowParticipantInfo} from '@board-buddy/core'
 import {MainContentComponent} from '@board-buddy/ui'
-import {PlayerService, PortalBattle, PortalWorkflowService, TourService} from '@board-buddy/portal'
+import {CurrentPlayerService, PortalBattle, PortalCreateUnitRequest, PortalWorkflowService, TourService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 import {SessionBattleStartDialogComponent} from '../session-battle-start-dialog/session-battle-start-dialog.component'
 import {SessionContentComponent} from '../session-content/session-content.component'
@@ -29,7 +29,7 @@ const UNIT_TYPE_ORDER: Record<string, number> = {INFANTRY: 0, MOUNTED: 1, ARTILL
 })
 export class SessionLobbyComponent {
   private workflowService = inject(PortalWorkflowService)
-  private playerService = inject(PlayerService)
+  private playerService = inject(CurrentPlayerService)
   private tourService = inject(TourService)
   private dialog = inject(MatDialog)
   private router = inject(Router)
@@ -209,7 +209,7 @@ export class SessionLobbyComponent {
     const key = this.sessionKey()
     const pid = this.playerId()
     if (!key || !pid) return
-    this.workflowService.createUnit(key, new WorkflowCreateUnitRequest(pid, unitDef.id)).subscribe({
+    this.workflowService.createUnit(key, new PortalCreateUnitRequest(unitDef.id)).subscribe({
       next: () => {
         this.translate.get('session.message.unitCreated').subscribe(t => this.toast.success(t))
         this.myInfoResource.reload()

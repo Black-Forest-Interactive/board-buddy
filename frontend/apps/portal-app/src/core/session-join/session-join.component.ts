@@ -10,7 +10,7 @@ import {MatIconModule} from '@angular/material/icon'
 import {MatCardModule} from '@angular/material/card'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {PlayerService, PortalJoinSessionRequest, PortalSessionService, PortalWorkflowService} from '@board-buddy/portal'
+import {CurrentPlayerService, PortalJoinSessionRequest, PortalSessionService, PortalWorkflowService} from '@board-buddy/portal'
 import {toPromise} from '@board-buddy/shared'
 
 @Component({
@@ -22,7 +22,7 @@ import {toPromise} from '@board-buddy/shared'
 export class SessionJoinComponent {
   private sessionService = inject(PortalSessionService)
   private workflowService = inject(PortalWorkflowService)
-  private playerService = inject(PlayerService)
+  private playerService = inject(CurrentPlayerService)
   private router = inject(Router)
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)
@@ -62,7 +62,7 @@ export class SessionJoinComponent {
     if (!this.hasPlayer()) {
       if (!name || name.trim().length < 2) return
       this.playerService.createPlayer({name: name.trim()}).subscribe({
-        next: (player) => { this.playerService.setPlayerId(player.id); doJoin() },
+        next: () => doJoin(),
         error: onError
       })
     } else {
