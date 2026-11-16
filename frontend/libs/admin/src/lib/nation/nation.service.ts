@@ -5,7 +5,7 @@ import {GovernmentType, Nation, NationChangeRequest, NationEffectInitialGovernme
 
 @Injectable({providedIn: 'root'})
 export class NationService extends BaseService {
-  constructor() { super('portal/nation') }
+  constructor() { super('admin/nation') }
 
   getNations(page = 0, size = 100): Observable<Page<Nation>> {
     return this.getPaged<Nation>('', page, size)

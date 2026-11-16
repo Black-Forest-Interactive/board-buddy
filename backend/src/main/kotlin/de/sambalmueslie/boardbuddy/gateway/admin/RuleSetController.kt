@@ -1,11 +1,14 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
+import de.sambalmueslie.boardbuddy.gateway.admin.security.AdminRole
+import io.micronaut.security.annotation.Secured
 import de.sambalmueslie.boardbuddy.core.ruleset.api.RuleSetChangeRequest
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.annotation.*
 import io.swagger.v3.oas.annotations.tags.Tag
 
-@Controller(value = "/api/portal/rule-set")
+@Secured(AdminRole.ADMIN)
+@Controller(value = "/api/admin/rule-set")
 @Tag(name = "Admin Rule Set API")
 class RuleSetController(private val gateway: RuleSetGateway) {
 

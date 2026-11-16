@@ -1,5 +1,6 @@
 package de.sambalmueslie.boardbuddy.core.unit
 
+import de.sambalmueslie.boardbuddy.common.MAX_TEXT_LENGTH
 import de.sambalmueslie.boardbuddy.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.core.event.EventService
@@ -44,7 +45,7 @@ class UnitDefinitionService(
     }
 
     override fun validate(request: UnitDefinitionChangeRequest) {
-        if (request.name.isBlank()) throw UnitDefinitionNameValidationFailed(request.name)
+        if (request.name.isBlank() || request.name.length > MAX_TEXT_LENGTH) throw UnitDefinitionNameValidationFailed(request.name)
         if (request.counterType == request.unitType) throw UnitDefinitionCounterClassValidationFailed(request.counterType)
         if (request.damagePoints.min <= 0) throw UnitDefinitionDamageValidationFailed(request.damagePoints)
         if (request.damagePoints.min > request.damagePoints.max) throw UnitDefinitionDamageValidationFailed(request.damagePoints)

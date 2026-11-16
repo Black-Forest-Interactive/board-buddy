@@ -9,8 +9,9 @@ import {
 } from 'keycloak-angular';
 import {environment} from "../environments/environment";
 
-const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-  urlPattern: /^.*$/,
+// only send the admin token to the own backend api (relative urls like 'api/admin/...')
+const apiCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
+  urlPattern: /^\/?api\//,
   bearerPrefix: 'Bearer'
 });
 
@@ -32,7 +33,7 @@ export const provideKeycloakAngular = () =>
       UserActivityService,
       {
         provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-        useValue: [localhostCondition]
+        useValue: [apiCondition]
       }
     ]
   });

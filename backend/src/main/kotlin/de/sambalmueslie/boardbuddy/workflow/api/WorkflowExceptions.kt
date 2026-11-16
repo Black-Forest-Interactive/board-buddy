@@ -25,3 +25,5 @@ class WorkflowBattleFrontAttackInvalid(value: Int) : WorkflowException(i++, "Bat
 class WorkflowBattleStartFailed(value: Long) : WorkflowException(i++, "Battle start failed $value")
 
 class WorkflowBattleAlreadyActive(value: String) : WorkflowException(i++, "Battle is already active for workflow $value")
+class WorkflowBattleInvalidArmy(value: Int) : WorkflowException(i++, "Battle army count or bonus points out of range $value")
+class WorkflowInvalidTechnology(value: Long) : WorkflowException(i++, "Invalid technology id $value")

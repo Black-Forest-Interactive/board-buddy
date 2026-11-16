@@ -1,24 +1,25 @@
 package de.sambalmueslie.boardbuddy.gateway.portal
 
 import de.sambalmueslie.boardbuddy.core.player.PlayerService
+import de.sambalmueslie.boardbuddy.core.player.PlayerTokenService
+import de.sambalmueslie.boardbuddy.core.player.api.Player
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerType
 import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalPlayerChangeRequest
-import io.micronaut.data.model.Pageable
 import jakarta.inject.Singleton
-import org.slf4j.LoggerFactory
 
 @Singleton
 class PlayerGateway(
-    private val service: PlayerService
+    private val service: PlayerService,
+    private val tokenService: PlayerTokenService,
 ) {
-    companion object {
-        private val logger = LoggerFactory.getLogger(PlayerGateway::class.java)
+    fun get(id: Long) = service.get(id)
+
+    /** Creates a human player and returns it together with its one-time plain session token. */
+    fun create(request: PortalPlayerChangeRequest): Pair<Player, String> {
+        val player = service.create(PlayerChangeRequest(PlayerType.HUMAN, request.name))
+        return player to tokenService.issue(player)
     }
 
-    fun get(id: Long) = service.get(id)
-    fun getAll(pageable: Pageable) = service.getAll(pageable)
-    fun create(request: PortalPlayerChangeRequest) = service.create(PlayerChangeRequest(PlayerType.HUMAN, request.name))
-    fun update(id: Long, request: PortalPlayerChangeRequest) = service.update(id, PlayerChangeRequest(PlayerType.HUMAN, request.name))
-    fun delete(id: Long) = service.delete(id)
+    fun logout(playerId: Long) = tokenService.revoke(playerId)
 }

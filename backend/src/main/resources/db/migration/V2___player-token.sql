@@ -1,0 +1,7 @@
+CREATE TABLE player_token
+(
+    player_id  BIGINT      NOT NULL PRIMARY KEY REFERENCES player (id) ON DELETE CASCADE,
+    token_hash VARCHAR(64) NOT NULL UNIQUE,
+
+    created    TIMESTAMP WITHOUT TIME ZONE NOT NULL
+);

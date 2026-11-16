@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core'
 import {Observable} from 'rxjs'
 import {BaseService} from '@board-buddy/shared'
 import {SessionEvent} from './workflow.api'
-import {Nation, TechnologyStatus, Workflow, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowBattleStartRequest, WorkflowCreateUnitRequest, WorkflowParticipantInfo, WorkflowResearchRequest} from '@board-buddy/core'
-import {PortalBattle, PortalParticipantInfo} from './workflow.api'
+import {Nation, TechnologyStatus, Workflow, WorkflowBattleStartRequest, WorkflowParticipantInfo} from '@board-buddy/core'
+import {PortalBattle, PortalBattleAttackFrontRequest, PortalBattleCreateFrontRequest, PortalCreateUnitRequest, PortalParticipantInfo, PortalResearchRequest} from './workflow.api'
 
 @Injectable({providedIn: 'root'})
 export class PortalWorkflowService extends BaseService {
@@ -15,6 +15,11 @@ export class PortalWorkflowService extends BaseService {
 
   getAvailableNations(key: string): Observable<Nation[]> {
     return this.getAll<Nation>(`${key}/nations`)
+  }
+
+  // rendered by the backend, used directly as image source
+  getJoinQrCodeUrl(key: string): string {
+    return `/${this.createUrl(`${key}/qr-code`)}`
   }
 
   getTechnologyStatus(key: string): Observable<TechnologyStatus> {
@@ -33,11 +38,11 @@ export class PortalWorkflowService extends BaseService {
     return this.get<PortalBattle>(`${key}/battle`)
   }
 
-  createUnit(key: string, request: WorkflowCreateUnitRequest): Observable<Workflow> {
+  createUnit(key: string, request: PortalCreateUnitRequest): Observable<Workflow> {
     return this.post<Workflow>(`${key}/unit`, request)
   }
 
-  research(key: string, request: WorkflowResearchRequest): Observable<Workflow> {
+  research(key: string, request: PortalResearchRequest): Observable<Workflow> {
     return this.post<Workflow>(`${key}/research`, request)
   }
 
@@ -45,11 +50,11 @@ export class PortalWorkflowService extends BaseService {
     return this.post<Workflow>(`${key}/battle/start`, request)
   }
 
-  battleCreateFront(key: string, request: WorkflowBattleCreateFrontRequest): Observable<PortalBattle> {
+  battleCreateFront(key: string, request: PortalBattleCreateFrontRequest): Observable<PortalBattle> {
     return this.post<PortalBattle>(`${key}/battle/front`, request)
   }
 
-  battleAttackFront(key: string, request: WorkflowBattleAttackFrontRequest): Observable<PortalBattle> {
+  battleAttackFront(key: string, request: PortalBattleAttackFrontRequest): Observable<PortalBattle> {
     return this.post<PortalBattle>(`${key}/battle/attack`, request)
   }
 

@@ -5,7 +5,7 @@ import {Technology, TechnologyChangeRequest, TechnologyEffectUnitUnlockRequest, 
 
 @Injectable({providedIn: 'root'})
 export class TechnologyService extends BaseService {
-  constructor() { super('portal/technology') }
+  constructor() { super('admin/technology') }
 
   getTechnologies(page = 0, size = 20): Observable<Page<Technology>> {
     return this.getPaged<Technology>('', page, size)

@@ -8,9 +8,9 @@ import {MatCardModule} from '@angular/material/card'
 import {MatTooltipModule} from '@angular/material/tooltip'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {BattleFront, BattleFrontUnit, GameUnit, Nation, Workflow, WorkflowBattleAttackFrontRequest, WorkflowBattleCreateFrontRequest, WorkflowParticipantInfo} from '@board-buddy/core'
+import {BattleFront, BattleFrontUnit, GameUnit, Nation, Workflow, WorkflowParticipantInfo} from '@board-buddy/core'
 import {MainContentComponent} from '@board-buddy/ui'
-import {PlayerService, PortalBattle, PortalWorkflowService, TourService} from '@board-buddy/portal'
+import {CurrentPlayerService, PortalBattle, PortalBattleAttackFrontRequest, PortalBattleCreateFrontRequest, PortalWorkflowService, TourService} from '@board-buddy/portal'
 
 @Component({
   selector: 'portal-session-battle',
@@ -20,7 +20,7 @@ import {PlayerService, PortalBattle, PortalWorkflowService, TourService} from '@
 })
 export class SessionBattleComponent {
   private workflowService = inject(PortalWorkflowService)
-  private playerService = inject(PlayerService)
+  private playerService = inject(CurrentPlayerService)
   private tourService = inject(TourService)
   private router = inject(Router)
   private toast = inject(HotToastService)
@@ -124,9 +124,8 @@ export class SessionBattleComponent {
 
   createFront(unit: GameUnit) {
     const key = this.sessionKey()
-    const pid = this.playerId()
-    if (!key || !pid) return
-    this.workflowService.battleCreateFront(key, new WorkflowBattleCreateFrontRequest(pid, unit.entity)).subscribe({
+    if (!key) return
+    this.workflowService.battleCreateFront(key, new PortalBattleCreateFrontRequest(unit.entity)).subscribe({
       next: (battle) => { this.battleData.set(battle); this.selectedUnit.set(null) },
       error: () => this.translate.get('session.message.error').subscribe(t => this.toast.error(t))
     })
@@ -135,11 +134,8 @@ export class SessionBattleComponent {
   attackFront(frontIndex: number) {
     const key = this.sessionKey()
     const unit = this.selectedUnit()
-    const pid = this.playerId()
-    const battle = this.battle()
-    if (!key || !unit || !pid || !battle) return
-    const opponentId = battle.opponentInfo.player.player.id
-    this.workflowService.battleAttackFront(key, new WorkflowBattleAttackFrontRequest(pid, opponentId, unit.entity, frontIndex)).subscribe({
+    if (!key || !unit || !this.battle()) return
+    this.workflowService.battleAttackFront(key, new PortalBattleAttackFrontRequest(unit.entity, frontIndex)).subscribe({
       next: (result) => {
         this.translate.get('session.battle.attacked').subscribe(t => this.toast.success(t))
         this.battleData.set(result)

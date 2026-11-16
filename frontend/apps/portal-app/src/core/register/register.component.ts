@@ -8,7 +8,7 @@ import {MatCardModule} from '@angular/material/card'
 import {MatIconModule} from '@angular/material/icon'
 import {TranslatePipe, TranslateService} from '@ngx-translate/core'
 import {HotToastService} from '@ngxpert/hot-toast'
-import {CreatePlayerRequest, PlayerService} from '@board-buddy/portal'
+import {CreatePlayerRequest, CurrentPlayerService} from '@board-buddy/portal'
 
 @Component({
   selector: 'portal-register',
@@ -17,7 +17,7 @@ import {CreatePlayerRequest, PlayerService} from '@board-buddy/portal'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
-  private playerService = inject(PlayerService)
+  private playerService = inject(CurrentPlayerService)
   private router = inject(Router)
   private toast = inject(HotToastService)
   private translate = inject(TranslateService)
@@ -27,10 +27,7 @@ export class RegisterComponent {
   submit() {
     if (this.nameControl.invalid) return
     this.playerService.createPlayer(new CreatePlayerRequest(this.nameControl.value!)).subscribe({
-      next: (player) => {
-        this.playerService.setPlayerId(player.id)
-        this.router.navigate(['/home'])
-      },
+      next: () => this.router.navigate(['/home']),
       error: () => this.translate.get('register.message.error').subscribe(t => this.toast.error(t))
     })
   }

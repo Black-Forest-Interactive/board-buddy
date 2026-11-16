@@ -153,6 +153,7 @@ class WorkflowService(
 
     fun delete(session: GameSession) {
         battleService.cleanup(session.key)
+        eventService.cleanup(session.key)
         sessionService.getAllEntities(session.id).forEach { engine.delete(it) }
         sessionService.delete(session.id)
     }

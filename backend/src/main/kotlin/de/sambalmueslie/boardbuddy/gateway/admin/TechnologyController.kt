@@ -1,5 +1,7 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
+import de.sambalmueslie.boardbuddy.gateway.admin.security.AdminRole
+import io.micronaut.security.annotation.Secured
 import de.sambalmueslie.boardbuddy.core.technology.api.TechnologyChangeRequest
 import de.sambalmueslie.boardbuddy.core.technology.api.TechnologyEffectUnitUnlockRequest
 import de.sambalmueslie.boardbuddy.engine.api.UnitType
@@ -7,7 +9,8 @@ import io.micronaut.data.model.Pageable
 import io.micronaut.http.annotation.*
 import io.swagger.v3.oas.annotations.tags.Tag
 
-@Controller(value = "/api/portal/technology")
+@Secured(AdminRole.ADMIN)
+@Controller(value = "/api/admin/technology")
 @Tag(name = "Admin Technology API")
 class TechnologyController(private val gateway: TechnologyGateway) {
 

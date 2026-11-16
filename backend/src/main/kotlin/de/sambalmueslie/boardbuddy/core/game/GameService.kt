@@ -1,5 +1,7 @@
 package de.sambalmueslie.boardbuddy.core.game
 
+import de.sambalmueslie.boardbuddy.common.MAX_DESCRIPTION_LENGTH
+import de.sambalmueslie.boardbuddy.common.MAX_TEXT_LENGTH
 import de.sambalmueslie.boardbuddy.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.common.findByIdOrNull
@@ -64,8 +66,8 @@ class GameService(
     }
 
     override fun validate(request: GameChangeRequest) {
-        if (request.name.isBlank()) throw GameNameValidationFailed(request.name)
-        if (request.description.isBlank()) throw GameDescriptionValidationFailed(request.description)
+        if (request.name.isBlank() || request.name.length > MAX_TEXT_LENGTH) throw GameNameValidationFailed(request.name)
+        if (request.description.isBlank() || request.description.length > MAX_DESCRIPTION_LENGTH) throw GameDescriptionValidationFailed(request.description)
     }
 
     override fun deleteDependencies(data: GameData) {

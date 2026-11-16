@@ -23,6 +23,7 @@ class PlayerService(
     companion object {
         private val logger = LoggerFactory.getLogger(PlayerService::class.java)
         private const val AI_PLAYER_NAME = "Barbarian"
+        private const val MAX_PLAYER_NAME_LENGTH = 50
     }
 
     override fun convert(data: PlayerData): Player {
@@ -38,7 +39,7 @@ class PlayerService(
     }
 
     override fun validate(request: PlayerChangeRequest) {
-        if (request.name.isBlank()) throw PlayerNameValidationFailed(request.name)
+        if (request.name.isBlank() || request.name.length > MAX_PLAYER_NAME_LENGTH) throw PlayerNameValidationFailed(request.name)
     }
 
     fun getAiPlayer(): Player {
