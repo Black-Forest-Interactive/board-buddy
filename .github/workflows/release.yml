@@ -1,12 +1,14 @@
 name: Release
 
-# Creates the GitHub release "Release X.Y.Z" with tag X.Y.Z for every merge to master.
+# Creates the GitHub release "Release X.Y.Z" with tag X.Y.Z once the CI workflow succeeded for a push to master.
 #   - version:  backend/gradle.properties (a trailing -SNAPSHOT is ignored), must match frontend/package.json
 #   - notes:    RELEASE_NOTES_X.Y.Z.md in the repository root, the first "# ..." heading is dropped (the release has its own title)
 #   - existing releases are left untouched, so later merges with the same version do nothing
 
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [master]
   workflow_dispatch:
 
@@ -20,13 +22,19 @@ concurrency:
 jobs:
   release:
     name: GitHub Release
+    # only after a successful CI run of a push to master (manual runs release the current master)
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
+    env:
+      RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
     permissions:
       contents: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.RELEASE_SHA }}
 
       - name: Determine version
         id: version
@@ -78,7 +86,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           gh release create "$VERSION" \
-            --target "$GITHUB_SHA" \
+            --target "$RELEASE_SHA" \
             --title "Release $VERSION" \
             --notes-file "$RUNNER_TEMP/notes.md" \
             --latest
