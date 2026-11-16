@@ -19,7 +19,7 @@
     "@ngneat/overview": "^8.1.0",
     "@ngx-translate/core": "^18.0.0",
     "@ngx-translate/http-loader": "^18.0.0",
-    "@ngxpert/hot-toast": "^6.4.1",
+    "@ngxpert/hot-toast": "^7.0.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
     "driver.js": "^1.10.2",
