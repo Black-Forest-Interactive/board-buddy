@@ -1,6 +1,6 @@
 # rendered by the nginx image entrypoint (envsubst), only defined environment variables are replaced
 server {
-    listen 80;
+    listen 8080;
     root /usr/share/nginx/html;
     index index.html;
     server_tokens off;

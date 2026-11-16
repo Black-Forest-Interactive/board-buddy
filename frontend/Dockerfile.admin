@@ -1,4 +1,4 @@
-FROM node:24-alpine AS builder
+FROM node:24.22.3-alpine AS builder
 WORKDIR /app
 
 COPY package*.json .npmrc ./
@@ -7,8 +7,9 @@ RUN npm ci --prefer-offline
 COPY . .
 RUN NX_DAEMON=false npx nx build admin-app --configuration=production
 
-FROM nginx:alpine
+# runs as non-root user, therefore listens on 8080
+FROM nginxinc/nginx-unprivileged:1.31.7-alpine
 ENV KEYCLOAK_ORIGIN=https://auth.blackforrestdevelopment.de
 COPY nginx.admin.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=builder /app/dist/apps/admin-app/browser /usr/share/nginx/html
-EXPOSE 80
+EXPOSE 8080
