@@ -54,7 +54,18 @@ Key environment variables will be documented here:
 | `DB_URL` | JDBC connection string | — |
 | `DB_USERNAME` | Database user | — |
 | `DB_PASSWORD` | Database password | — |
-| `BASE_URL` | Public base URL of the app | `http://localhost` |
+| `BOARD_BUDDY_BASE_URL` | Public base URL of the portal, used for join links, QR codes and link previews | `https://blackforrestdevelopment.de` |
+| `KEYCLOAK_JWKS_URL` | JWKS endpoint of the Keycloak realm used by the admin app | hosted instance |
+| `KEYCLOAK_ISSUER` | Expected `iss` claim of admin tokens (realm URL) | hosted instance |
+| `KEYCLOAK_ADMIN_CLIENT` | Keycloak client id of the admin app, checked against the `azp` claim | `board-buddy-admin` |
+| `KEYCLOAK_ORIGIN` | Keycloak origin allowed by the admin app's Content-Security-Policy (admin frontend container) | `https://auth.blackforrestdevelopment.de` |
+
+Admin users need the Keycloak realm role `board-buddy-admin`.
+
+Both frontend containers run as a non-root user and listen on port **8080**.
+
+If you serve the portal over plain `http` on another host than `localhost`, set `BOARD_BUDDY_PORTAL_COOKIE_SECURE=false`
+(maps to `board-buddy.portal.cookie-secure`), otherwise browsers drop the player cookie. Do not do this in production.
 
 ---
 
