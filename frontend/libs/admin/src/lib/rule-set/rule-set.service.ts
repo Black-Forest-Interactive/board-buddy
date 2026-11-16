@@ -5,7 +5,7 @@ import {RuleSet, RuleSetChangeRequest} from '@board-buddy/core'
 
 @Injectable({providedIn: 'root'})
 export class RuleSetService extends BaseService {
-  constructor() { super('portal/rule-set') }
+  constructor() { super('admin/rule-set') }
 
   getRuleSets(page = 0, size = 20): Observable<Page<RuleSet>> {
     return this.getPaged<RuleSet>('', page, size)

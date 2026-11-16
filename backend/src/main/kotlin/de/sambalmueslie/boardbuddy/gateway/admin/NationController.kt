@@ -1,5 +1,7 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
+import de.sambalmueslie.boardbuddy.gateway.admin.security.AdminRole
+import io.micronaut.security.annotation.Secured
 import de.sambalmueslie.boardbuddy.core.nation.api.NationChangeRequest
 import de.sambalmueslie.boardbuddy.core.nation.api.NationEffectInitialGovernmentRequest
 import de.sambalmueslie.boardbuddy.engine.api.GovernmentType
@@ -7,7 +9,8 @@ import io.micronaut.data.model.Pageable
 import io.micronaut.http.annotation.*
 import io.swagger.v3.oas.annotations.tags.Tag
 
-@Controller(value = "/api/portal/nation")
+@Secured(AdminRole.ADMIN)
+@Controller(value = "/api/admin/nation")
 @Tag(name = "Admin Nation API")
 class NationController(private val gateway: NationGateway) {
 

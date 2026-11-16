@@ -22,8 +22,9 @@ micronaut:
         signatures:
           jwks:
             keycloak:
-              url: https://auth.blackforrestdevelopment.de/realms/board-buddy/protocol/openid-connect/certs
-#               url: http://localhost:8081/realms/board-buddy/protocol/openid-connect/certs
+              url: ${KEYCLOAK_JWKS_URL:`https://auth.blackforrestdevelopment.de/realms/board-buddy/protocol/openid-connect/certs`}
+        claims-validators:
+          issuer: ${KEYCLOAK_ISSUER:`https://auth.blackforrestdevelopment.de/realms/board-buddy`}
     intercept-url-map:
       - access: isAnonymous()
         pattern: /swagger/**
@@ -61,6 +62,9 @@ jackson:
   serialization-inclusion: ALWAYS
 
 board-buddy:
+  admin:
+    # keycloak client the admin tokens must be issued for (azp claim)
+    authorized-party: ${KEYCLOAK_ADMIN_CLIENT:board-buddy-admin}
   portal:
     # set to false only for local development over plain http
     cookie-secure: true

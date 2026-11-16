@@ -1,10 +1,13 @@
 package de.sambalmueslie.boardbuddy.gateway.admin
 
+import de.sambalmueslie.boardbuddy.gateway.admin.security.AdminRole
+import io.micronaut.security.annotation.Secured
 import de.sambalmueslie.boardbuddy.core.player.api.PlayerChangeRequest
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.annotation.*
 import io.swagger.v3.oas.annotations.tags.Tag
 
+@Secured(AdminRole.ADMIN)
 @Controller(value = "/api/admin/player")
 @Tag(name = "Admin Player API")
 class PlayerController(private val gateway: PlayerGateway) {
