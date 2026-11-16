@@ -104,8 +104,8 @@ export class SessionLobbyComponent {
   })
 
   readonly qrUrl = computed(() => {
-    const url = this.joinUrl()
-    return url ? `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(url)}` : ''
+    const key = this.sessionId()
+    return key ? this.workflowService.getJoinQrCodeUrl(key) : ''
   })
 
   private myInfoResource = resource({

@@ -32,6 +32,7 @@ class GameSessionService(
 ) : BaseEntityService<GameSession, GameSessionChangeRequest, GameSessionData>(repository, eventService, GameSession::class) {
     companion object {
         private val logger = LoggerFactory.getLogger(GameSessionService::class.java)
+        private const val MAX_SESSION_NAME_LENGTH = 100
     }
 
     fun assignPlayer(gameSession: GameSession, player: Player, entity: GameEntity): GameSession? {
@@ -116,7 +117,7 @@ class GameSessionService(
 
 
     override fun validate(request: GameSessionChangeRequest) {
-        if (request.name.isBlank()) throw GameSessionNameValidationFailed(request.name)
+        if (request.name.isBlank() || request.name.length > MAX_SESSION_NAME_LENGTH) throw GameSessionNameValidationFailed(request.name)
         if (!request.game.ruleSets.contains(request.ruleSet)) throw GameSessionRuleSetValidationFailed(request.game, request.ruleSet)
     }
 

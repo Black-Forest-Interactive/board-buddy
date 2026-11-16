@@ -17,6 +17,11 @@ export class PortalWorkflowService extends BaseService {
     return this.getAll<Nation>(`${key}/nations`)
   }
 
+  // rendered by the backend, used directly as image source
+  getJoinQrCodeUrl(key: string): string {
+    return `/${this.createUrl(`${key}/qr-code`)}`
+  }
+
   getTechnologyStatus(key: string): Observable<TechnologyStatus> {
     return this.get<TechnologyStatus>(`${key}/technology-status`)
   }

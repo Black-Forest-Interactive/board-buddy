@@ -125,6 +125,50 @@ class PortalSecurityTest {
     }
 
     @Test
+    fun `invalid input is rejected with 400 and without internal details`() {
+        assertStatus(HttpStatus.BAD_REQUEST) {
+            client.toBlocking().exchange(HttpRequest.POST("/api/portal/player", mapOf("name" to "x".repeat(10_000))), Map::class.java)
+        }
+        val host = createPlayer("validator")
+        val workflow = client.toBlocking().retrieve(
+            HttpRequest.POST("/api/portal/session", mapOf("name" to "v", "gameId" to game.id, "ruleSetId" to ruleSet.id, "nationId" to nations[0].id)).withPlayer(host),
+            Map::class.java
+        )
+        val key = workflow["id"] as String
+        val participants = client.toBlocking().retrieve(HttpRequest.GET<Any>("/api/portal/workflow/$key/participants").withPlayer(host), List::class.java)
+        val hostId = ((participants.first() as Map<*, *>)["player"] as Map<*, *>)["id"]
+        val other = ((participants.last() as Map<*, *>)["player"] as Map<*, *>)["id"]
+        val ex = assertThrows(HttpClientResponseException::class.java) {
+            client.toBlocking().exchange(
+                HttpRequest.POST("/api/portal/workflow/$key/battle/start", mapOf(
+                    "attacker" to mapOf("id" to hostId, "armyCount" to 1_000_000),
+                    "defender" to mapOf("id" to other, "armyCount" to 1),
+                    "type" to "ARMY_VS_ARMY", "isWalled" to false
+                )).withPlayer(host), Any::class.java
+            )
+        }
+        assertEquals(HttpStatus.BAD_REQUEST, ex.status)
+        assertFalse(ex.response.getBody(String::class.java).orElse("").contains("Exception"))
+    }
+
+    @Test
+    fun `join qr code is rendered locally for participants only`() {
+        val host = createPlayer("qr-host")
+        val stranger = createPlayer("qr-stranger")
+        val workflow = client.toBlocking().retrieve(
+            HttpRequest.POST("/api/portal/session", mapOf("name" to "qr", "gameId" to game.id, "ruleSetId" to ruleSet.id, "nationId" to nations[0].id)).withPlayer(host),
+            Map::class.java
+        )
+        val key = workflow["id"] as String
+        val png = client.toBlocking().retrieve(HttpRequest.GET<Any>("/api/portal/workflow/$key/qr-code").withPlayer(host), ByteArray::class.java)
+        assertEquals(0x89.toByte(), png[0])
+        assertEquals('P'.code.toByte(), png[1])
+        assertStatus(HttpStatus.FORBIDDEN) {
+            client.toBlocking().exchange(HttpRequest.GET<Any>("/api/portal/workflow/$key/qr-code").withPlayer(stranger), ByteArray::class.java)
+        }
+    }
+
+    @Test
     fun `logout revokes the token`() {
         val token = createPlayer("bob")
         client.toBlocking().exchange(HttpRequest.POST("/api/portal/player/logout", "").withPlayer(token), Any::class.java)

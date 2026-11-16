@@ -8,6 +8,7 @@ COPY . .
 RUN NX_DAEMON=false npx nx build admin-app --configuration=production
 
 FROM nginx:alpine
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+ENV KEYCLOAK_ORIGIN=https://auth.blackforrestdevelopment.de
+COPY nginx.admin.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=builder /app/dist/apps/admin-app/browser /usr/share/nginx/html
 EXPOSE 80

@@ -1,8 +1,9 @@
 package de.sambalmueslie.boardbuddy.core.ruleset.api
 
 import de.sambalmueslie.boardbuddy.common.EntityException
+import de.sambalmueslie.boardbuddy.common.forMessage
 
 
 sealed class RuleSetRequestValidationException(code: Int, msg: String) : EntityException(RuleSet::class, code, msg)
 
-class RuleSetNameValidationFailed(value: String) : RuleSetRequestValidationException(1, "Validation failed due to invalid name '$value'")
+class RuleSetNameValidationFailed(value: String) : RuleSetRequestValidationException(1, "Validation failed due to invalid name '${value.forMessage()}'")

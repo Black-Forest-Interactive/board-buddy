@@ -1,5 +1,7 @@
 package de.sambalmueslie.boardbuddy.core.technology
 
+import de.sambalmueslie.boardbuddy.common.MAX_DESCRIPTION_LENGTH
+import de.sambalmueslie.boardbuddy.common.MAX_TEXT_LENGTH
 import de.sambalmueslie.boardbuddy.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.common.findByIdOrNull
@@ -61,7 +63,7 @@ class TechnologyService(
     }
 
     override fun validate(request: TechnologyChangeRequest) {
-        if (request.name.isBlank()) throw TechnologyNameValidationFailed(request.name)
+        if (request.name.isBlank() || request.name.length > MAX_TEXT_LENGTH || request.imageUrl.length > MAX_TEXT_LENGTH || request.description.length > MAX_DESCRIPTION_LENGTH) throw TechnologyNameValidationFailed(request.name)
         if (request.tier <= 0) throw TechnologyTierValidationFailed(request.tier)
     }
 

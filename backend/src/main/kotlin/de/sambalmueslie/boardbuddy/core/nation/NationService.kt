@@ -1,5 +1,7 @@
 package de.sambalmueslie.boardbuddy.core.nation
 
+import de.sambalmueslie.boardbuddy.common.MAX_DESCRIPTION_LENGTH
+import de.sambalmueslie.boardbuddy.common.MAX_TEXT_LENGTH
 import de.sambalmueslie.boardbuddy.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.common.findByIdOrNull
@@ -65,7 +67,7 @@ class NationService(
     }
 
     override fun validate(request: NationChangeRequest) {
-        if (request.name.isBlank()) throw NationNameValidationFailed(request.name)
+        if (request.name.isBlank() || request.name.length > MAX_TEXT_LENGTH || request.imageUrl.length > MAX_TEXT_LENGTH || request.description.length > MAX_DESCRIPTION_LENGTH) throw NationNameValidationFailed(request.name)
     }
 
     override fun deleteDependencies(data: NationData) {

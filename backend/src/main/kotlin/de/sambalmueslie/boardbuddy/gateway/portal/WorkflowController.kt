@@ -34,6 +34,10 @@ class WorkflowController(private val gateway: WorkflowGateway) {
     @Get("{id}/nations")
     fun getAvailableNations(id: String) = gateway.getAvailableNations(id)
 
+    @Get("{id}/qr-code")
+    @Produces(MediaType.IMAGE_PNG)
+    fun getJoinQrCode(authentication: Authentication, id: String): ByteArray = gateway.getJoinQrCode(id, authentication.playerId())
+
     @Get("{id}/technology-status")
     fun getTechnologyStatus(authentication: Authentication, id: String) =
         gateway.getTechnologyStatus(id, authentication.playerId())

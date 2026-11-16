@@ -1,5 +1,6 @@
 package de.sambalmueslie.boardbuddy.core.ruleset
 
+import de.sambalmueslie.boardbuddy.common.MAX_TEXT_LENGTH
 import de.sambalmueslie.boardbuddy.common.BaseEntityService
 import de.sambalmueslie.boardbuddy.common.TimeProvider
 import de.sambalmueslie.boardbuddy.common.findByIdOrNull
@@ -122,7 +123,7 @@ class RuleSetService(
     }
 
     override fun validate(request: RuleSetChangeRequest) {
-        if (request.name.isBlank()) throw RuleSetNameValidationFailed(request.name)
+        if (request.name.isBlank() || request.name.length > MAX_TEXT_LENGTH) throw RuleSetNameValidationFailed(request.name)
     }
 
     override fun deleteDependencies(data: RuleSetData) {

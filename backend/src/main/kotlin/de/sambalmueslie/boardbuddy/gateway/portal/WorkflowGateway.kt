@@ -21,6 +21,7 @@ import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleCreateFront
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleStartRequest
 import de.sambalmueslie.boardbuddy.workflow.sse.SessionEvent
 import de.sambalmueslie.boardbuddy.workflow.sse.SessionEventService
+import io.micronaut.context.annotation.Value
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import jakarta.inject.Singleton
@@ -36,6 +37,8 @@ import java.nio.charset.StandardCharsets
 class WorkflowGateway(
     private val service: WorkflowService,
     private val eventService: SessionEventService,
+    private val qrCode: QrCodeRenderer,
+    @Value("\${board-buddy.base-url}") private val baseUrl: String,
     protocolService: ProtocolService
 ) {
 
@@ -47,7 +50,6 @@ class WorkflowGateway(
         protocol.log("[$id] get og preview")
         val workflow = runCatching { service.get(id) }.getOrNull()
             ?: return HttpResponse.notFound()
-        val baseUrl = "https://blackforrestdevelopment.de"
         val encodedId = URLEncoder.encode(id, StandardCharsets.UTF_8)
         val joinUrl = "$baseUrl/session/join?key=$encodedId"
         val name = htmlEscape(workflow.name)
@@ -73,11 +75,17 @@ class WorkflowGateway(
               <meta http-equiv="refresh" content="0;url=$joinUrl">
             </head>
             <body>
-              <script>window.location.href = '$joinUrl'</script>
+              <a href="$joinUrl">$name — Board Buddy</a>
             </body>
             </html>
         """.trimIndent()
         return HttpResponse.ok(content).contentType(MediaType.TEXT_HTML)
+    }
+
+    fun getJoinQrCode(id: String, playerId: Long): ByteArray {
+        requireParticipant(id, playerId)
+        val joinUrl = "$baseUrl/session/join?key=${URLEncoder.encode(id, StandardCharsets.UTF_8)}"
+        return qrCode.render(joinUrl)
     }
 
     private fun htmlEscape(value: String): String = value

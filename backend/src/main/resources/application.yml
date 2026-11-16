@@ -3,6 +3,7 @@ micronaut:
     name: byte-buddy
   server:
     port: 8080
+    max-request-size: 1MB
     thread-selection: AUTO
     netty:
       access-logger:
@@ -62,6 +63,8 @@ jackson:
   serialization-inclusion: ALWAYS
 
 board-buddy:
+  # public url of the portal, used for join links and the link preview
+  base-url: ${BOARD_BUDDY_BASE_URL:`https://blackforrestdevelopment.de`}
   admin:
     # keycloak client the admin tokens must be issued for (azp claim)
     authorized-party: ${KEYCLOAK_ADMIN_CLIENT:board-buddy-admin}
