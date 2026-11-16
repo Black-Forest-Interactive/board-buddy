@@ -5,10 +5,8 @@ import de.sambalmueslie.boardbuddy.gateway.portal.api.PortalBattleOpponent
 import de.sambalmueslie.boardbuddy.infrastructure.ProtocolService
 import de.sambalmueslie.boardbuddy.workflow.WorkflowService
 import de.sambalmueslie.boardbuddy.workflow.api.Workflow
-import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateRequest
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowPlayerActionForbidden
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
-import de.sambalmueslie.boardbuddy.workflow.api.WorkflowPlayerJoinRequest
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowResearchRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.Battle
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleAttackFrontRequest
@@ -80,8 +78,6 @@ class WorkflowGateway(
 
     fun getAvailableNations(id: String) = service.getAvailableNations(id)
     fun getTechnologyStatus(id: String, playerId: Long) = service.getTechnologyStatus(id, playerId)
-    fun create(request: WorkflowCreateRequest) = protocol.log("Create ${request.name}", request) { service.create(request) }
-    fun join(id: String, request: WorkflowPlayerJoinRequest) = protocol.log("[$id] join ${request.name}", request) { service.join(id, request) }
     fun createUnit(id: String, request: WorkflowCreateUnitRequest) = protocol.log("[$id] ${request.playerId} create unit ${request.unitTypeId}", request) { service.createUnit(id, request) }
     fun research(id: String, request: WorkflowResearchRequest) = protocol.log("[$id] ${request.playerId} research ${request.technologyId}", request) { service.research(id, request) }
     fun battleStart(id: String, request: WorkflowBattleStartRequest, playerId: Long): Workflow {

@@ -1,8 +1,6 @@
 package de.sambalmueslie.boardbuddy.gateway.portal
 
-import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateRequest
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowCreateUnitRequest
-import de.sambalmueslie.boardbuddy.workflow.api.WorkflowPlayerJoinRequest
 import de.sambalmueslie.boardbuddy.workflow.api.WorkflowResearchRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleAttackFrontRequest
 import de.sambalmueslie.boardbuddy.workflow.battle.api.WorkflowBattleCreateFrontRequest
@@ -31,12 +29,6 @@ class WorkflowController(private val gateway: WorkflowGateway) {
 
     @Get("{id}/technology-status")
     fun getTechnologyStatus(@CookieValue("player-id") playerId: Long, id: String) = gateway.getTechnologyStatus(id, playerId)
-
-    @Post
-    fun create(@Body request: WorkflowCreateRequest) = gateway.create(request)
-
-    @Post("{id}/join")
-    fun join(id: String, @Body request: WorkflowPlayerJoinRequest) = gateway.join(id, request)
 
     @Post("{id}/unit")
     fun createUnit(id: String, @Body request: WorkflowCreateUnitRequest) = gateway.createUnit(id, request)
