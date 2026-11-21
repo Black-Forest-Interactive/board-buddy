@@ -199,7 +199,7 @@ sonar {
 
 
 jib {
-    from.image = "eclipse-temurin:25.0.5_8-jre-alpine"
+    from.image = "eclipse-temurin:25.0.5.1_2-jre-alpine"
     to {
         image = "ghcr.io/black-forest-interactive/board-buddy-backend"
         tags = setOf("latest", project.version.toString())

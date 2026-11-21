@@ -9,6 +9,10 @@ RUN NX_DAEMON=false npx nx build admin-app --configuration=production
 
 # runs as non-root user, therefore listens on 8080
 FROM nginxinc/nginx-unprivileged:1.31.7-alpine
+# base image is not rebuilt often enough, pull in Alpine security fixes
+USER root
+RUN apk upgrade --no-cache
+USER 101
 ENV KEYCLOAK_ORIGIN=https://auth.blackforrestdevelopment.de
 COPY nginx.admin.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=builder /app/dist/apps/admin-app/browser /usr/share/nginx/html
