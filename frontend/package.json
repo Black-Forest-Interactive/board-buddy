@@ -52,7 +52,7 @@
     "@nx/workspace": "24.0.1",
     "@oxc-project/runtime": "^0.155.0",
     "@playwright/test": "^1.64.1",
-    "@schematics/angular": "^22.2.4",
+    "@schematics/angular": "^22.3.0",
     "@swc-node/register": "1.12.1",
     "@swc/core": "^1.16.20",
     "@swc/helpers": "^0.5.23",
